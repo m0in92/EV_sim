@@ -1,21 +1,22 @@
-Parameter Classification,Parameter Name,Volt_2017,Tesla
+Parameter Classification,Parameter Name,Volt_2017,Audi_e-tron_quattro_2019
 basic vehicle,dataset_name,Volt_2017,Tesla
-basic vehicle,name,Volt,
-basic vehicle,year,2017,
-basic vehicle,manufacturer,Chevy,
-cell,capacity [A hr],15,
-cell,mass [g],450,
-cell,V_max [V],4.2,
-cell,V_nom [V],3.8,
-cell,V_min [V],3,
-module,Np,3,
-module,Ns,8,
-module,overhead_mass,0.08,
-pack,N_module_s,12,
-pack,overhead_mass,0.1,
-pack,SOC_full,75,
-pack,SOC_empty,25,
-pack,eff,0.96,
+basic vehicle,model_name,Volt,e-tron_quattro
+basic vehicle,year,2017,2019
+basic vehicle,manufacturer,Chevy,Audi
+cell,battery_cell_manufacturer,,LG Chem
+cell,capacity [A hr],15,60
+cell,mass [g],450,820
+cell,V_max [V],4.2,4.2
+cell,V_nom [V],3.8,3.6666
+cell,V_min [V],3,2.5
+module,Np,3,4
+module,Ns,8,3
+module,overhead_mass,0.08,0.245
+pack,N_module_s,12,36
+pack,overhead_mass,0.1,0.33
+pack,SOC_full,75,75
+pack,SOC_empty,25,25
+pack,eff,0.96,0.96
 motor,Lmax [Nm],275,
 motor,RPM_rated [rpm],4000,
 motor,RPM_max [rpm],12000,

@@ -38,4 +38,6 @@ motor_power, limit_power, battery_demand, current, battery_SOC = sim1.simulate()
 print(motor_power)
 
 plt.plot(dc.time_s/60, battery_demand)
+plt.xlabel('Time [min]')
+plt.ylabel('Battery power demand [kW]')
 plt.show()

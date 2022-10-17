@@ -7,7 +7,7 @@ class Basic_vehicle_info:
         self.check_typeErrors(vehicle_name)
         self.vehicle_name = vehicle_name
         df = self.__parse_basic_vehicle_info()
-        self.EV_brand_name = df["name"]
+        self.EV_model_name = df["model_name"]
         self.EV_manufacturer = df["manufacturer"]
         self.EV_year = df["year"]
 
@@ -31,6 +31,7 @@ class Cell(Basic_vehicle_info):
     def __init__(self, vehicle_name):
         super().__init__(vehicle_name)
         df = self.parse_cell_info()
+        self.cell_manufacturer = df["battery_cell_manufacturer"]
         self.cell_cap = float(df["capacity [A hr]"])  # in Ahr
         self.cell_mass = float(df["mass [g]"])  # in g
         self.cell_V_max = float(df["V_max [V]"])  # in V
@@ -49,8 +50,8 @@ class Module(Cell):
     def __init__(self, vehicle_name):
         super().__init__(vehicle_name)
         df = self.parse_module_info()
-        self.Ns = int(df["Np"])  # no. of series connections of cells in a module [unitless]
-        self.Np = int(df["Ns"])  # no. of parallel connections of cells in a module[unitless]
+        self.Ns = int(df["Ns"])  # no. of series connections of cells in a module [unitless]
+        self.Np = int(df["Np"])  # no. of parallel connections of cells in a module[unitless]
         self.module_overhead_mass = float(df["overhead_mass"])  # mass beyond cell mass [in percent]
 
         self.total_no_cells = self.Ns * self.Np
