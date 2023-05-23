@@ -1,7 +1,7 @@
 import numpy as np
 
-from setup_vehicle import Vehicle
-from setup_drivecycles import Drive_cycle
+from EV_sim.setup_vehicle import Vehicle
+from EV_sim.setup_drivecycles import Drive_cycle
 
 
 class Sim:

@@ -1,5 +1,5 @@
-from setup_vehicle import Basic_vehicle_info,Cell, Module, Pack, Motor, Wheel, Drivetrain, Vehicle
-from setup_drivecycles import Drive_cycle
+from EV_sim.setup_vehicle import Vehicle
+from EV_sim.setup_drivecycles import Drive_cycle
 from sim import Sim
 import pickle
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ vehicle_name = "Volt_2017"
 veh1 = Vehicle(vehicle_name)
 drive_cycle_name = "us06"
 dc = Drive_cycle(drive_cycle_name)
-a_file = open("data/sim_params/sim_param.pkl", "rb")
+a_file = open("../data/sim_params/sim_param.pkl", "rb")
 sim_param = pickle.load(a_file)
 
 sim1 = Sim(vehicle=veh1, drive_cycle=dc, sim_params=sim_param)
@@ -38,6 +38,7 @@ motor_power, limit_power, battery_demand, current, battery_SOC = sim1.simulate()
 print(motor_power)
 
 plt.plot(dc.time_s/60, battery_demand)
+plt.title(f"{vehicle_name}")
 plt.xlabel('Time [min]')
 plt.ylabel('Battery power demand [kW]')
 plt.title('EV example drive cycle results')
