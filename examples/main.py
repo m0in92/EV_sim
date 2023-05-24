@@ -1,6 +1,6 @@
 from EV_sim.setup_vehicle import Vehicle
 from EV_sim.setup_drivecycles import Drive_cycle
-from sim import Sim
+from EV_sim.sim import Sim
 import pickle
 import matplotlib.pyplot as plt
 

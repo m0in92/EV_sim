@@ -16,7 +16,7 @@ class Basic_vehicle_info:
         if not (isinstance(var, str)):
             raise TypeError("vehicle_name should be of a string type.")
 
-    def create_df(self, file_dir="data/EV/EV_dataset.csv"):
+    def create_df(self, file_dir="../data/EV/EV_dataset.csv"):
         df = pd.read_csv(file_dir, header=0)
         df.set_index(['Parameter Classification', 'Parameter Name'], inplace=True)
         if self.vehicle_name not in df.columns:
@@ -139,7 +139,7 @@ class Vehicle(Drivetrain):
     def __init__(self, vehicle_name):
         super().__init__(vehicle_name)
         df = self.parse_vehicle_info()
-        self.no_wheels = int(df["no_wheels"])
+        self.no_wheels = 4
         self.road_force = float(df["road_force [N]"])
         self.frontal_area = float(df["frontal_area [m2]"]) # in m2
         self.C_d = float(df["C_d"])
