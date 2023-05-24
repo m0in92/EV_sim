@@ -235,7 +235,7 @@ class EV:
     @property
     def equiv_mass(self):
         """
-        Vehicle's equivalent mass is a sum of its maximum and translational equivalent mass of the rotating inertias.
+        Vehicle's equivalent mass is a sum of its maximum and translational equivalent mass of the rotating inertia.
         :return: (float) Vehicle equivalent mass, kg
         """
         return self.max_mass + self.rot_mass
@@ -244,7 +244,7 @@ class EV:
     def max_speed(self):
         """
         Vehicle maximum speed in km/h
-        :return: (float) Vehicle max. speed, km/hr
+        :return: (float) Vehicle max. speed, km/h
         """
         return 2 * np.pi * self.drive_train.wheel.r * self.motor.RPM_max * 60 / (1000 * self.drive_train.gear_box.N)
 
