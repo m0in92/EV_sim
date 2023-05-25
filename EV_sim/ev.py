@@ -248,6 +248,16 @@ class EV:
         """
         return 2 * np.pi * self.drive_train.wheel.r * self.motor.RPM_max * 60 / (1000 * self.drive_train.gear_box.N)
 
+    @staticmethod
+    def list_all_EV_alias(file_dir):
+        """
+        This method lists all the EV alias in the EV database.
+        :return: (list) list of all EV alias in the EV database
+        """
+        df = pd.read_csv(file_dir)
+        df.set_index(['Parameter Classification', 'Parameter Name'], inplace=True)
+        return df.columns.tolist()
+
     def create_df(self,file_dir):
         """
         returns a dataframe containing all the relevant EV information.
