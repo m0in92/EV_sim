@@ -9,4 +9,4 @@ model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condi
 sol = model.simulate()
 
 # plot
-sol.plot(t_array=udds.t, veh_alias_name=alias_name)
+sol.plot()

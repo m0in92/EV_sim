@@ -192,8 +192,9 @@ class VehicleDynamics:
             prev_distance = distance[k]
             prev_SOC = battery_SOC[k]
 
-        return Solution(des_acc, des_acc_F, aero_F, roll_grade_F, demand_torque, max_torque, limit_regen, limit_torque, \
-               motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed, actual_speed_kmph, distance, \
-               demand_power, limit_power, battery_demand, current, battery_SOC)
+        return Solution(self.EV.alias_name, self.DriveCycle.t, des_acc, des_acc_F, aero_F, roll_grade_F, demand_torque,
+                        max_torque, limit_regen, limit_torque, motor_torque, actual_acc_F, actual_acc, motor_speed,
+                        actual_speed, actual_speed_kmph, distance, demand_power, limit_power, battery_demand, current,
+                        battery_SOC)
 
 
