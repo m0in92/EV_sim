@@ -526,4 +526,5 @@ class Results(ttk.Frame):
         self.toolbar2.update()
 
 
-EVSimulatorApp()
+if __name__ == '__main__':
+    EVSimulatorApp()
