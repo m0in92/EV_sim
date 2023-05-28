@@ -1,9 +1,20 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from EV_sim.config import definations
+
 
 class DriveCycle:
-    def __init__(self, drive_cycle_name = "udds", folder_dir = "../data/drive_cycles/"):
+    """
+    DriveCycle class searches for and stores arrays of time and desired speed informations.
+    """
+    def __init__(self, drive_cycle_name: str = "udds", folder_dir: str = definations.ROOT_DIR +
+                                                                         "/data/drive_cycles/"):
+        """
+        DriveCycle constructor
+        :param drive_cycle_name: Drive cycle name as store in the data/drive_cycles directory.
+        :param folder_dir: The relative path directory to data/drive_cycles.
+        """
         if isinstance(drive_cycle_name, str):
             self.drive_cycle_name = drive_cycle_name # insert the name of the .txt file in the relevant directory.
         else:
@@ -31,20 +42,11 @@ class DriveCycle:
         df["Target Speed [m/h]"] = df["Target Speed [km/h]"] * 1000/3600  # creates a col with units in m/s
         return df
 
-    # @property
-    # def time_s(self):
-    #     return np.array(self.parse_file()["Test Time [s]"])
-    #
-    # @property
-    # def speed_kmph(self):
-    #     return np.array(self.parse_file()["Target Speed [km/h]"])
-    #
-    # @property
-    # def speed_mps(self):
-    #     return np.array(self.parse_file()["Target Speed [m/h]"])
-
-
     def plot(self):
+        """
+        Plots the time, s, vs. speed, km/h, plot of the drive cycles.
+        :return:
+        """
         plt.figure()
         plt.subplot(1,1,1)
         plt.plot(self.time_s, self.speed_kmph)

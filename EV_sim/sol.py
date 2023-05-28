@@ -4,13 +4,15 @@ import matplotlib.pyplot as plt
 
 class Solution:
     """
-    Class object that stores the simulation results from the model.
+    Class object that stores the simulation results from the model. Furthermore, it contains methods to plot the
+    results.
     """
-    def __init__(self, veh_alias: str, t, des_acc, des_acc_F, aero_F, roll_grade_F, demand_torque, max_torque, limit_regen, limit_torque, \
-               motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed, actual_speed_kmph, distance, \
-               demand_power, limit_power, battery_demand, current, battery_SOC):
-        self.veh_alias = veh_alias # vehicle alias
-        self.t = t # time array, s
+
+    def __init__(self, veh_alias: str, t, des_acc, des_acc_F, aero_F, roll_grade_F, demand_torque, max_torque,
+                 limit_regen, limit_torque, motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed,
+                 actual_speed_kmph, distance, demand_power, limit_power, battery_demand, current, battery_SOC):
+        self.veh_alias = veh_alias  # vehicle alias
+        self.t = t  # time array, s
         self.des_acc = des_acc
         self.des_acc_F = des_acc_F
         self.aero_F = aero_F

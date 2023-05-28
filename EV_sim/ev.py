@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from EV_sim.config import definations
+
 
 class ACInductionMotor:
     def __init__(self, rpm_r, rpm_max, l_max, eff, i):
@@ -139,7 +141,17 @@ class BatteryPack(BatteryModule):
 
 
 class EV:
-    def __init__(self, alias_name, database_dir = "../data/EV/EV_dataset.csv"):
+    """
+    EV class contains stores all relevant vehicle parameters (e.g., wheel, drivetrain, battery pack, etc.,) as its
+    class attributes. Furthermore, its has various vehicle methods to calculate for additional vehicle parameters.
+    "../EV_sim/data/EV/EV_dataset.csv"
+    """
+    def __init__(self, alias_name: str, database_dir: str = definations.ROOT_DIR + "/data/EV/EV_dataset.csv"):
+        """
+        EV class constructor.
+        :param alias_name: (str) Vehicle alias [i.e, identifier]
+        :param database_dir: (str) The file location of the data/EV/EV_dataset.csv relative to the working directory.
+        """
         self.alias_name = alias_name
         df_basicinfo = self.parse_basic_data(file_dir=database_dir)
         self.model_name = df_basicinfo["model_name"]
@@ -208,7 +220,7 @@ class EV:
                                 num_modules, pack_overhead_mass, soc_full, soc_empty, pack_eff)
 
     @property
-    def curb_mass(self):
+    def curb_mass(self) -> float:
         """
         Vehicle curb mass in units of kg.
         :return: (float) vehicle curb mass, kg
@@ -216,7 +228,7 @@ class EV:
         return self.m + self.pack.pack_mass
 
     @property
-    def max_mass(self):
+    def max_mass(self) -> float:
         """
         Vehicle maximum mass in units of kg.
         :return: (float) vehicle maximum mass, kg
@@ -224,7 +236,7 @@ class EV:
         return self.curb_mass + self.payload_capacity
 
     @property
-    def rot_mass(self):
+    def rot_mass(self) -> float:
         """
         Vehicle rotating equivalent mass in units of kg.
         :return: (float)
@@ -233,7 +245,7 @@ class EV:
                 (self.drive_train.wheel.I * self.drive_train.num_wheel))/(self.drive_train.wheel.r ** 2)
 
     @property
-    def equiv_mass(self):
+    def equiv_mass(self) -> float:
         """
         Vehicle's equivalent mass is a sum of its maximum and translational equivalent mass of the rotating inertia.
         :return: (float) Vehicle equivalent mass, kg
@@ -241,7 +253,7 @@ class EV:
         return self.max_mass + self.rot_mass
 
     @property
-    def max_speed(self):
+    def max_speed(self) -> float:
         """
         Vehicle maximum speed in km/h
         :return: (float) Vehicle max. speed, km/h
@@ -249,7 +261,7 @@ class EV:
         return 2 * np.pi * self.drive_train.wheel.r * self.motor.RPM_max * 60 / (1000 * self.drive_train.gear_box.N)
 
     @staticmethod
-    def list_all_EV_alias(file_dir):
+    def list_all_EV_alias(file_dir: str):
         """
         This method lists all the EV alias in the EV database.
         :return: (list) list of all EV alias in the EV database
@@ -258,7 +270,7 @@ class EV:
         df.set_index(['Parameter Classification', 'Parameter Name'], inplace=True)
         return df.columns.tolist()
 
-    def create_df(self,file_dir):
+    def create_df(self, file_dir: str):
         """
         returns a dataframe containing all the relevant EV information.
         :param file_dir:
@@ -270,7 +282,7 @@ class EV:
             raise Exception(f"{self.alias_name} not in EV dataset")
         return df[self.alias_name]
 
-    def parse_basic_data(self, file_dir):
+    def parse_basic_data(self, file_dir: str):
         """
         Returns a dataframe containing the basic EV information
         :param file_dir:
@@ -278,7 +290,7 @@ class EV:
         """
         return self.create_df(file_dir=file_dir)["basic vehicle"]
 
-    def parse_wheel_info(self, file_dir):
+    def parse_wheel_info(self, file_dir: str):
         """
         Returns a dataframe containing the EV's motor information
         :param file_dir:
@@ -286,7 +298,7 @@ class EV:
         """
         return self.create_df(file_dir=file_dir)["wheel"]
 
-    def parse_drivetrain_info(self, file_dir):
+    def parse_drivetrain_info(self, file_dir: str):
         """
         Returns a dataframe containing the EV's drive train information
         :param file_dir:
@@ -294,7 +306,7 @@ class EV:
         """
         return self.create_df(file_dir=file_dir)["drive train"]
 
-    def parse_motor_info(self, file_dir):
+    def parse_motor_info(self, file_dir: str):
         """
         Returns a dataframe containing the EV's drive train information
         :param file_dir:
@@ -302,7 +314,7 @@ class EV:
         """
         return self.create_df(file_dir=file_dir)["motor"]
 
-    def parse_veh_info(self, file_dir):
+    def parse_veh_info(self, file_dir: str):
         """
         Returns a dataframe containing the EV's drive train information
         :param file_dir:
@@ -310,7 +322,7 @@ class EV:
         """
         return self.create_df(file_dir=file_dir)["vehicle"]
 
-    def parse_cell_info(self, file_dir):
+    def parse_cell_info(self, file_dir: str):
         """
         Returns a dataframe containing the EV's battery cell information
         :param file_dir:
@@ -318,7 +330,7 @@ class EV:
         """
         return self.create_df(file_dir=file_dir)["cell"]
 
-    def parse_module_info(self, file_dir):
+    def parse_module_info(self, file_dir: str):
         """
         Returns a dataframe containing the EV's battery module information
         :param file_dir:
@@ -326,7 +338,7 @@ class EV:
         """
         return self.create_df(file_dir=file_dir)["module"]
 
-    def parse_pack_info(self, file_dir):
+    def parse_pack_info(self, file_dir: str):
         """
         Returns a dataframe containing the EV's battery pack information
         :param file_dir:

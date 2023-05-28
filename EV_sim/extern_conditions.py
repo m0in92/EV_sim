@@ -2,9 +2,12 @@ import numpy as np
 
 
 class ExternalConditions:
-    def __init__(self, rho, road_grade, road_force=0.0):
+    """
+    ExternalConditions stores the density, road grade and road force parameters.
+    """
+    def __init__(self, rho: float, road_grade: float, road_force: float=0.0):
         """
-        Class for the external conditions
+        ExternalConditions constructor
         :param rho: external air density, kg / m^3
         :param road_grade: represents the amount of road rise or drop. For e.g., a road grade of 5 % means that the
         road will rise 5 ft over the next 100 ft.

@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.typing
 
 from EV_sim.ev import EV
 from EV_sim.extern_conditions import ExternalConditions
@@ -7,7 +8,17 @@ from EV_sim.constants import PhysicsConstants
 from EV_sim.sol import Solution
 
 class VehicleDynamics:
-    def __init__(self, ev_obj, drive_cycle_obj, external_condition_obj):
+    """
+    VehicleDynamics simulates the demanded power and current from the batter pack.
+    """
+    def __init__(self, ev_obj: EV, drive_cycle_obj: DriveCycle, external_condition_obj: ExternalConditions):
+        """
+        VehicleDynamics class constructor.
+        :param ev_obj: (EV) EV class object that contains vehicle parameters.
+        :param drive_cycle_obj: (DriveCycle) Drive cycle class object that contains all relevant drive cycle parameters.
+        :param external_condition_obj: (ExternalConditions) ExternalConditions class object that contains all relevant
+        external condition parameters.
+        """
         if isinstance(ev_obj, EV):
             self.EV = ev_obj
         else:
@@ -29,7 +40,7 @@ class VehicleDynamics:
                                  "match.")
 
     @property
-    def des_speed(self):
+    def des_speed(self) -> numpy.typing.ArrayLike:
         """
         Desired vehicle speed in m/s.
         :return: (np.ndarray) Array of desired speed, m/s
@@ -37,11 +48,19 @@ class VehicleDynamics:
         return np.minimum(self.DriveCycle.speed_kmph, self.EV.max_speed) / 3.6
 
     @staticmethod
-    def desired_acc(desired_speed, prev_speed, current_time, prev_time):
+    def desired_acc(desired_speed: float, prev_speed: float, current_time: float, prev_time:float) -> float:
+        """
+        Calculates and returns the desired acceleration, m/s^2.
+        :param desired_speed: (float) desired speed, m/s
+        :param prev_speed: (float) speed at the previous time step, m/s
+        :param current_time: (float): time at the current time step, s
+        :param prev_time: (float): time at the previous time step, s
+        :return: (float) desired acceleration, m/s^2
+        """
         return (desired_speed - prev_speed) / (current_time - prev_time)
 
     @staticmethod
-    def desired_acc_F(equivalent_mass, desired_acc):
+    def desired_acc_F(equivalent_mass: float, desired_acc: float) -> float:
         """
         Calculates the desired accelerating force in N.
         :param equivalent_mass: (float) Equivalent vehicle mass, kg
@@ -51,7 +70,7 @@ class VehicleDynamics:
         return equivalent_mass * desired_acc
 
     @staticmethod
-    def aero_F(air_density, aero_frontal_area, C_d, prev_speed):
+    def aero_F(air_density: float, aero_frontal_area: float, C_d: float, prev_speed: float) -> float:
         """
         Calculates the aerodynamic drag in N.
         :param air_density: External air density, kg/m^3
@@ -63,7 +82,7 @@ class VehicleDynamics:
         return 0.5 * air_density * aero_frontal_area * C_d * (prev_speed**2)
 
     @staticmethod
-    def roll_grade_F(max_veh_mass, gravity_acc, grade_angle):
+    def roll_grade_F(max_veh_mass: float, gravity_acc: float, grade_angle: float) -> float:
         """
         Calculates the rolling grade force.
         :param C_r: rolling coefficient, unit-less
@@ -75,7 +94,8 @@ class VehicleDynamics:
         return max_veh_mass * gravity_acc * np.sin(grade_angle)
 
     @staticmethod
-    def demand_torque(des_acc_F, aero_F, roll_grade_F, road_F, wheel_radius, gear_ratio):
+    def demand_torque(des_acc_F: float, aero_F: float, roll_grade_F: float, road_F: float, wheel_radius: float,
+                      gear_ratio: float) -> float:
         return (des_acc_F + aero_F + roll_grade_F + road_F) * wheel_radius / gear_ratio
 
     def init_cond(self):
@@ -91,6 +111,10 @@ class VehicleDynamics:
         return prev_speed, prev_motor_speed, prev_distance, prev_SOC, prev_time
 
     def create_init_arrays(self):
+        """
+        Create zeros numpy arrays of the desired sizes for all the simulation results
+        :return: (tuple) Tuple of zeros numpy arrays for the storage of results.
+        """
         des_acc = np.zeros(len(self.DriveCycle.t))
         des_acc_F = np.zeros(len(self.DriveCycle.t))
         aero_F = np.zeros(len(self.DriveCycle.t))

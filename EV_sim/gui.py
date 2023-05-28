@@ -6,18 +6,25 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
 import EV_sim
+from EV_sim.config import definations
 
 
 class EVSimulatorApp(tkinter.Tk):
+    """
+    This class displays the main dashboard of the GUI (Graphical User Interface).
+
+    Note: Currently, the GUI only supports constant road grade and constant road force.
+    """
     heading_style = ('Helvetica', 10, 'bold')
 
-    EV_DATABASE_DIR = "../../data/EV/EV_dataset.csv"
-    DRIVECYCLE_FOLDER_DIR = "../../data/drive_cycles/"
+    EV_DATABASE_DIR = definations.ROOT_DIR + "/data/EV/EV_dataset.csv"
+    DRIVECYCLE_FOLDER_DIR = definations.ROOT_DIR + "/data/drive_cycles/"
 
     def __init__(self):
         # root
         super().__init__()
         self.title('EV Simulator')
+        # self.iconbitmap('icon.ico')
 
         # Widget
         self.UserInputFrame = UserInput(self)
@@ -37,8 +44,13 @@ class EVSimulatorApp(tkinter.Tk):
 
 
 class UserInput(ttk.Frame):
+    """
+    This class contains attributes and methods pertaining to the user input frame of the GUI.
+    """
+
+    dc_wildcard_txt = definations.ROOT_DIR + '/data/drive_cycles/*.txt'
     # all_dc lists all the available drive cycles from drive_cycle database.
-    all_dc = [file_.split('\\')[1].split('.')[0] for file_ in glob.glob('../../data/drive_cycles/*.txt')]
+    all_dc = [file_.split('\\')[1].split('.')[0] for file_ in glob.glob(dc_wildcard_txt)]
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -77,6 +89,9 @@ class UserInput(ttk.Frame):
 
 
 class Parameters(ttk.Frame):
+    """
+    This class contains attributes and methods pertaining to the Parameters frame of the GUI.
+    """
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -426,6 +441,9 @@ class Parameters(ttk.Frame):
 
 
 class Results(ttk.Frame):
+    """
+    This class contains attributes and methods pertaining to the results frame of the GUI.
+    """
     error_font_style = ('Helvetica', 10, 'bold')
 
     def __init__(self, parent, var_EV_alias, var_dc, var_air_pressure, var_road_grade, var_road_force):
