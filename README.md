@@ -26,6 +26,9 @@ Recommended installation steps are listed as follows:
 ### Vehicles in the Database:
 The following vehicles and their corresponding vehicle alias names are listed below. This list will be updated as the 
 vehicle database grows. The various source for the vehicle parameters are also cited (see Reference section for details).
+Please note that certain approximations and assumptions were made for the vehicle parameters. Feel free to contact the
+author for more details, corrections, and/or contributions.
+
 1. Chevy Volt 2017<sup>2</sup>
 2. Tesla Model S 2021-2023
    - Motor specs <sup>3</sup>
