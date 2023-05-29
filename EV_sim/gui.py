@@ -1,5 +1,6 @@
 import tkinter
 from tkinter import ttk
+import os
 import glob
 
 import matplotlib.pyplot as plt
@@ -48,9 +49,10 @@ class UserInput(ttk.Frame):
     This class contains attributes and methods pertaining to the user input frame of the GUI.
     """
 
-    dc_wildcard_txt = definations.ROOT_DIR + '/data/drive_cycles/*.txt'
-    # all_dc lists all the available drive cycles from drive_cycle database.
-    all_dc = [file_.split('\\')[1].split('.')[0] for file_ in glob.glob(dc_wildcard_txt)]
+    # Class variables
+    dc_wildcard_txt = definations.ROOT_DIR + '\data\drive_cycles\*.txt'
+    all_dc = [os.path.split(file_)[-1].split('.')[0] for file_ in glob.glob(dc_wildcard_txt)] # all_dc lists all the
+    # available drive cycles from drive_cycle database.
 
     def __init__(self, parent):
         super().__init__(parent)
