@@ -18,6 +18,11 @@ and hence the limited torque and actual forces, acceleration, and speed are then
   
 ![image](Assests/gui.png)
 
+### Installation
+Recommended installation steps are listed as follows:
+1. Ensure numpy (https://numpy.org/), pandas (https://pandas.pydata.org/), and Matplotlib (https://matplotlib.org/) are installed in your system.
+2. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
+
 ### File Directories
 - Assests: Contains images for the README.md file
 - EV_Sim: Source code
