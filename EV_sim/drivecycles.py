@@ -55,7 +55,7 @@ class DriveCycle:
         plt.show()
 
     def __repr__(self):
-        return f"{self.drive_cycle_name}"
+        return f"DriveCycle({self.drive_cycle_name})"
 
     def __str__(self):
         return f"{self.drive_cycle_name}"

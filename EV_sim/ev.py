@@ -347,7 +347,7 @@ class EV:
         return self.create_df(file_dir=file_dir)["pack"]
 
     def __repr__(self):
-        return f"{self.alias_name}, {self.pack.pack_energy}, {self.motor.eff}, {self.drive_train.wheel.r}"
+        return f"EV('{self.alias_name}')"
 
     def __str__(self):
         return f"{self.alias_name} made by {self.manufacturer}"

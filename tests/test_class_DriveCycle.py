@@ -12,3 +12,4 @@ class TestDriveCycle(unittest.TestCase):
         self.assertTrue(np.array_equal(t_actual, udds.t))
         self.assertEqual(3.0, udds.speed_mph[21])
         self.assertEqual(4.828032000000000, udds.speed_kmph[21])
+

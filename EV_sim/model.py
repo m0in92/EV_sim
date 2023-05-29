@@ -221,4 +221,10 @@ class VehicleDynamics:
                         actual_speed, actual_speed_kmph, distance, demand_power, limit_power, battery_demand, current,
                         battery_SOC)
 
+    def __repr__(self):
+        return f"VehicleDynamics({self.EV}, {self.DriveCycle}, {self.ExtCond})"
+
+    def __str__(self):
+        return f"Vehicle Alias: {self.EV.alias_name} driving along {self.DriveCycle.drive_cycle_name}."
+
 

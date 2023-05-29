@@ -28,3 +28,9 @@ class ExternalConditions:
             self.road_force = 0
         else:
             raise TypeError("Road force needs to be a float.")
+
+    def __repr__(self):
+        return f"ExternalConditions({self.rho}, {self.road_grade}, {self.road_force})"
+
+    def __str__(self):
+        return f"air_pressure: {self.rho}, road_grade:{self.road_grade}, road_force: {self.road_force}"

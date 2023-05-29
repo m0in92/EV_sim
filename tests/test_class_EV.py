@@ -70,3 +70,14 @@ class TestEVConstructor(unittest.TestCase):
         self.assertEqual(0.95, volt.motor.eff)
         self.assertEqual(0.2, volt.motor.I)
         self.assertAlmostEqual(1.151917306316258e+02, volt.motor.P_max)
+
+class TestEVReprAndStr(unittest.TestCase):
+    def test_repr(self):
+        alias_name = "Volt_2017"
+        volt = EV_sim.EV(alias_name=alias_name)
+        self.assertEqual(f"EV('{alias_name}')", repr(volt))
+
+    def test_str(self):
+        alias_name = "Volt_2017"
+        volt = EV_sim.EV(alias_name=alias_name)
+        self.assertEqual(f"{alias_name} made by Chevy", str(volt))
