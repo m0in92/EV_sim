@@ -167,7 +167,8 @@ class Parameters(ttk.Frame):
         motor_display_label6 = ttk.Label(parameter_motor_frame, text="Inertia, kg m^2")
         motor_display_label7 = ttk.Label(parameter_motor_frame, text="Max. Power, kW")
 
-        motor_output_label1 = ttk.Label(parameter_motor_frame, textvariable=self.var_motor_type, width=10)
+        motor_output_label1 = ttk.Label(parameter_motor_frame, textvariable=self.var_motor_type, width=20) # This
+        # ttk.Label corresponds to motor type and needs extra space.
         motor_output_label2 = ttk.Label(parameter_motor_frame, textvariable=self.var_motor_rated_speed, width=10)
         motor_output_label3 = ttk.Label(parameter_motor_frame, textvariable=self.var_motor_max_speed, width=10)
         motor_output_label4 = ttk.Label(parameter_motor_frame, textvariable=self.var_motor_max_torque, width=10)
@@ -394,7 +395,7 @@ class Parameters(ttk.Frame):
         # initiate EV instance and update GUI variables
         ev_instance = EV_sim.EV(user_input_alias_combo, database_dir=EVSimulatorApp.EV_DATABASE_DIR)
 
-        self.var_motor_type.set('AC Induction Motor')  # TO DO: Add more motor types.
+        self.var_motor_type.set(ev_instance.motor.motor_type)
         self.var_motor_rated_speed.set(ev_instance.motor.RPM_r)
         self.var_motor_max_speed.set(ev_instance.motor.RPM_max)
         self.var_motor_max_torque.set(ev_instance.motor.L_max)

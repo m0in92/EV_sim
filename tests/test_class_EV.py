@@ -15,7 +15,7 @@ class TestEVConstructor(unittest.TestCase):
         self.assertEqual("2017", volt.year)
         self.assertEqual("Chevy", volt.manufacturer)
         # Check for battery pack information
-        self.assertTrue(np.isnan(volt.pack.cell_manufacturer))
+        self.assertEqual("Unknown", volt.pack.cell_manufacturer)
         self.assertEqual(15.0, volt.pack.cell_cap)
         self.assertEqual(450.0, volt.pack.cell_mass)
         self.assertEqual(4.2, volt.pack.cell_V_max)

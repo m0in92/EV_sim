@@ -5,7 +5,16 @@ from EV_sim.config import definations
 
 
 class ACInductionMotor:
-    def __init__(self, rpm_r, rpm_max, l_max, eff, i):
+    def __init__(self, motor_type, rpm_r, rpm_max, l_max, eff, i):
+        # check for the input motor type. np.isnan is possible in case of empty field in the EV_dataset.csv
+        if isinstance(motor_type, str) or np.isnan(motor_type):
+            if isinstance(motor_type, str):
+                self.motor_type = motor_type
+            else:
+                self.motor_type = "Unknown" # set instance's motor type in case it is missing
+        else:
+            raise TypeError("Motor type needs to be a string or np.nan (in case it is unknown) type.")
+
         if isinstance(rpm_r, float):
             self.RPM_r = rpm_r # rated motor speed, rpm
         else:
@@ -91,7 +100,15 @@ class DriveTrain:
 
 class BatteryCell:
     def __init__(self, manufacturer, cap, mass, v_max, v_nom, v_min):
-        self.cell_manufacturer = manufacturer
+        # check for the input manufacturer type. np.isnan is possible in case of empty field in the EV_dataset.csv
+        if isinstance(manufacturer, str) or np.isnan(manufacturer):
+            if isinstance(manufacturer, str):
+                self.cell_manufacturer = manufacturer
+            else:
+                self.cell_manufacturer = "Unknown" # sets the instance value in case of unknown values.
+        else:
+            raise TypeError("Battery cell manufacturer needs to be a string or np.nan type.")
+
         self.cell_cap = cap  # Battery cell capacity, A hr
         self.cell_mass = mass  # Battery cell mass, g
         self.cell_V_max = v_max  # Battery cell max. voltage, V
@@ -179,13 +196,14 @@ class EV:
                                       inverter_eff=inverter_eff, frac_regen_torque=frac_regen_torque, eff=dt_eff)
 
         df_motor = self.parse_motor_info(file_dir=database_dir)
+        motor_type = df_motor["type"]
         rpm_r = float(df_motor["RPM_rated [rpm]"])
         rpm_max = float(df_motor["RPM_max [rpm]"])
         l_max = float(df_motor["Lmax [Nm]"])
         motor_eff = float(df_motor["eff"])
         i_motor = float(df_motor["inertia [kg/m2]"])
         del df_motor
-        self.motor = ACInductionMotor(rpm_r=rpm_r, rpm_max=rpm_max, l_max=l_max, eff=motor_eff, i=i_motor)
+        self.motor = ACInductionMotor(motor_type=motor_type, rpm_r=rpm_r, rpm_max=rpm_max, l_max=l_max, eff=motor_eff, i=i_motor)
 
         df_vehicle = self.parse_veh_info(file_dir=database_dir)
         self.C_d = float(df_vehicle["C_d"]) # drag coefficient, unit-less
