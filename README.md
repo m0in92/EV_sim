@@ -29,8 +29,8 @@ vehicle database grows. The various source for the vehicle parameters are also c
 Please note that certain approximations and assumptions were made for the vehicle parameters. Feel free to contact the
 author for more details, corrections, and/or contributions.
 
-1. Chevy Volt 2017<sup>2</sup>
-2. Tesla Model S 2021-2023
+1. Chevy Volt 2017<sup>2</sup> : Volt_2017
+2. Tesla Model S 2021-2023 : Tesla_S_2023_LongRange
    - Motor specs <sup>3</sup>
    - Battery specs <sup>4</sup>
    - General Vehicle specs <sup>5,6</sup>
