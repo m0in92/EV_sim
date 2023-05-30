@@ -30,10 +30,14 @@ Please note that certain approximations and assumptions were made for the vehicl
 author for more details, corrections, and/or contributions.
 
 1. Chevy Volt 2017<sup>2</sup> : Volt_2017
-2. Tesla Model S 2021-2023 : Tesla_S_2023_LongRange
+2. Tesla Model 3 RWD 2023: Tesla_3_2023
+    - Battery specs <sup>7,8</sup>
+    - General Vehicle specs <sup>9,10,11</sup>
+    - Motor specs <sup>11</sup>
+3. Tesla Model S 2021-2023 : Tesla_S_2023_LongRange
    - Motor specs <sup>3</sup>
    - Battery specs <sup>4</sup>
-   - General Vehicle specs <sup>5,6</sup>
+   - General vehicle specs <sup>5,6</sup>
    - Drivetrain specs <sup>3</sup>
 
 ### File Directories
@@ -49,3 +53,9 @@ author for more details, corrections, and/or contributions.
 4. https://www.qnovo.com/blogs/peek-inside-the-battery-of-a-tesla-model-s#:~:text=Panasonic%20specifies%20a%20weight%20of,kg%20or%20about%20700%20lbs.
 5. https://www.caranddriver.com/features/a15108689/drag-queens-aerodynamics-compared-comparison-test/
 6. https://www.tesla.com/ownersmanual/models/en_us/GUID-E414862C-CFA1-4A0B-9548-BE21C32CAA58.html
+7. https://insideevs.com/news/542064/tesla-model3-lfp-battery-pack/
+8. https://en.wikipedia.org/wiki/Tesla_Model_3#:~:text=The%20battery%20uses%202170%2Dsize,in%2096%20groups%20of%2031.
+9. https://www.tesla.com/ownersmanual/model3/en_us/GUID-877ACE2D-B62F-4596-A6AD-A74F7905741C.html
+10. https://arstechnica.com/cars/2019/03/the-tesla-model-3-reviewed-finally/#:~:text=The%20shape%20has%20purpose%2C%20though,original%20target%20of%20just%200.21.
+11. https://teslamotorsclub.com/tmc/threads/model-3-frontal-area.94907/
+12. https://www.researchgate.net/publication/370553199_Comparison_of_Electric_EV_and_Fossil_Fuel_Gasoline-Diesel_Vehicles_in_Terms_of_Torque_and_Power/figures?lo=1
