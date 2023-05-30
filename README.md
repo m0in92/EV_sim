@@ -23,6 +23,38 @@ Recommended installation steps are listed as follows:
 1. Ensure numpy (https://numpy.org/), pandas (https://pandas.pydata.org/), and Matplotlib (https://matplotlib.org/) are installed in your system.
 2. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
 
+### Usage
+#### Using Source code
+<p>
+Import the EV_sim module using Python's import command, and this imports relevant submodules within EV_sim.
+
+<code>import EV_sim</code>
+
+Then, specify the EV class object whose parameters include the EV's alias name. For the list of support EV parameters, refer
+to the "Vehicles in the Database" section. For example:
+
+<code> alias_name = "Volt_2017" </code><br>
+<code> volt = EV_sim.EV(alias_name=alias_name) </code>
+
+Specify the DriveCycle and ExternalConditions class objects.
+
+<code>
+udds = EV_sim.DriveCycle(drive_cycle_name="us06") <br>
+waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3) <br></code>
+
+Finally, declare the VehicleDynamics object and use it's simulate method. 
+
+<code>
+model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo) <br>
+sol = model.simulate()
+</code>
+</p>
+
+#### Using GUI
+<p>
+One way to execute gui is to run <code>python -m EV_sim</code> on the command line.
+</p>
+
 ### Vehicles in the Database:
 The following vehicles and their corresponding vehicle alias names are listed below. This list will be updated as the 
 vehicle database grows. The various source for the vehicle parameters are also cited (see Reference section for details).
