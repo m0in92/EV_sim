@@ -38,16 +38,14 @@ to the "Vehicles in the Database" section. For example:
 
 Specify the DriveCycle and ExternalConditions class objects.
 
-<code>
-udds = EV_sim.DriveCycle(drive_cycle_name="us06") <br>
-waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3) <br></code>
+<code> udds = EV_sim.DriveCycle(drive_cycle_name="us06") </code> <br>
+<code> waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3) </code>
 
 Finally, declare the VehicleDynamics object and use it's simulate method. 
 
-<code>
-model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo) <br>
-sol = model.simulate()
-</code>
+<code> model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo) </code> <br>
+<code> sol = model.simulate() </code>
+
 </p>
 
 #### Using GUI
@@ -56,6 +54,7 @@ One way to execute gui is to run <code>python -m EV_sim</code> on the command li
 </p>
 
 ### Vehicles in the Database:
+<p>
 The following vehicles and their corresponding vehicle alias names are listed below. This list will be updated as the 
 vehicle database grows. The various source for the vehicle parameters are also cited (see Reference section for details).
 Please note that certain approximations and assumptions were made for the vehicle parameters. Feel free to contact the
@@ -71,6 +70,7 @@ author for more details, corrections, and/or contributions.
    - Battery specs <sup>4</sup>
    - General vehicle specs <sup>5,6</sup>
    - Drivetrain specs <sup>3</sup>
+</p>
 
 ### File Directories
 - Assests: Contains images for the README.md file
