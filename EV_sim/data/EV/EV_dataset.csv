@@ -3,6 +3,7 @@ basic vehicle,dataset_name,Volt_2017,Tesla_S_2023,Tesla_2022_3
 basic vehicle,model_name,Volt,Model S,Model 3
 basic vehicle,year,2017,2023,2022
 basic vehicle,manufacturer,Chevy,Tesla,Tesla
+basic vehicle,trim,Unknown,Long Range,RWD
 cell,positive electrode chem.,,,LFP
 cell,battery_cell_manufacturer,,Panasonic,CATL
 cell,capacity [A hr],15,3.4,6.25

@@ -25,7 +25,7 @@ class EVSimulatorApp(tkinter.Tk):
         # root
         super().__init__()
         self.title('EV Simulator')
-        # self.iconbitmap('icon.ico')
+        self.iconbitmap(definations.ROOT_DIR + '/icon.ico')
 
         # Widget
         self.UserInputFrame = UserInput(self)
@@ -361,7 +361,7 @@ class Parameters(ttk.Frame):
         pack_display_label1 = ttk.Label(parameter_pack_frame, text="Tot. Modules")
         pack_display_label2 = ttk.Label(parameter_pack_frame, text="Mass, kg")
         pack_display_label3 = ttk.Label(parameter_pack_frame, text="Energy, Wh")
-        pack_display_label4 = ttk.Label(parameter_pack_frame, text="Specific Energy, Ah/kg")
+        pack_display_label4 = ttk.Label(parameter_pack_frame, text="Specific Energy, Wh/kg")
         pack_display_label5 = ttk.Label(parameter_pack_frame, text="V. min., V")
         pack_display_label6 = ttk.Label(parameter_pack_frame, text="V. nom., V")
         pack_display_label7 = ttk.Label(parameter_pack_frame, text="V. max., V")

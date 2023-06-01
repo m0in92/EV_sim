@@ -99,7 +99,7 @@ class DriveTrain:
 
 
 class BatteryCell:
-    def __init__(self, manufacturer, cap, mass, v_max, v_nom, v_min):
+    def __init__(self, manufacturer, cap, mass, v_max, v_nom, v_min, chem):
         # check for the input manufacturer type. np.isnan is possible in case of empty field in the EV_dataset.csv
         if isinstance(manufacturer, str) or np.isnan(manufacturer):
             if isinstance(manufacturer, str):
@@ -115,15 +115,23 @@ class BatteryCell:
         self.cell_V_nom = v_nom # Battery cell nominal voltage, V
         self.cell_V_min = v_min  # Battery cell min. voltage, V
 
+        if isinstance(chem, str) or np.isnan(chem):
+            if isinstance(chem, str):
+                self.cell_chem = chem # Battery cell postive electrode chemistry
+            else:
+                self.cell_chem = "Unknown"
+        else:
+            raise TypeError("Cell chemistry needs to be a string or a np.nan type.")
+
         self.cell_energy = self.cell_V_nom * self.cell_cap # Battery cell energy, W hr
         self.cell_spec_energy = 1000 * self.cell_energy / self.cell_mass # Battery cell specific energy, W hr/kg
 
 
 class BatteryModule(BatteryCell):
-    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min,
+    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min, cell_chem,
                  n_s, n_p, overload_mass):
         super().__init__(manufacturer=cell_manufacturer, cap=cell_cap, mass=cell_mass, v_max=cell_v_max,
-                         v_nom=cell_v_nom, v_min=cell_v_min)
+                         v_nom=cell_v_nom, v_min=cell_v_min, chem=cell_chem)
         self.Ns = n_s # no. of series connections of cells in a module, unit-less
         self.Np = n_p  # no. of parallel connections of cells in a module, unit-less
         self.module_overhead_mass = overload_mass  # mass beyond cell mass, percent
@@ -131,16 +139,16 @@ class BatteryModule(BatteryCell):
         self.total_no_cells = self.Ns * self.Np
         self.module_cap = self.Np * self.cell_cap  # Battery module capacity,  A hr
         self.module_mass = self.total_no_cells * (self.cell_mass / 1000) / (1 - self.module_overhead_mass)  # Battery module mass, kg
-        self.module_energy = self.total_no_cells * self.cell_energy / 1000  # Battery module energy, kWhr
-        self.module_specific_energy = self.module_energy * 1000 / self.module_mass  # Specific energy, Whr/kg
+        self.module_energy = self.total_no_cells * self.cell_energy / 1000  # Battery module energy, kWh
+        self.module_specific_energy = self.module_energy * 1000 / self.module_mass  # Specific energy, Wh/kg
 
 
 class BatteryPack(BatteryModule):
-    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min,
+    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min, cell_chem,
                  n_s, n_p, module_overhead_mass,
                  num_modules, pack_overhead_mass, soc_full, soc_empty, eff):
         super().__init__(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass, cell_v_max=cell_v_max,
-                         cell_v_nom=cell_v_nom, cell_v_min=cell_v_min,
+                         cell_v_nom=cell_v_nom, cell_v_min=cell_v_min, cell_chem=cell_chem,
                          n_s=n_s, n_p=n_p, overload_mass=module_overhead_mass)
         self.num_modules = num_modules  # no. of modules in series, unit-less
         self.pack_overhead_mass = pack_overhead_mass  # mass beyond module and cell masses, percent
@@ -150,8 +158,8 @@ class BatteryPack(BatteryModule):
 
         self.total_no_cells = self.total_no_cells * self.num_modules  # total no. of battery cells in the pack, unit-less
         self.pack_mass = self.module_mass * self.num_modules / (1 - self.pack_overhead_mass)  # Battery pack mass, kg
-        self.pack_energy = self.module_energy * self.num_modules  # Battery pack energy, W hr
-        self.pack_specific_energy = self.pack_energy * 1000 / self.pack_mass  # Battery pack specific energy, Whr/kg
+        self.pack_energy = self.module_energy * self.num_modules  # Battery pack energy, Wh
+        self.pack_specific_energy = self.pack_energy * 1000 / self.pack_mass  # Battery pack specific energy, Wh/kg
         self.pack_V_max = self.num_modules * self.Ns * self.cell_V_max # Battery pack max. voltage, V
         self.pack_V_nom = self.num_modules * self.Ns * self.cell_V_nom # Battery pack nominal voltage, V
         self.pack_V_min = self.num_modules * self.Ns * self.cell_V_min # battery pack min. voltage, V
@@ -174,6 +182,7 @@ class EV:
         self.model_name = df_basicinfo["model_name"]
         self.year = df_basicinfo["year"]
         self.manufacturer = df_basicinfo["manufacturer"]
+        self.trim = df_basicinfo["trim"]
         del df_basicinfo
 
         df_wheel = self.parse_wheel_info(file_dir=database_dir)
@@ -220,6 +229,7 @@ class EV:
         cell_v_max = float(df_cell["V_max [V]"])
         cell_v_nom = float(df_cell["V_nom [V]"])
         cell_v_min = float(df_cell["V_min [V]"])
+        cell_chem = df_cell['positive electrode chem.']
         del df_cell
         df_module = self.parse_module_info(file_dir=database_dir)
         n_s = int(df_module["Ns"])
@@ -233,9 +243,11 @@ class EV:
         soc_empty = float(df_pack["SOC_empty"])
         pack_eff = float(df_pack["eff"])
         del df_pack
-        self.pack = BatteryPack(cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min,
-                                n_s, n_p, module_overhead_mass,
-                                num_modules, pack_overhead_mass, soc_full, soc_empty, pack_eff)
+        self.pack = BatteryPack(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass,
+                                cell_v_max=cell_v_max, cell_v_nom=cell_v_nom, cell_v_min=cell_v_min, cell_chem=cell_chem,
+                                n_s=n_s, n_p=n_p, module_overhead_mass=module_overhead_mass,
+                                num_modules=num_modules, pack_overhead_mass=pack_overhead_mass, soc_full=soc_full,
+                                soc_empty=soc_empty, eff=pack_eff)
 
     @property
     def curb_mass(self) -> float:
