@@ -13,5 +13,4 @@ setup(name='EV_sim',
       author_email="moinahmed100#gmail.com",
       packages=["EV_sim"],
       install_requires=['numpy', 'pandas', 'matplotlib'],
-      license_files='',
       )
