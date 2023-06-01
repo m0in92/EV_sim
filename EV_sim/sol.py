@@ -13,17 +13,17 @@ class Solution:
                  actual_speed_kmph, distance, demand_power, limit_power, battery_demand, current, battery_SOC):
         self.veh_alias = veh_alias  # vehicle alias
         self.t = t  # time array, s
-        self.des_acc = des_acc
-        self.des_acc_F = des_acc_F
-        self.aero_F = aero_F
-        self.roll_grade_F = roll_grade_F
-        self.demand_torque = demand_torque
-        self.max_torque = max_torque
-        self.limit_regen = limit_regen
-        self.limit_torque = limit_torque
-        self.motor_torque = motor_torque
-        self.actual_acc_F = actual_acc_F
-        self.actual_acc = actual_acc
+        self.des_acc = des_acc # Desired Acceleration, N
+        self.des_acc_F = des_acc_F # Desired Accelerating Force, N
+        self.aero_F = aero_F # Aerodynamic Force, N
+        self.roll_grade_F = roll_grade_F # roll grade force, N
+        self.demand_torque = demand_torque # Demand Torque, Nm
+        self.max_torque = max_torque # Max. Torque, Nm
+        self.limit_regen = limit_regen # Limit Regeneration, Nm
+        self.limit_torque = limit_torque # Limit Torque, Nm
+        self.motor_torque = motor_torque # Motor Torque, Nm
+        self.actual_acc_F = actual_acc_F # Actual Acceleration Force, N
+        self.actual_acc = actual_acc # Actual Acceleration, m/s^2
         self.motor_speed = motor_speed
         self.actual_speed = actual_speed
         self.actual_speed_kmph = actual_speed_kmph
@@ -31,7 +31,7 @@ class Solution:
         self.demand_power = demand_power
         self.limit_power = limit_power
         self.battery_demand = battery_demand
-        self.current = current
+        self.current = current # battery pack current, A
         self.battery_SOC = battery_SOC
 
     def plot_battery_demand(self):

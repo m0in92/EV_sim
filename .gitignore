@@ -469,4 +469,4 @@ cython_debug/
 EV_sim/data/EV/battery_cell_dataset.xlsx
 EV_sim/data/EV/BMW_Samsung_SDI_94Ah_Datasheet (1).pdf
 EV_sim/data/EV/batteryi5486.pdf
-EV_sim/gui2.py
+EV_sim/data/EV/EV_dataset_premium.csv
