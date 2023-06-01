@@ -10,6 +10,12 @@ import EV_sim
 from EV_sim.config import definations
 
 
+# Public variables
+icon_dir = definations.ROOT_DIR + '/icon.ico'
+license_dir = os.path.join(definations.ROOT_DIR + './LICENSE') # TODO: A better way of defining project directory
+doc_dir = os.path.join(definations.ROOT_DIR + './README.md') # TODO: A better way of defining project directory
+
+
 class VehicleDynamicsApp(tkinter.Tk):
     """
     Contains method and attributes for the root window. It creates the main window, menubar, panedwindow, and the
@@ -40,16 +46,10 @@ class VehicleDynamicsApp(tkinter.Tk):
         style = ttk.Style()
         style.theme_use('classic')
 
-        # Widgets - Menubar and PanedWindow
-        self.mb = tkinter.Menu(self)
-        option_menu = tkinter.Menu(self.mb)
-        option_menu.add_command(label="Show to two decimal", command=self.show_two_decimal_cmd)
-        self.mb.add_cascade(label="Options", menu=option_menu)
-
-        self.pw = ttk.PanedWindow(self, orient=tkinter.HORIZONTAL)
-
-        # Widget - Input and Display Frames
-        self.InputAndDisplayFrame = InputAndDisplayFrames(parent=self.pw)
+        # Widgets
+        mb = MenuBarClass(self) # menubar using the MenuBarClass below.
+        self.pw = ttk.PanedWindow(self, orient=tkinter.HORIZONTAL) # PanedWindow Widget
+        self.InputAndDisplayFrame = InputAndDisplayFrames(parent=self.pw) # Input and Display Frames Widget
 
         # Widget grid placements
         self.pw.grid(row=0, column=0, sticky="news")
@@ -57,13 +57,54 @@ class VehicleDynamicsApp(tkinter.Tk):
         # Row and column configurations
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        self.config(menu=self.mb)
+        self.config(menu=mb)
 
         # main loop
         self.mainloop()
 
-    def show_two_decimal_cmd(self):
-        self.set_two_decimal.set(True)
+
+class MenuBarClass(tkinter.Menu):
+    """Attributes and methods for the menubar."""
+    def __init__(self, parent) -> None:
+        super().__init__(parent)
+
+        option_menu = tkinter.Menu(self, tearoff="off")
+        option_menu.add_command(label="Show to two decimal")
+        help_menu = tkinter.Menu(self, tearoff="off")
+        help_menu.add_command(label="Documentation", command=self.show_doc_window)
+        help_menu.add_command(label="Licence", command=self.show_licence_window)
+        self.add_cascade(label="Options", menu=option_menu)
+        self.add_cascade(label="Help", menu=help_menu)
+
+    def read_file(self, licence_file_dir) -> str:
+        with open(licence_file_dir, 'r', encoding='utf8') as l_file:
+            l_str = l_file.read()
+            l_file.close()
+        return l_str
+
+    def show_licence_window(self) -> None:
+        win_license = tkinter.Toplevel()
+        win_license.iconbitmap(icon_dir)
+
+        lblfme = tkinter.LabelFrame(win_license, text="Licence")
+        tkinter.Label(lblfme, text=self.read_file(licence_file_dir=license_dir)).grid(row=0, column=0)
+
+        lblfme.grid(row=0, column=0, sticky="news")
+
+    def show_doc_window(self) -> None:
+        """
+        Opens a new window with the documentation.
+        :return: None
+        """
+        # TODO: Add scroll bar.
+        win_doc = tkinter.Toplevel()
+        win_doc.iconbitmap(icon_dir)
+
+        lblfme = tkinter.LabelFrame(win_doc, text="Documentation")
+        tkinter.Label(lblfme, text=self.read_file(licence_file_dir=doc_dir)).grid(row=0, column=0)
+
+        # Widget Placements
+        lblfme.grid(row=0, column=0, sticky="news")
 
 
 class InputAndDisplayFrames(ttk.Frame):
@@ -675,6 +716,7 @@ class ResultDisplay(MainDisplay):
     ResultDisplay contains attributes and methods pertaining to the display corresponding to the results section in the
     Input display. This section is activated after the simulation is performed.
     """
+    # TODO: have the option of saving data and plots.
     def __init__(self, parent_fme, text: str, parent_obj: tkinter.Frame) -> None:
         super().__init__(parent_fme=parent_fme, text=text, parent_obj=parent_obj)
 
