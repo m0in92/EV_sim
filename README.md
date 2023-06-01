@@ -75,7 +75,9 @@ author for more details, corrections, and/or contributions.
 ### File Directories
 - Assests: Contains images for the README.md file
 - EV_Sim: Source code
-- examples: example implementation using source code
+  - config: path configurations 
+  - examples: example implementation using source code 
+  - data: datafiles for EVs and dirvecycles
 - tests: Test code using the results from MATLAB code<sup>2</sup>.
 
 ### References
