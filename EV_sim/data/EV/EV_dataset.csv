@@ -1,41 +1,41 @@
-Parameter Classification,Parameter Name,Volt_2017,Tesla_S_2023_LongRange,Tesla_2022_3,Tesla_2022_3_LongRange
-basic vehicle,dataset_name,Volt_2017,Tesla_S_2023,Tesla_2022_3,Tesla_2022_3_LongRange
-basic vehicle,model_name,Volt,Model S,Model 3,Model 3
-basic vehicle,year,2017,2023,2022,2022
-basic vehicle,manufacturer,Chevy,Tesla,Tesla,Tesla
-basic vehicle,trim,Unknown,Long Range,RWD,Long Range
-cell,positive electrode chem.,,,LFP,NCM
-cell,battery_cell_manufacturer,,Panasonic,CATL,
-cell,capacity [A hr],15,3.4,6.25,4.76
-cell,mass [g],450,46,65,65
-cell,V_max [V],4.2,4.2,3.65,4.2
-cell,V_nom [V],3.8,3.6,3.22,3.7
-cell,V_min [V],3,3.2,2.5,3.2
-module,Np,3,72,24,31
-module,Ns,8,6,31,24
-module,overhead_mass,0.08,0.245,0.2,0.5
-pack,N_module_s,12,16,4,4
-pack,overhead_mass,0.1,0.33,0.33,0.33
-pack,SOC_full,75,75,75,75
-pack,SOC_empty,25,25,25,25
-pack,eff,0.96,0.96,0.96,0.96
-motor,type,AC Induction Motor,3-phase AC Induction Motor,AC Induction Motor,AC Induction Motor
-motor,Lmax [Nm],275,329,330,510
-motor,RPM_rated [rpm],4000,5605.8,8000,8000
-motor,RPM_max [rpm],12000,12000,15000,15000
-motor,eff,0.95,0.95,0.95,0.95
-motor,inertia [kg/m2],0.2,0.2,0.2,0.2
-wheel,radius [m],0.35,0.4826,0.508,0.508
-wheel,inertia [kg/m2],8,8,8,8
-wheel,roll_coeff,0.0111,0.0111,0.01,0.01
-drive train,inverter_eff,0.94,0.94,0.94,0.94
-drive train,frac_regen_torque,0.9,0.9,0.9,0.9
-drive train,gear_ratio,12,9.04,9,9
-drive train,gear_inertia [kg/m2],0.05,0.05,0.05,0.05
-drive train,eff,0.8316,0.93,0.93,0.93
-drive train,no_wheels,4,4,4,4
-vehicle,C_d,0.22,0.24,0.23,0.23
-vehicle,frontal_area [m2],1.84,2.341157,2.22,2.22
-vehicle,mass [kg],1425,433,433,1843.33
-vehicle,payload_cap [kg],75,93,93,297
-vehicle,overhead_power [W],200,200,200,200
+Parameter Classification,Parameter Name,Volt_2017,Tesla_S_2023_LongRange,Tesla_2022_3,Tesla_2022_3_LongRange,Tesla_2022_3_Performance
+basic vehicle,dataset_name,Volt_2017,Tesla_S_2023,Tesla_2022_3,Tesla_2022_3_LongRange,Tesla_2022_3_Performance
+basic vehicle,model_name,Volt,Model S,Model 3,Model 3,Model 3
+basic vehicle,year,2017,2023,2022,2022,2022
+basic vehicle,manufacturer,Chevy,Tesla,Tesla,Tesla,Tesla
+basic vehicle,trim,Unknown,Long Range,RWD,Long Range,Performance
+cell,positive electrode chem.,,,LFP,NCM,NCA
+cell,battery_cell_manufacturer,,Panasonic,CATL,,Panasonic
+cell,capacity [A hr],15,3.4,6.25,4.76,5
+cell,mass [g],450,46,65,65,65
+cell,V_max [V],4.2,4.2,3.65,4.2,4.2
+cell,V_nom [V],3.8,3.6,3.22,3.7,3.7
+cell,V_min [V],3,3.2,2.5,3.2,3.2
+module,Np,3,72,24,31,46
+module,Ns,8,6,31,24,24
+module,overhead_mass,0.08,0.245,0.2,0.5,0.5
+pack,N_module_s,12,16,4,4,4
+pack,overhead_mass,0.1,0.33,0.33,0.33,0.33
+pack,SOC_full,75,75,75,75,75
+pack,SOC_empty,25,25,25,25,2
+pack,eff,0.96,0.96,0.96,0.96,0.96
+motor,type,AC Induction Motor,3-phase AC Induction Motor,AC Induction Motor,AC Induction Motor,AC Induction Motor
+motor,Lmax [Nm],275,329,330,510,487
+motor,RPM_rated [rpm],4000,5605.8,8000,8000,8000
+motor,RPM_max [rpm],12000,12000,15000,15000,15000
+motor,eff,0.95,0.95,0.95,0.95,0.95
+motor,inertia [kg/m2],0.2,0.2,0.2,0.2,0.2
+wheel,radius [m],0.35,0.4826,0.508,0.508,0.507
+wheel,inertia [kg/m2],8,8,8,8,8
+wheel,roll_coeff,0.0111,0.0111,0.01,0.01,0.01
+drive train,inverter_eff,0.94,0.94,0.94,0.94,0.96
+drive train,frac_regen_torque,0.9,0.9,0.9,0.9,0.9
+drive train,gear_ratio,12,9.04,9,9,9
+drive train,gear_inertia [kg/m2],0.05,0.05,0.05,0.05,0.05
+drive train,eff,0.8316,0.93,0.93,0.93,0.93
+drive train,no_wheels,4,4,4,4,4
+vehicle,C_d,0.22,0.24,0.23,0.23,0.23
+vehicle,frontal_area [m2],1.84,2.341157,2.22,2.22,2.22
+vehicle,mass [kg],1425,433,433,1843.33,1843.99
+vehicle,payload_cap [kg],75,93,93,297,297
+vehicle,overhead_power [W],200,200,200,200,200

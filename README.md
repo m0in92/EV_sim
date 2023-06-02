@@ -61,11 +61,19 @@ Please note that certain approximations and assumptions were made for the vehicl
 author for more details, corrections, and/or contributions.
 
 1. Chevy Volt 2017<sup>2</sup> : Volt_2017
-2. Tesla Model 3 RWD 2023: Tesla_3_2023
+2. Tesla Model 3 RWD 2022: Tesla_2022_3
     - Battery specs <sup>7,8</sup>
     - General Vehicle specs <sup>9,10,11</sup>
     - Motor specs <sup>11</sup>
-3. Tesla Model S 2021-2023 : Tesla_S_2023_LongRange
+3. Tesla Model 3 Long Range: Tesla_2022_3_LongRange
+   - Battery specs <sup>8, 13</sup>
+   - General Vehicle specs <sup>8,9,11</sup>
+   - Motor specs <sup>13</sup>
+4. Tesla Model 3 Performance: Tesla_2022_3_Performance
+    - Battery Specs <sup>14</sup>
+    - General Vehicle specs <sup>14</sup>
+    - Motor specs <sup>13</sup>
+5. Tesla Model S 2021-2023 : Tesla_S_2023_LongRange
    - Motor specs <sup>3</sup>
    - Battery specs <sup>4</sup>
    - General vehicle specs <sup>5,6</sup>
@@ -82,7 +90,7 @@ author for more details, corrections, and/or contributions.
 
 ### References
 1. Gillespie, T. D. (Thomas D. ). (1992). Fundamentals of vehicle dynamics.
-2. Plett, G. (2015). Simulating Battery Packs. In Battery Management Systems, vol 2 (1st Editio, pp. 31–67). Artech House.
+2. Plett, G. (2015). Simulating Battery Packs. In Battery Management Systems, vol 2 (1st Edition, pp. 31–67). Artech House.
 3. https://www.talkingtrendo.com/tesla-model-s-electric-car/
 4. https://www.qnovo.com/blogs/peek-inside-the-battery-of-a-tesla-model-s#:~:text=Panasonic%20specifies%20a%20weight%20of,kg%20or%20about%20700%20lbs.
 5. https://www.caranddriver.com/features/a15108689/drag-queens-aerodynamics-compared-comparison-test/
@@ -93,3 +101,5 @@ author for more details, corrections, and/or contributions.
 10. https://arstechnica.com/cars/2019/03/the-tesla-model-3-reviewed-finally/#:~:text=The%20shape%20has%20purpose%2C%20though,original%20target%20of%20just%200.21.
 11. https://teslamotorsclub.com/tmc/threads/model-3-frontal-area.94907/
 12. https://www.researchgate.net/publication/370553199_Comparison_of_Electric_EV_and_Fossil_Fuel_Gasoline-Diesel_Vehicles_in_Terms_of_Torque_and_Power/figures?lo=1
+13. https://ev-database.org/car/1321/Tesla-Model-3-Long-Range-Dual-Motor
+14. https://ev-database.org/car/1322/Tesla-Model-3-Performance
