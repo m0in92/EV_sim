@@ -1,4 +1,3 @@
 include EV_sim/data/EV/EV_dataset.csv
 include EV_sim/data/drive_cycles/*.txt
 include EV_sim/icon.ico
-include EV_sim/config/*.py

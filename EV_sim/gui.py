@@ -12,8 +12,8 @@ from EV_sim.config import definations
 
 # Public variables
 icon_dir = definations.ROOT_DIR + '/icon.ico'
-license_dir = os.path.join(definations.ROOT_DIR + './LICENSE') # TODO: A better way of defining project directory
-doc_dir = os.path.join(definations.ROOT_DIR + './README.md') # TODO: A better way of defining project directory
+license_dir = os.path.join(definations.PROJ_DIR + '/LICENSE')
+doc_dir = os.path.join(definations.PROJ_DIR + '/README.md')
 
 
 class VehicleDynamicsApp(tkinter.Tk):
