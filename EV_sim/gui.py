@@ -117,7 +117,8 @@ class InputAndDisplayFrames(ttk.Frame):
 
         # Instance variables
         self.ev_obj = EV_sim.EV("Volt_2017") # stores the EV object, initialized with a random EV
-        self.dc_obj = EV_sim.DriveCycle(MainDisplay.all_dc[0], folder_dir=VehicleDynamicsApp.DRIVECYCLE_FOLDER_DIR)
+        self.dc_obj = EV_sim.DriveCycle.empty_drivecycle()
+        # self.dc_obj = EV_sim.DriveCycle(MainDisplay.all_dc[0], folder_dir=VehicleDynamicsApp.DRIVECYCLE_FOLDER_DIR)
         # stores the DriveCycle object and initializes with a the first drive cycle text file in the
         # data/drive_cycles folder
         self.var_air_pressure = tkinter.StringVar()
@@ -343,10 +344,14 @@ class ResultInput(ttk.Frame):
 
             # Widget placements
             self.lstbox_result.grid(row=self.start_row_num + 2, column=0)
-        except:
+        except AttributeError:
+            self.error_msg.set("Set Drive Cycle.")
+            ttk.Label(self, text=self.error_msg.get(), font=VehicleDynamicsApp.error_font_style, foreground='red',
+                      width=30).grid(row=self.start_row_num + 2, column=0, sticky=tkinter.W)
+        except ValueError:
             self.error_msg.set("Set valid external conditions.")
             ttk.Label(self, text=self.error_msg.get(), font= VehicleDynamicsApp.error_font_style, foreground='red')\
-                .grid(row=self.start_row_num+2, column=0)
+                .grid(row=self.start_row_num+2, column=0, sticky=tkinter.W)
 
     def cmd_lstbox_result(self, event) -> None:
         user_choice = self.lstbox_result.get(self.lstbox_result.curselection())
@@ -622,6 +627,10 @@ class InputsDisplay(MainDisplay):
 
 
 class DCParameterDisplay(ttk.Frame):
+    """
+    Contains attributes and methods for the display for the drive cycle. A plot or array for the drive cycle can
+    be viewed.
+    """
     MAX_ARRAY_LENGTH = 20
 
     def __init__(self, parent, user_selection, dc_obj):
@@ -632,10 +641,15 @@ class DCParameterDisplay(ttk.Frame):
         else:
             raise TypeError("dc_obj needs to be a DriveCycle object.")
 
-        if user_selection == ParametersOnInputFrame.lstbox_params_dc_choices[0]: # plot
-            self.create_plot_display()
-        elif user_selection == ParametersOnInputFrame.lstbox_params_dc_choices[1]: # array
-            self.create_array_display()
+        # If drive cycle is not set, then attempts to plot or list arrays will result in Attribute exception.
+        try:
+            if user_selection == ParametersOnInputFrame.lstbox_params_dc_choices[0]: # plot
+                self.create_plot_display()
+            elif user_selection == ParametersOnInputFrame.lstbox_params_dc_choices[1]: # array
+                self.create_array_display()
+        except AttributeError:
+            ttk.Label(self, text="Set Drive Cycle in the Inputs section.", font=VehicleDynamicsApp.error_font_style,
+                      foreground="red").grid(row=0, column=0)
 
         # Widget grid placement
         self.grid(row=0, column=0, sticky="news")
