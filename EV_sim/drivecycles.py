@@ -1,3 +1,6 @@
+import typing
+from typing import overload
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -9,18 +12,29 @@ class DriveCycle:
     DriveCycle class searches for and stores arrays of time and desired speed information.
     """
 
-    def __init__(self, drive_cycle_name: str = "udds", folder_dir: str = definations.ROOT_DIR + "/data/drive_cycles/"):
+    @overload
+    def __int__(self, drive_cycle_name: str) -> None:
+        ...
+
+    @overload
+    def __init(self, drive_cycle_name: None) -> None:
+        ...
+
+    def __init__(self, drive_cycle_name: typing.Optional[str], folder_dir: str = definations.ROOT_DIR + "/data/drive_cycles/"):
         """
         DriveCycle constructor
         :param drive_cycle_name: Drive cycle name as store in the data/drive_cycles directory.
         :param folder_dir: The relative path directory to data/drive_cycles.
         """
-        if isinstance(drive_cycle_name, str):
-            self.drive_cycle_name = drive_cycle_name  # insert the name of the .txt file in the relevant directory.
+        if isinstance(drive_cycle_name, str) or (drive_cycle_name is None):
+            if isinstance(drive_cycle_name, str):
+                self.drive_cycle_name = drive_cycle_name  # insert the name of the .txt file in the relevant directory.
+            else:
+                self.drive_cycle_name = None
         else:
-            TypeError("Drive cycle name needs to a string type.")
+            TypeError("Drive cycle name needs to a string or None type.")
 
-        if self.drive_cycle_name != "Unknown":
+        if self.drive_cycle_name is not None:
             if isinstance(folder_dir, str):
                 if folder_dir[-1] == "/":
                     self.folder_dir = folder_dir
@@ -35,15 +49,6 @@ class DriveCycle:
             self.speed_kmph = df_drivecycle["Target Speed [km/h]"].to_numpy()  # desired speed, km/h
             self.speed_mps = df_drivecycle["Target Speed [m/h]"].to_numpy()  # desired speed, mps
             del df_drivecycle
-
-    @classmethod
-    def empty_drivecycle(cls):
-        """
-        This method creates a class instance where the drive cycle name is Unknown. This is initializing an instance in
-        GUI application
-        :return: class object with the drive_cycle_name attribute equal to Unknown
-        """
-        return cls(drive_cycle_name="Unknown")
 
     def parse_file(self):
         file_dir = self.folder_dir + f"{self.drive_cycle_name}.txt"

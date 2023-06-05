@@ -1,11 +1,23 @@
+from typing import Optional, overload, Union
+
 import numpy as np
+import numpy.typing as npt
 
 
 class ExternalConditions:
     """
     ExternalConditions stores the density, road grade and road force parameters.
     """
-    def __init__(self, rho: float, road_grade: float, road_force: float=0.0):
+    @overload
+    def __init__(self, rho: None, road_grade: None, road_force: None):
+        ...
+
+    @overload
+    def __init__(self, rho:float, road_grade:float, road_force:float):
+        ...
+
+    def __init__(self, rho: Optional[float], road_grade: Union[Optional[float], npt.ArrayLike],
+                 road_force: Optional[float] = 0.0):
         """
         ExternalConditions constructor
         :param rho: external air density, kg / m^3
@@ -13,19 +25,22 @@ class ExternalConditions:
         road will rise 5 ft over the next 100 ft.
         :param: (float) constant road force input by the EV driver, N
         """
-        if isinstance(rho, float):
-            self.rho = rho # air density, kg / m^3
+        if isinstance(rho, float) or (rho is None):
+            self.rho = rho
         else:
             raise TypeError("External air density needs to be a float.")
 
         if isinstance(road_grade, float) or isinstance(road_grade, np.ndarray):
             self.road_grade = road_grade # road grade, %
+            self.road_grade_angle = np.arctan(road_grade / 100)  # road grade angle, rad
+        elif road_grade is None:
+            self.road_grade = None
         else:
             raise TypeError("External road grade needs to be a float or a numpy array.")
-        self.road_grade_angle = np.arctan(road_grade/100) # road grade angle, rad
+        # self.road_grade_angle = np.arctan(road_grade / 100)  # road grade angle, rad
 
-        if isinstance(road_force, float):
-            self.road_force = 0
+        if isinstance(road_force, float) or (road_force is None):
+            self.road_force = road_force
         else:
             raise TypeError("Road force needs to be a float.")
 
