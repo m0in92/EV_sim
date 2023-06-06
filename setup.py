@@ -1,6 +1,5 @@
 from distutils.core import setup
 
-
 with open("README.md", 'r', encoding='utf8') as file:
     long_description = file.read()
     file.close()
