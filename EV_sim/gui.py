@@ -3,6 +3,7 @@ import os
 import tkinter
 from tkinter import ttk
 
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
@@ -13,6 +14,9 @@ from EV_sim.config import definations
 icon_dir = definations.ROOT_DIR + '/icon.ico'
 license_dir = os.path.join(definations.PROJ_DIR + '/LICENSE')
 doc_dir = os.path.join(definations.PROJ_DIR + '/README.md')
+
+
+matplotlib.use('TkAgg')
 
 
 class VehicleDynamicsApp(tkinter.Tk):
