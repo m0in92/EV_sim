@@ -64,14 +64,15 @@ author for more details, corrections, and/or contributions.
 2. Tesla Model 3 RWD 2022: Tesla_2022_Model3_RWD
 3. Tesla Model 3 Long Range: Tesla_2022_Model3_LongRangeAWD
 4. Tesla Model 3 Performance: Tesla_2022_Model3_PerformanceAWD
+5. Tesla Model S Plaid: Tesla_2022_ModelS_PlaidTriMotorAWD
 </p>
 
 ### File Directories
-- Assests: Contains images for the README.md file
+- Assets: Contains images for the README.md file
 - EV_Sim: Source code
   - config: path configurations 
   - examples: example implementation using source code 
-  - data: datafiles for EVs and dirvecycles
+  - data: datafiles for EVs and drive cycles
 - tests: Test code using the results from MATLAB code<sup>2</sup>.
 
 ### References
@@ -79,3 +80,6 @@ author for more details, corrections, and/or contributions.
 2. Plett, G. (2015). Simulating Battery Packs. In Battery Management Systems, vol 2 (1st Edition, pp. 31–67). Artech House.
 3. https://evspecifications.com
 4. https://ev_database.org
+5. https://insideevs.com/
+6. https://www.torquenews.com/
+7. https://www.guideautoweb.com/en/

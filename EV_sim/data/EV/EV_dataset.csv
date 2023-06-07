@@ -1,41 +1,42 @@
-Parameter Classification,Parameter Name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD
-basic vehicle,dataset_name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD
-basic vehicle,model_name,Volt,Model 3,Model 3,Model 3
-basic vehicle,year,2017,2022,2022,2022
-basic vehicle,manufacturer,Chevy,Tesla,Tesla,Tesla
-basic vehicle,trim,Unknown,RWD,Long Range AWD,Performance AWD
-cell,positive electrode chem.,,LFP,NCM,NMC
-cell,battery_cell_manufacturer,,CATL,Tesla and Panasonic,Tesla and Panasonic
-cell,capacity [A hr],15,6.25,4.76,5
-cell,mass [g],450,65,65,65
-cell,V_max [V],4.2,3.65,4.2,4.2
-cell,V_nom [V],3.8,3.22,3.7,3.7
-cell,V_min [V],3,2.5,3.2,3.2
-module,Np,3,24,31,46
-module,Ns,8,31,24,24
-module,overhead_mass,0.08,0.2,0.5,0.5
-pack,N_module_s,12,4,4,4
-pack,overhead_mass,0.1,0.33,0.33,0.33
-pack,SOC_full,75,75,75,75
-pack,SOC_empty,25,25,25,2
-pack,eff,0.96,0.96,0.96,0.96
-motor,type,AC Induction Motor,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous
-motor,Lmax [Nm],275,450,330,450
-motor,RPM_rated [rpm],4000,8000,8000,8000
-motor,RPM_max [rpm],12000,15000,15000,15000
-motor,eff,0.95,0.95,0.95,0.95
-motor,inertia [kg/m2],0.2,0.2,0.2,0.2
-wheel,radius [m],0.35,0.4572,0.4826,0.508
-wheel,inertia [kg/m2],8,8,8,8
-wheel,roll_coeff,0.0111,0.01,0.01,0.01
-drive train,inverter_eff,0.94,0.94,0.94,0.96
-drive train,frac_regen_torque,0.9,0.9,0.9,0.9
-drive train,gear_ratio,12,9,9,9
-drive train,gear_inertia [kg/m2],0.05,0.05,0.05,0.05
-drive train,eff,0.8316,0.93,0.93,0.93
-drive train,no_wheels,4,4,4,4
-vehicle,C_d,0.22,0.23,0.23,0.23
-vehicle,frontal_area [m2],1.84,2.26,2.26,2.26
-vehicle,mass [kg],1425,1751.9991,1829.99878,1835.999802
-vehicle,payload_cap [kg],75,308,471,465
-vehicle,overhead_power [W],200,200,200,200
+Parameter Classification,Parameter Name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD,Tesla_2022_ModelS_PlaidTriMotorAWD
+basic vehicle,dataset_name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD,Tesla_2022_ModelS_PlaidTriMotorAWD
+basic vehicle,model_name,Volt,Model 3,Model 3,Model 3,Model S
+basic vehicle,year,2017,2022,2022,2022,2022
+basic vehicle,manufacturer,Chevy,Tesla,Tesla,Tesla,Tesla
+basic vehicle,trim,Unknown,RWD,Long Range AWD,Performance AWD,Plaid Tri Motor
+cell,positive electrode chem.,,LFP,NCM,NMC,NCA
+cell,battery_cell_manufacturer,,CATL,Tesla and Panasonic,Tesla and Panasonic,Panasonic
+cell,format,,2170,2170,2170,18650
+cell,capacity [A hr],15,6.25,4.76,5,3.5
+cell,mass [g],450,65,65,65,47
+cell,V_max [V],4.2,3.65,4.2,4.2,4.2
+cell,V_nom [V],3.8,3.22,3.7,3.7,3.7
+cell,V_min [V],3,2.5,3.2,3.2,2.5
+module,Np,3,24,31,46,72
+module,Ns,8,31,24,24,22
+module,overhead_mass,0.08,0.2,0.5,0.5,0.5
+pack,N_module_s,12,4,4,4,5
+pack,overhead_mass,0.1,0.33,0.33,0.33,0.33
+pack,SOC_full,75,75,75,75,75
+pack,SOC_empty,25,25,25,2,25
+pack,eff,0.96,0.96,0.96,0.96,0.96
+motor,type,AC Induction Motor,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous
+motor,Lmax [Nm],275,450,330,450,420
+motor,RPM_rated [rpm],4000,8000,8000,8000,4660
+motor,RPM_max [rpm],12000,15000,15000,15000,18000
+motor,eff,0.95,0.95,0.95,0.95,0.95
+motor,inertia [kg/m2],0.2,0.2,0.2,0.2,0.2
+wheel,radius [m],0.35,0.4572,0.4826,0.508,0.4826
+wheel,inertia [kg/m2],8,8,8,8,8
+wheel,roll_coeff,0.0111,0.01,0.01,0.01,0.01
+drive train,inverter_eff,0.94,0.94,0.94,0.96,0.96
+drive train,frac_regen_torque,0.9,0.9,0.9,0.9,0.9
+drive train,gear_ratio,12,9,9,9,7.5
+drive train,gear_inertia [kg/m2],0.05,0.05,0.05,0.05,0.05
+drive train,eff,0.8316,0.93,0.93,0.93,0.93
+drive train,no_wheels,4,4,4,4,4
+vehicle,C_d,0.22,0.23,0.23,0.23,0.208
+vehicle,frontal_area [m2],1.84,2.26,2.26,2.26,2.38
+vehicle,mass [kg],1425,1751.9991,1829.99878,1835.999802,2240.998492
+vehicle,payload_cap [kg],75,308,471,465,479
+vehicle,overhead_power [W],200,200,200,200,200

@@ -1,38 +1,37 @@
-import numpy as np
+from dataclasses import dataclass
 import matplotlib.pyplot as plt
+import numpy.typing as npt
+from typing import Optional
 
 
+@dataclass
 class Solution:
     """
     Class object that stores the simulation results from the model. Furthermore, it contains methods to plot the
     results.
     """
-
-    def __init__(self, veh_alias: str, t, des_acc, des_acc_F, aero_F, roll_grade_F, demand_torque, max_torque,
-                 limit_regen, limit_torque, motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed,
-                 actual_speed_kmph, distance, demand_power, limit_power, battery_demand, current, battery_SOC):
-        self.veh_alias = veh_alias  # vehicle alias
-        self.t = t  # time array, s
-        self.des_acc = des_acc # Desired Acceleration, N
-        self.des_acc_F = des_acc_F # Desired Accelerating Force, N
-        self.aero_F = aero_F # Aerodynamic Force, N
-        self.roll_grade_F = roll_grade_F # roll grade force, N
-        self.demand_torque = demand_torque # Demand Torque, Nm
-        self.max_torque = max_torque # Max. Torque, Nm
-        self.limit_regen = limit_regen # Limit Regeneration, Nm
-        self.limit_torque = limit_torque # Limit Torque, Nm
-        self.motor_torque = motor_torque # Motor Torque, Nm
-        self.actual_acc_F = actual_acc_F # Actual Acceleration Force, N
-        self.actual_acc = actual_acc # Actual Acceleration, m/s^2
-        self.motor_speed = motor_speed
-        self.actual_speed = actual_speed
-        self.actual_speed_kmph = actual_speed_kmph
-        self.distance = distance
-        self.demand_power = demand_power
-        self.limit_power = limit_power
-        self.battery_demand = battery_demand
-        self.current = current # battery pack current, A
-        self.battery_SOC = battery_SOC
+    veh_alias: Optional[str]
+    t : Optional[npt.ArrayLike]
+    des_acc : Optional[npt.ArrayLike]
+    des_acc_F : Optional[npt.ArrayLike]
+    aero_F : Optional[npt.ArrayLike]
+    roll_grade_F : Optional[npt.ArrayLike]
+    demand_torque : Optional[npt.ArrayLike]
+    max_torque : Optional[npt.ArrayLike]
+    limit_regen : Optional[npt.ArrayLike]
+    limit_torque : Optional[npt.ArrayLike]
+    motor_torque : Optional[npt.ArrayLike]
+    actual_acc_F : Optional[npt.ArrayLike]
+    actual_acc : Optional[npt.ArrayLike]
+    motor_speed : Optional[npt.ArrayLike]
+    actual_speed : Optional[npt.ArrayLike]
+    actual_speed_kmph : Optional[npt.ArrayLike]
+    distance : Optional[npt.ArrayLike]
+    demand_power : Optional[npt.ArrayLike]
+    limit_power : Optional[npt.ArrayLike]
+    battery_demand : Optional[npt.ArrayLike]
+    current : Optional[npt.ArrayLike]
+    battery_SOC : Optional[npt.ArrayLike]
 
     def plot_battery_demand(self):
         """

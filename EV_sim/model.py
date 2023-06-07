@@ -6,6 +6,7 @@ from EV_sim.extern_conditions import ExternalConditions
 from EV_sim.drivecycles import DriveCycle
 from EV_sim.constants import PhysicsConstants
 from EV_sim.sol import Solution
+from EV_sim.utils.timer import sol_timer
 
 class VehicleDynamics:
     """
@@ -140,6 +141,7 @@ class VehicleDynamics:
                motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed, actual_speed_kmph, distance, \
                demand_power, limit_power, battery_demand, current, battery_SOC
 
+    @sol_timer
     def simulate(self):
         # intialization
         prev_speed, prev_motor_speed, prev_distance, prev_SOC, prev_time = self.init_cond()
