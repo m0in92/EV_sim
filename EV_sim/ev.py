@@ -1,123 +1,137 @@
+from dataclasses import dataclass, InitVar
+
 import numpy as np
 import pandas as pd
 
 from EV_sim.config import definations
 
 
+@dataclass
 class ACInductionMotor:
-    def __init__(self, motor_type, rpm_r, rpm_max, l_max, eff, i):
+    motor_type: float # motor type
+    RPM_r: float # rated motor speed, rpm
+    RPM_max: float # max. motor speed, rpm
+    L_max: float # max. torque, Nm
+    eff: float # motor efficiency, unit-less
+    I: float # motor inertia, kg/m2
+
+    def __post_init__(self):
         # check for the input motor type. np.isnan is possible in case of empty field in the EV_dataset.csv
-        if isinstance(motor_type, str) or np.isnan(motor_type):
-            if isinstance(motor_type, str):
-                self.motor_type = motor_type
+        if isinstance(self.motor_type, str) or np.isnan(self.motor_type):
+            if isinstance(self.motor_type, str):
+                self.motor_type = self.motor_type
             else:
                 self.motor_type = "Unknown" # set instance's motor type in case it is missing
         else:
             raise TypeError("Motor type needs to be a string or np.nan (in case it is unknown) type.")
 
-        if isinstance(rpm_r, float):
-            self.RPM_r = rpm_r # rated motor speed, rpm
-        else:
+        if not isinstance(self.RPM_r, float):
             raise TypeError("Rated motor speed needs to be a float.")
 
-        if isinstance(rpm_max, float):
-            self.RPM_max = rpm_max # max motor speed, rpm
-        else:
+        if not isinstance(self.RPM_max, float):
             raise TypeError("Max. motor speed needs to be a float.")
 
-        if isinstance(l_max, float):
-            self.L_max = l_max # max. torque in Nm
-        else:
+        if not isinstance(self.L_max, float):
             raise TypeError("Max. motor torque needs to be a float.")
 
-        if isinstance(eff, float):
-            self.eff = eff # motor efficiency, unit-less
-        else:
+        if not isinstance(self.eff, float):
             raise TypeError("Motor efficiency needs to be a float.")
 
-        if isinstance(i, float):
-            self.I = i # motor inertia, kg m^2
-        else:
+        if not isinstance(self.I, float):
             raise TypeError("Motor efficiency needs to be a float.")
 
         self.P_max = 2 * np.pi * self.L_max * self.RPM_r / 60000 # max motor power, kW
 
 
+@dataclass
 class Wheel:
-    def __init__(self, r, i):
-        if isinstance(r, float):
-            self.r = r # wheel radius in m
-        else:
-            raise TypeError("Wheel radius needs to be a float.")
+    r: float # wheel radius
+    I: float # wheel inertia
 
-        if isinstance(i, float):
-            self.I = i # wheel inertia, kg m^2
-        else:
+    def __post_init__(self):
+        if not isinstance(self.r, float):
+            raise TypeError("Wheel radius needs to be a float.")
+        if not isinstance(self.I, float):
             raise TypeError("Wheel inertia needs to be a float.")
 
 
+@dataclass()
 class Gearbox:
-    def __init__(self, ratio, i):
-        if isinstance(ratio, float):
-            self.N = ratio # gearbox ratio
-        else:
-            raise TypeError("Gearbox ratio needs to be a float.")
+    N: float # gear box ratio
+    I: float # gearbox inertia
 
-        if isinstance(i, float):
-            self.I = i # gearbox inertia, kg m^2
-        else:
+    def __post_init__(self):
+        if not isinstance(self.N, float):
+            raise TypeError("Gearbox ratio needs to be a float.")
+        if not isinstance(self.I, float):
             raise TypeError("Gearbox inertia needs to be a float.")
 
 
+@dataclass
 class DriveTrain:
-    def __init__(self, wheel_radius, wheel_inertia, num_wheel,
-                 gearbox_ratio, gearbox_inertia,
-                 inverter_eff, frac_regen_torque, eff):
-        self.wheel = Wheel(r=wheel_radius, i= wheel_inertia) # Wheel object
+    wheel_radius: int # wheel radius, m
+    wheel_inertia: float # wheel inertia, kg/m2
+    num_wheel: int # number of wheels in a drivetrain
+    gearbox_ratio: float # gearbox ratio
+    gearbox_inertia: float # gearbox inertia, kg/m2
+    inverter_eff: float # inverter efficiency, unit-less
+    frac_regen_torque: float # fraction of regenerated torque
+    eff: float # drivetrain efficiency
 
-        if isinstance(num_wheel, int):
-            self.num_wheel = num_wheel # total number of wheels
-        else:
+    def __post_init__(self):
+        self.wheel = Wheel(r= self.wheel_radius, I=self.wheel_inertia) # Wheel object
+        del self.wheel_radius, self.wheel_inertia
+
+        if not isinstance(self.num_wheel, int):
             raise TypeError("Number of wheels needs to an integer.")
 
-        self.gear_box = Gearbox(ratio=gearbox_ratio, i=gearbox_inertia) # Gearbox object
+        self.gear_box = Gearbox(N=self.gearbox_ratio, I=self.gearbox_inertia) # Gearbox object
+        del self.gearbox_ratio, self.gearbox_inertia
 
-        if isinstance(inverter_eff, float):
-            self.inverter_eff = inverter_eff # inverter efficiency, unit-less
-        else:
+        if not isinstance(self.inverter_eff, float):
             raise TypeError("Inverter efficiency needs to be a float.")
 
-        if isinstance(frac_regen_torque, float):
-            self.frac_regen_torque = frac_regen_torque # fraction of regeneration torque, unit-less
-        else:
+        if not isinstance(self.frac_regen_torque, float):
             raise TypeError("Frac_regen_torque needs to be a float.")
 
-        if isinstance(eff, float):
-            self.eff = eff # drivetrain efficiency, unit-less
-        else:
+        if not isinstance(self.eff, float):
             raise TypeError("Drivetrain efficiency needs to be a float.")
 
 
+@dataclass
 class BatteryCell:
-    def __init__(self, manufacturer, cap, mass, v_max, v_nom, v_min, chem):
+    cell_manufacturer: str
+    cell_cap: float # Battery cell capacity, A hr
+    cell_mass: float # Battery cell mass, g
+    cell_V_max: float # Battery cell max. voltage, V
+    cell_V_nom: float # Battery cell nominal voltage, V
+    cell_V_min: float # Battery cell min. voltage, V
+    cell_chem: str # Battery positive electrode chemistry
+
+    def __post_init__(self):
         # check for the input manufacturer type. np.isnan is possible in case of empty field in the EV_dataset.csv
-        if isinstance(manufacturer, str) or np.isnan(manufacturer):
-            if isinstance(manufacturer, str):
-                self.cell_manufacturer = manufacturer
+        if isinstance(self.cell_manufacturer, str) or np.isnan(self.cell_manufacturer):
+            if isinstance(self.cell_manufacturer, str):
+                self.cell_manufacturer = self.cell_manufacturer
             else:
                 self.cell_manufacturer = "Unknown" # sets the instance value in case of unknown values.
         else:
             raise TypeError("Battery cell manufacturer needs to be a string or np.nan type.")
 
-        self.cell_cap = cap  # Battery cell capacity, A hr
-        self.cell_mass = mass  # Battery cell mass, g
-        self.cell_V_max = v_max  # Battery cell max. voltage, V
-        self.cell_V_nom = v_nom # Battery cell nominal voltage, V
-        self.cell_V_min = v_min  # Battery cell min. voltage, V
+        if not isinstance(self.cell_cap, float):
+            raise TypeError('cell_cap needs to be a float type.')
+        if not isinstance(self.cell_mass, float):
+            raise TypeError('cell_mass needs to be a float type.')
+        if not isinstance(self.cell_V_max, float):
+            raise TypeError('cell_V_max needs to be a float type.')
+        if not isinstance(self.cell_V_nom, float):
+            raise TypeError('cell_V_nom needs to be a float type.')
+        if not isinstance(self.cell_V_min, float):
+            raise TypeError('cell_V_min needs to be a float type.')
 
-        if isinstance(chem, str) or np.isnan(chem):
-            if isinstance(chem, str):
-                self.cell_chem = chem # Battery cell postive electrode chemistry
+        if isinstance(self.cell_chem, str) or np.isnan(self.cell_chem):
+            if isinstance(self.cell_chem, str):
+                self.cell_chem = self.cell_chem # Battery cell postive electrode chemistry
             else:
                 self.cell_chem = "Unknown"
         else:
@@ -128,10 +142,10 @@ class BatteryCell:
 
 
 class BatteryModule(BatteryCell):
-    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min, cell_chem,
+    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_V_max, cell_V_nom, cell_V_min, cell_chem,
                  n_s, n_p, overload_mass):
-        super().__init__(manufacturer=cell_manufacturer, cap=cell_cap, mass=cell_mass, v_max=cell_v_max,
-                         v_nom=cell_v_nom, v_min=cell_v_min, chem=cell_chem)
+        super().__init__(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass, cell_V_max=cell_V_max,
+                         cell_V_nom=cell_V_nom, cell_V_min=cell_V_min, cell_chem=cell_chem)
         self.Ns = n_s # no. of series connections of cells in a module, unit-less
         self.Np = n_p  # no. of parallel connections of cells in a module, unit-less
         self.module_overhead_mass = overload_mass  # mass beyond cell mass, percent
@@ -147,8 +161,8 @@ class BatteryPack(BatteryModule):
     def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min, cell_chem,
                  n_s, n_p, module_overhead_mass,
                  num_modules, pack_overhead_mass, soc_full, soc_empty, eff):
-        super().__init__(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass, cell_v_max=cell_v_max,
-                         cell_v_nom=cell_v_nom, cell_v_min=cell_v_min, cell_chem=cell_chem,
+        super().__init__(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass,
+                         cell_V_max=cell_v_max, cell_V_nom=cell_v_nom, cell_V_min=cell_v_min, cell_chem=cell_chem,
                          n_s=n_s, n_p=n_p, overload_mass=module_overhead_mass)
         self.num_modules = num_modules  # no. of modules in series, unit-less
         self.pack_overhead_mass = pack_overhead_mass  # mass beyond module and cell masses, percent
@@ -212,7 +226,8 @@ class EV:
         motor_eff = float(df_motor["eff"])
         i_motor = float(df_motor["inertia [kg/m2]"])
         del df_motor
-        self.motor = ACInductionMotor(motor_type=motor_type, rpm_r=rpm_r, rpm_max=rpm_max, l_max=l_max, eff=motor_eff, i=i_motor)
+        self.motor = ACInductionMotor(motor_type=motor_type, RPM_r=rpm_r, RPM_max=rpm_max, L_max=l_max, eff=motor_eff,
+                                      I=i_motor)
 
         df_vehicle = self.parse_veh_info(file_dir=database_dir)
         self.C_d = float(df_vehicle["C_d"]) # drag coefficient, unit-less
