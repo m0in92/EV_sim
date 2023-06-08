@@ -1,6 +1,6 @@
 import unittest
 
-import numpy as np
+# import numpy as np
 
 import EV_sim
 
@@ -8,7 +8,7 @@ import EV_sim
 class TestEVConstructor(unittest.TestCase):
     def test_EV_attributes(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         # Check for vehicle basic information
         self.assertEqual(alias_name, volt.alias_name)
         self.assertEqual("Volt", volt.model_name)
@@ -39,7 +39,7 @@ class TestEVConstructor(unittest.TestCase):
 
     def test_motor_attributes(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         # Check for vehicle drivetrain information
         self.assertEqual(0.35, volt.drive_train.wheel.r)
         self.assertEqual(8.0, volt.drive_train.wheel.I)
@@ -55,7 +55,7 @@ class TestEVConstructor(unittest.TestCase):
         :return:
         """
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         self.assertAlmostEqual(1.581521739130435e+03, volt.curb_mass)
         self.assertAlmostEqual(1.656521739130435e+03, volt.max_mass)
         self.assertEqual(5.551020408163266e+02, volt.rot_mass)
@@ -64,7 +64,7 @@ class TestEVConstructor(unittest.TestCase):
 
     def test_motor_attributes(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         self.assertEqual(275, volt.motor.L_max)
         self.assertEqual(4000, volt.motor.RPM_r)
         self.assertEqual(12000, volt.motor.RPM_max)
@@ -73,12 +73,15 @@ class TestEVConstructor(unittest.TestCase):
         self.assertAlmostEqual(1.151917306316258e+02, volt.motor.P_max)
 
 class TestEVReprAndStr(unittest.TestCase):
+    alias_name = "Volt_2017"
+    volt = EV_sim.EVFromDatabase(alias_name=alias_name)
     def test_repr(self):
-        alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
-        self.assertEqual(f"EV('{alias_name}')", repr(volt))
+        # alias_name = "Volt_2017"
+        # volt = EV_sim.EVFromDatabase(alias_name=alias_name)
+        repr(self.volt)
+        self.assertEqual(f"EV('{self.alias_name}')", repr(self.volt))
 
     def test_str(self):
-        alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
-        self.assertEqual(f"{alias_name} made by Chevy", str(volt))
+        # alias_name = "Volt_2017"
+        # volt = EV_sim.EVFromDatabase(alias_name=alias_name)
+        self.assertEqual(f"{self.alias_name} made by Chevy", str(self.volt))

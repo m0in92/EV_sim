@@ -121,7 +121,7 @@ class InputAndDisplayFrames(ttk.Frame):
         super().__init__(parent)
 
         # Instance variables
-        self.ev_obj = EV_sim.EV("Volt_2017")  # stores the EV object, initialized with a random EV
+        self.ev_obj = EV_sim.EVFromDatabase("Volt_2017")  # stores the EV object, initialized with a random EV
         self.dc_obj = EV_sim.DriveCycle(drive_cycle_name=None)  # stores the DriveCycle object and initializes with a
         # the first drive cycle text file in the data/drive_cycles folder
         self.var_air_pressure = tkinter.StringVar()
@@ -580,7 +580,7 @@ class InputsDisplay(MainDisplay):
         row_num = 2
         ttk.Label(self, text="EV Alias").grid(row=row_num, column=0)
         self.combobox_EV_alias = ttk.Combobox(self, height=10)
-        self.combobox_EV_alias['values'] = EV_sim.EV.list_all_EV_alias(file_dir=VehicleDynamicsApp.EV_DATABASE_DIR)
+        self.combobox_EV_alias['values'] = EV_sim.EVFromDatabase.list_all_EV_alias(file_dir=VehicleDynamicsApp.EV_DATABASE_DIR)
 
         self.combobox_EV_alias.bind('<<ComboboxSelected>>', self.combobox_EV_alias_select)
 
@@ -618,7 +618,7 @@ class InputsDisplay(MainDisplay):
         ttk.Entry(self, textvariable=self.parent_obj.var_road_force).grid(row=4, column=1)
 
     def combobox_EV_alias_select(self, event) -> None:
-        self.parent_obj.ev_obj = EV_sim.EV(self.combobox_EV_alias.get())
+        self.parent_obj.ev_obj = EV_sim.EVFromDatabase(self.combobox_EV_alias.get())
 
     def combobox_dc_select(self, event) -> None:
         self.parent_obj.dc_obj = EV_sim.DriveCycle(self.combobox_dc.get(),

@@ -34,7 +34,7 @@ Then, specify the EV class object whose parameters include the EV's alias name. 
 to the "Vehicles in the Database" section. For example:
 
 <code> alias_name = "Volt_2017" </code><br>
-<code> volt = EV_sim.EV(alias_name=alias_name) </code>
+<code> volt = EV_sim.EVFromDatabase(alias_name=alias_name) </code>
 
 Specify the DriveCycle and ExternalConditions class objects.
 

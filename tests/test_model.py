@@ -12,7 +12,7 @@ class TestVehicleDynamics(unittest.TestCase):
     drive_cycle_name = "udds"
     def test_des_speed(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -22,7 +22,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_desired_acceleration(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -36,7 +36,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_acceleration_force(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -48,7 +48,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_aero_force(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -59,7 +59,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_roll_grade_force(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -70,7 +70,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_demand_torque(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -81,7 +81,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_max_torque(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -93,7 +93,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_limit_regeneration(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -105,7 +105,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_limit_torque(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -116,7 +116,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_motor_torque(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -128,7 +128,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_actual_acceleration_force(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -140,7 +140,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_actual_acceleration(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -152,7 +152,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_motor_speed(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -164,7 +164,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_actual_speed(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -176,7 +176,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_demand_power(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -188,7 +188,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_sim_limit_power(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
@@ -200,7 +200,7 @@ class TestVehicleDynamics(unittest.TestCase):
 
     def test_battery_demand(self):
         alias_name = "Volt_2017"
-        volt = EV_sim.EV(alias_name=alias_name)
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
         udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
         waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
         model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)

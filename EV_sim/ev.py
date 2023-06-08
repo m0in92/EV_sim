@@ -1,4 +1,4 @@
-from dataclasses import dataclass, InitVar
+from dataclasses import dataclass, InitVar, KW_ONLY
 
 import numpy as np
 import pandas as pd
@@ -137,18 +137,18 @@ class BatteryCell:
         else:
             raise TypeError("Cell chemistry needs to be a string or a np.nan type.")
 
-        self.cell_energy = self.cell_V_nom * self.cell_cap # Battery cell energy, W hr
-        self.cell_spec_energy = 1000 * self.cell_energy / self.cell_mass # Battery cell specific energy, W hr/kg
+        self.cell_energy = self.cell_V_nom * self.cell_cap  # Battery cell energy, W hr
+        self.cell_spec_energy = 1000 * self.cell_energy / self.cell_mass  # Battery cell specific energy, W hr/kg
 
 
+@dataclass
 class BatteryModule(BatteryCell):
-    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_V_max, cell_V_nom, cell_V_min, cell_chem,
-                 n_s, n_p, overload_mass):
-        super().__init__(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass, cell_V_max=cell_V_max,
-                         cell_V_nom=cell_V_nom, cell_V_min=cell_V_min, cell_chem=cell_chem)
-        self.Ns = n_s # no. of series connections of cells in a module, unit-less
-        self.Np = n_p  # no. of parallel connections of cells in a module, unit-less
-        self.module_overhead_mass = overload_mass  # mass beyond cell mass, percent
+    Ns: int
+    Np: int
+    module_overhead_mass: float
+
+    def __post_init__(self):
+        super().__post_init__()
 
         self.total_no_cells = self.Ns * self.Np
         self.module_cap = self.Np * self.cell_cap  # Battery module capacity,  A hr
@@ -157,18 +157,16 @@ class BatteryModule(BatteryCell):
         self.module_specific_energy = self.module_energy * 1000 / self.module_mass  # Specific energy, Wh/kg
 
 
+@dataclass
 class BatteryPack(BatteryModule):
-    def __init__(self, cell_manufacturer, cell_cap, cell_mass, cell_v_max, cell_v_nom, cell_v_min, cell_chem,
-                 n_s, n_p, module_overhead_mass,
-                 num_modules, pack_overhead_mass, soc_full, soc_empty, eff):
-        super().__init__(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass,
-                         cell_V_max=cell_v_max, cell_V_nom=cell_v_nom, cell_V_min=cell_v_min, cell_chem=cell_chem,
-                         n_s=n_s, n_p=n_p, overload_mass=module_overhead_mass)
-        self.num_modules = num_modules  # no. of modules in series, unit-less
-        self.pack_overhead_mass = pack_overhead_mass  # mass beyond module and cell masses, percent
-        self.SOC_full = soc_full  # Battery pack state-of-charge when full, percent
-        self.SOC_empty = soc_empty  # Battery pack state-of-charge when empty, percent
-        self.eff = eff  # battery pack efficiency
+    num_modules: int # no. of modules in series, unit-less
+    pack_overhead_mass: float # mass beyond module and cell masses, percent
+    SOC_full: float # Battery pack state-of-charge when full, percent
+    SOC_empty: float # Battery pack state-of-charge when empty, percent
+    eff: float # battery pack efficiency
+
+    def __post_init__(self):
+        super().__post_init__()
 
         self.total_no_cells = self.total_no_cells * self.num_modules  # total no. of battery cells in the pack, unit-less
         self.pack_mass = self.module_mass * self.num_modules / (1 - self.pack_overhead_mass)  # Battery pack mass, kg
@@ -179,90 +177,30 @@ class BatteryPack(BatteryModule):
         self.pack_V_min = self.num_modules * self.Ns * self.cell_V_min # battery pack min. voltage, V
 
 
+@dataclass
 class EV:
     """
-    EV class contains stores all relevant vehicle parameters (e.g., wheel, drivetrain, battery pack, etc.,) as its
-    class attributes. Furthermore, its has various vehicle methods to calculate for additional vehicle parameters.
-    "../EV_sim/data/EV/EV_dataset.csv"
+    EV stores all relevant vehicle parameters (e.g., wheel, drivetrain, battery pack, etc.,) as its class attributes.
+    Furthermore, its has various vehicle methods to calculate for additional vehicle parameters.
     """
-    def __init__(self, alias_name: str, database_dir: str = definations.ROOT_DIR + "/data/EV/EV_dataset.csv"):
-        """
-        EV class constructor.
-        :param alias_name: (str) Vehicle alias [i.e, identifier]
-        :param database_dir: (str) The file location of the data/EV/EV_dataset.csv relative to the working directory.
-        """
-        self.alias_name = alias_name
-        df_basicinfo = self.parse_basic_data(file_dir=database_dir)
-        self.model_name = df_basicinfo["model_name"]
-        self.year = df_basicinfo["year"]
-        self.manufacturer = df_basicinfo["manufacturer"]
-        self.trim = df_basicinfo["trim"]
-        del df_basicinfo
+    # Basic EV information
+    alias_name: str
+    model_name: str
+    year: int
+    manufacturer: str
+    trim: str
 
-        df_wheel = self.parse_wheel_info(file_dir=database_dir)
-        wheel_radius = float(df_wheel["radius [m]"])
-        wheel_inertia = float(df_wheel["inertia [kg/m2]"])
-        self.C_r = float(df_wheel["roll_coeff"]) # rolling coefficient, unit-less
-        del df_wheel
+    # vehicle's component class objects
+    drive_train: DriveTrain
+    motor: ACInductionMotor
+    pack: BatteryPack
 
-        df_drivetrain = self.parse_drivetrain_info(file_dir=database_dir)
-        gearbox_ratio = float(df_drivetrain["gear_ratio"]) # motor rpm / wheel rpm, unit-less
-        gearbox_inertia = float(df_drivetrain["gear_inertia [kg/m2]"])
-        inverter_eff = float(df_drivetrain["inverter_eff"])
-        frac_regen_torque = float(df_drivetrain["frac_regen_torque"])
-        dt_eff = float(df_drivetrain["eff"])
-        num_wheels = int(df_drivetrain["no_wheels"])
-        del df_drivetrain
-
-        self.drive_train = DriveTrain(wheel_radius=wheel_radius, wheel_inertia=wheel_inertia, num_wheel=num_wheels,
-                                      gearbox_ratio=gearbox_ratio, gearbox_inertia=gearbox_inertia,
-                                      inverter_eff=inverter_eff, frac_regen_torque=frac_regen_torque, eff=dt_eff)
-
-        df_motor = self.parse_motor_info(file_dir=database_dir)
-        motor_type = df_motor["type"]
-        rpm_r = float(df_motor["RPM_rated [rpm]"])
-        rpm_max = float(df_motor["RPM_max [rpm]"])
-        l_max = float(df_motor["Lmax [Nm]"])
-        motor_eff = float(df_motor["eff"])
-        i_motor = float(df_motor["inertia [kg/m2]"])
-        del df_motor
-        self.motor = ACInductionMotor(motor_type=motor_type, RPM_r=rpm_r, RPM_max=rpm_max, L_max=l_max, eff=motor_eff,
-                                      I=i_motor)
-
-        df_vehicle = self.parse_veh_info(file_dir=database_dir)
-        self.C_d = float(df_vehicle["C_d"]) # drag coefficient, unit-less
-        self.A_front = float(df_vehicle["frontal_area [m2]"]) # vehicle frontal area, m^2
-        self.m = float(df_vehicle["mass [kg]"]) # vehicle mass, kg
-        self.payload_capacity = float(df_vehicle["payload_cap [kg]"]) # vehicle payload capacity, kg
-        self.overhead_power = float(df_vehicle["overhead_power [W]"]) # vehicle overhear power, W
-        del df_vehicle
-
-        df_cell = self.parse_cell_info(file_dir=database_dir)
-        cell_manufacturer = df_cell["battery_cell_manufacturer"]
-        cell_cap = float(df_cell["capacity [A hr]"])
-        cell_mass = float(df_cell["mass [g]"])
-        cell_v_max = float(df_cell["V_max [V]"])
-        cell_v_nom = float(df_cell["V_nom [V]"])
-        cell_v_min = float(df_cell["V_min [V]"])
-        cell_chem = df_cell['positive electrode chem.']
-        del df_cell
-        df_module = self.parse_module_info(file_dir=database_dir)
-        n_s = int(df_module["Ns"])
-        n_p = int(df_module["Np"])
-        module_overhead_mass = float(df_module["overhead_mass"])
-        del df_module
-        df_pack = self.parse_pack_info(file_dir=database_dir)
-        num_modules = int(df_pack["N_module_s"])
-        pack_overhead_mass = float(df_pack["overhead_mass"])
-        soc_full = float(df_pack["SOC_full"])
-        soc_empty = float(df_pack["SOC_empty"])
-        pack_eff = float(df_pack["eff"])
-        del df_pack
-        self.pack = BatteryPack(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass,
-                                cell_v_max=cell_v_max, cell_v_nom=cell_v_nom, cell_v_min=cell_v_min, cell_chem=cell_chem,
-                                n_s=n_s, n_p=n_p, module_overhead_mass=module_overhead_mass,
-                                num_modules=num_modules, pack_overhead_mass=pack_overhead_mass, soc_full=soc_full,
-                                soc_empty=soc_empty, eff=pack_eff)
+    # Other vehicle information
+    C_d: float # drag coefficient, unit-less
+    A_front: float # vehicle frontal area, m^2
+    m: float # vehicle mass, kg
+    payload_capacity: float # vehicle payload capacity, kg
+    overhead_power: float # vehicle overhear power, W
 
     @property
     def curb_mass(self) -> float:
@@ -304,6 +242,95 @@ class EV:
         :return: (float) Vehicle max. speed, km/h
         """
         return 2 * np.pi * self.drive_train.wheel.r * self.motor.RPM_max * 60 / (1000 * self.drive_train.gear_box.N)
+
+
+class EVFromDatabase(EV):
+    """
+    EVFromDatabase inherits from the EV class. It is meant to update the attributes of its parent EV class using the
+    Database.
+    """
+    def __init__(self, alias_name: str, database_dir: str = definations.ROOT_DIR + "/data/EV/EV_dataset.csv"):
+        """
+        EV class constructor.
+        :param alias_name: (str) Vehicle alias [i.e, identifier]
+        :param database_dir: (str) The file location of the data/EV/EV_dataset.csv relative to the working directory.
+        """
+        self.alias_name = alias_name
+        df_basicinfo = self.parse_basic_data(file_dir=database_dir)
+        model_name = df_basicinfo["model_name"]
+        year = df_basicinfo["year"]
+        manufacturer = df_basicinfo["manufacturer"]
+        trim = df_basicinfo["trim"]
+        del df_basicinfo
+
+        df_wheel = self.parse_wheel_info(file_dir=database_dir)
+        wheel_radius = float(df_wheel["radius [m]"])
+        wheel_inertia = float(df_wheel["inertia [kg/m2]"])
+        self.C_r = float(df_wheel["roll_coeff"]) # rolling coefficient, unit-less
+        del df_wheel
+
+        df_drivetrain = self.parse_drivetrain_info(file_dir=database_dir)
+        gearbox_ratio = float(df_drivetrain["gear_ratio"]) # motor rpm / wheel rpm, unit-less
+        gearbox_inertia = float(df_drivetrain["gear_inertia [kg/m2]"])
+        inverter_eff = float(df_drivetrain["inverter_eff"])
+        frac_regen_torque = float(df_drivetrain["frac_regen_torque"])
+        dt_eff = float(df_drivetrain["eff"])
+        num_wheels = int(df_drivetrain["no_wheels"])
+        del df_drivetrain
+
+        drive_train_obj = DriveTrain(wheel_radius=wheel_radius, wheel_inertia=wheel_inertia, num_wheel=num_wheels,
+                                  gearbox_ratio=gearbox_ratio, gearbox_inertia=gearbox_inertia,
+                                  inverter_eff=inverter_eff, frac_regen_torque=frac_regen_torque, eff=dt_eff)
+
+        df_motor = self.parse_motor_info(file_dir=database_dir)
+        motor_type = df_motor["type"]
+        rpm_r = float(df_motor["RPM_rated [rpm]"])
+        rpm_max = float(df_motor["RPM_max [rpm]"])
+        l_max = float(df_motor["Lmax [Nm]"])
+        motor_eff = float(df_motor["eff"])
+        i_motor = float(df_motor["inertia [kg/m2]"])
+        del df_motor
+        motor_obj = ACInductionMotor(motor_type=motor_type, RPM_r=rpm_r, RPM_max=rpm_max, L_max=l_max, eff=motor_eff,
+                                 I=i_motor)
+
+        df_vehicle = self.parse_veh_info(file_dir=database_dir)
+        C_d = float(df_vehicle["C_d"]) # drag coefficient, unit-less
+        A_front = float(df_vehicle["frontal_area [m2]"]) # vehicle frontal area, m^2
+        m = float(df_vehicle["mass [kg]"]) # vehicle mass, kg
+        payload_capacity = float(df_vehicle["payload_cap [kg]"]) # vehicle payload capacity, kg
+        overhead_power = float(df_vehicle["overhead_power [W]"]) # vehicle overhear power, W
+        del df_vehicle
+
+        df_cell = self.parse_cell_info(file_dir=database_dir)
+        cell_manufacturer = df_cell["battery_cell_manufacturer"]
+        cell_cap = float(df_cell["capacity [A hr]"])
+        cell_mass = float(df_cell["mass [g]"])
+        cell_v_max = float(df_cell["V_max [V]"])
+        cell_v_nom = float(df_cell["V_nom [V]"])
+        cell_v_min = float(df_cell["V_min [V]"])
+        cell_chem = df_cell['positive electrode chem.']
+        del df_cell
+        df_module = self.parse_module_info(file_dir=database_dir)
+        n_s = int(df_module["Ns"])
+        n_p = int(df_module["Np"])
+        module_overhead_mass = float(df_module["overhead_mass"])
+        del df_module
+        df_pack = self.parse_pack_info(file_dir=database_dir)
+        num_modules = int(df_pack["N_module_s"])
+        pack_overhead_mass = float(df_pack["overhead_mass"])
+        soc_full = float(df_pack["SOC_full"])
+        soc_empty = float(df_pack["SOC_empty"])
+        pack_eff = float(df_pack["eff"])
+        del df_pack
+        pack_obj = BatteryPack(cell_manufacturer=cell_manufacturer, cell_cap=cell_cap, cell_mass=cell_mass,
+                               cell_V_max=cell_v_max, cell_V_nom=cell_v_nom, cell_V_min=cell_v_min, cell_chem=cell_chem,
+                               Ns=n_s, Np=n_p, module_overhead_mass=module_overhead_mass,
+                               num_modules=num_modules, pack_overhead_mass=pack_overhead_mass, SOC_full=soc_full,
+                               SOC_empty=soc_empty, eff=pack_eff)
+
+        super().__init__(alias_name=alias_name, model_name=model_name, year=year, manufacturer=manufacturer, trim=trim,
+                         drive_train = drive_train_obj, motor = motor_obj, pack= pack_obj,
+                         C_d=C_d, A_front=A_front, m=m, payload_capacity=payload_capacity, overhead_power=overhead_power)
 
     @staticmethod
     def list_all_EV_alias(file_dir: str):
@@ -396,3 +423,4 @@ class EV:
 
     def __str__(self):
         return f"{self.alias_name} made by {self.manufacturer}"
+
