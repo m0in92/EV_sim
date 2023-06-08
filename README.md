@@ -60,11 +60,17 @@ vehicle database grows. For sources of the vehicle parameters in the database, r
 Please note that certain approximations and assumptions were made for the vehicle parameters. Feel free to contact the
 author for more details, corrections, and/or contributions.
 
-1. Chevy Volt 2017: Volt_2017
-2. Tesla Model 3 RWD 2022: Tesla_2022_Model3_RWD
-3. Tesla Model 3 Long Range: Tesla_2022_Model3_LongRangeAWD
-4. Tesla Model 3 Performance: Tesla_2022_Model3_PerformanceAWD
-5. Tesla Model S Plaid: Tesla_2022_ModelS_PlaidTriMotorAWD
+Chevy 2017 Volt : Volt_2017
+Tesla 2022 Model 3 RWD : Tesla_2022_Model3_RWD
+Tesla 2022 Model 3 Long Range AWD : Tesla_2022_Model3_LongRangeAWD
+Tesla 2022 Model 3 Performance AWD : Tesla_2022_Model3_PerformanceAWD
+Tesla 2022 Model S Plaid Tri Motor : Tesla_2022_ModelS_PlaidTriMotorAWD
+Tesla 2022 ModelS Long Range : Tesla_2022_ModelS_LongRange
+Tesla 2022 ModelX : Tesla_2022_ModelX
+Tesla 2022 ModelX Plaid : Tesla_2022_ModelX_Plaid
+Tesla 2022 ModelY RWD : Tesla_2022_ModelY_RWD
+Tesla 2022 ModelY Long Range AWD : Tesla_2022_ModelY_LongRangeAWD
+Tesla 2022 ModelY Performance AWD : Tesla_2022_ModelY_PerformanceAWD
 </p>
 
 ### File Directories
@@ -83,3 +89,4 @@ author for more details, corrections, and/or contributions.
 5. https://insideevs.com/
 6. https://www.torquenews.com/
 7. https://www.guideautoweb.com/en/
+8. https://www.caranddriver.com/
