@@ -19,27 +19,52 @@ and hence the limited torque and actual forces, acceleration, and speed are then
 ![image](Assests/gui.png)
 
 ### Installation
-Recommended installation steps are listed as follows:
-1. Ensure numpy (https://numpy.org/), pandas (https://pandas.pydata.org/), and Matplotlib (https://matplotlib.org/) are installed in your system.
+Either of the two recommended installation procedures can be used and the steps for these installation procedures are
+listed below.
+#### Git Clone
+1. Ensure numpy (https://numpy.org/), pandas (https://pandas.pydata.org/), and Matplotlib (https://matplotlib.org/) 
+are installed in your system.
 2. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
+#### Python setup
+1. Download or clone this repository
+2. Ensure you are on the repository directory (where the setup.py resides) and run 
+<code>python setup.py sdist</code> on the command line.
+3. Step 2 will create a dist directory in the repository. Extract the contents tar.gz file in this directory. Move to
+the directory where the extracted files reside and run <code>pip install EV_sim</code> on the command line. This 
+will install EV_sim on your system (along with the external dependencies) and EV_sim can be imported as any other Python
+package.
 
-### Usage
+
+### Basic Usage
 #### Using Source code
 <p>
 Import the EV_sim module using Python's import command, and this imports relevant submodules within EV_sim.
 
 <code>import EV_sim</code>
 
-Then, specify the EV class object whose parameters include the EV's alias name. For the list of support EV parameters, refer
-to the "Vehicles in the Database" section. For example:
+Simulation requires instances of three classes: 
+1. EV
+2. DriveCycle
+3. ExternalConditions
 
-<code> alias_name = "Volt_2017" </code><br>
+Then, "EV" class object needs to be initialized. Various vehicle parameters needs to be defined to initialize it. Instead,
+EV_sim provides a database of commercial electric vehicles (EV), which contains all the relevant required parameters. For the 
+list of supported commercial EV, refer to the "Vehicles in the Database" section. When using the parameters from the
+database, "EVfromDatabase" class object (derived child of EV class) is called instead. The "EVfromDatabase" takes 
+vehicle alias as its input parameter. In EV_sim, vehicle alias is a string and follows the convention: 
+'manufacturer_year_model name_trim'.
+
+For example:
+
+<code> alias_name = "Tesla_2022_Model3_RWD" </code><br>
 <code> volt = EV_sim.EVFromDatabase(alias_name=alias_name) </code>
 
-Specify the DriveCycle and ExternalConditions class objects.
+
+Specify the DriveCycle and ExternalConditions class objects. </br>
 
 <code> udds = EV_sim.DriveCycle(drive_cycle_name="us06") </code> <br>
 <code> waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3) </code>
+
 
 Finally, declare the VehicleDynamics object and use it's simulate method. 
 
@@ -60,20 +85,26 @@ vehicle database grows. For sources of the vehicle parameters in the database, r
 Please note that certain approximations and assumptions were made for the vehicle parameters. Feel free to contact the
 author for more details, corrections, and/or contributions.
 
-Audi 2021 e-tron 55 quattro  : Audi_2021_e-tron 55 quattro
-Chevy 2017 Volt  : Volt_2017
-Tesla 2022 Model 3 RWD : Tesla_2022_Model3_RWD
-Tesla 2022 Model 3 Long Range AWD : Tesla_2022_Model3_LongRangeAWD
-Tesla 2022 Model 3 Performance AWD : Tesla_2022_Model3_PerformanceAWD
-Tesla 2022 Model S Plaid Tri Motor : Tesla_2022_ModelS_PlaidTriMotorAWD
-Tesla 2022 ModelS Long Range : Tesla_2022_ModelS_LongRange
-Tesla 2022 ModelX  : Tesla_2022_ModelX
-Tesla 2022 ModelX Plaid : Tesla_2022_ModelX_Plaid
-Tesla 2022 ModelY RWD : Tesla_2022_ModelY_RWD
-Tesla 2022 ModelY Long Range AWD : Tesla_2022_ModelY_LongRangeAWD
-Tesla 2022 ModelY Performance AWD : Tesla_2022_ModelY_PerformanceAWD
+- Audi 2021 e-tron 55 quattro  : Audi_2021_e-tron 55 quattro
+- Chevy 2017 Volt  : Volt_2017
+- Tesla 2022 Model 3 RWD : Tesla_2022_Model3_RWD
+- Tesla 2022 Model 3 Long Range AWD : Tesla_2022_Model3_LongRangeAWD
+- Tesla 2022 Model 3 Performance AWD : Tesla_2022_Model3_PerformanceAWD
+- Tesla 2022 Model S Plaid Tri Motor : Tesla_2022_ModelS_PlaidTriMotorAWD
+- Tesla 2022 ModelS Long Range : Tesla_2022_ModelS_LongRange
+- Tesla 2022 ModelX  : Tesla_2022_ModelX
+- Tesla 2022 ModelX Plaid : Tesla_2022_ModelX_Plaid
+- Tesla 2022 ModelY RWD : Tesla_2022_ModelY_RWD
+- Tesla 2022 ModelY Long Range AWD : Tesla_2022_ModelY_LongRangeAWD
+- Tesla 2022 ModelY Performance AWD : Tesla_2022_ModelY_PerformanceAWD
 
 </p>
+
+### Drive Cycles in the Package:
+- Urban Dynamometer Driving Schedule (udds)
+- Highway Fuel Economy test (hwfet)
+- New York City Cycle (nycc)
+- US06 (us06)
 
 ### File Directories
 - Assets: Contains images for the README.md file
@@ -81,6 +112,7 @@ Tesla 2022 ModelY Performance AWD : Tesla_2022_ModelY_PerformanceAWD
   - config: path configurations 
   - examples: example implementation using source code 
   - data: datafiles for EVs and drive cycles
+  - utils: utility code for timing simulation times and printing useful database information.
 - tests: Test code using the results from MATLAB code<sup>2</sup>.
 
 ### References
