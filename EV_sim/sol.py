@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+
+import numpy as np
 import matplotlib.pyplot as plt
 import numpy.typing as npt
 from typing import Optional
@@ -12,26 +14,49 @@ class Solution:
     """
     veh_alias: Optional[str]
     t: Optional[npt.ArrayLike]
-    des_acc: Optional[npt.ArrayLike]
-    des_acc_F: Optional[npt.ArrayLike]
-    aero_F: Optional[npt.ArrayLike]
-    roll_grade_F: Optional[npt.ArrayLike]
-    demand_torque: Optional[npt.ArrayLike]
-    max_torque: Optional[npt.ArrayLike]
-    limit_regen: Optional[npt.ArrayLike]
-    limit_torque: Optional[npt.ArrayLike]
-    motor_torque: Optional[npt.ArrayLike]
-    actual_acc_F: Optional[npt.ArrayLike]
-    actual_acc: Optional[npt.ArrayLike]
-    motor_speed: Optional[npt.ArrayLike]
-    actual_speed: Optional[npt.ArrayLike]
-    actual_speed_kmph: Optional[npt.ArrayLike]
-    distance: Optional[npt.ArrayLike]
-    demand_power: Optional[npt.ArrayLike]
-    limit_power: Optional[npt.ArrayLike]
-    battery_demand: Optional[npt.ArrayLike]
-    current: Optional[npt.ArrayLike]
-    battery_SOC: Optional[npt.ArrayLike]
+    # des_acc: Optional[npt.ArrayLike]
+    # des_acc_F: Optional[npt.ArrayLike]
+    # aero_F: Optional[npt.ArrayLike]
+    # roll_grade_F: Optional[npt.ArrayLike]
+    # demand_torque: Optional[npt.ArrayLike]
+    # max_torque: Optional[npt.ArrayLike]
+    # limit_regen: Optional[npt.ArrayLike]
+    # limit_torque: Optional[npt.ArrayLike]
+    # motor_torque: Optional[npt.ArrayLike]
+    # actual_acc_F: Optional[npt.ArrayLike]
+    # actual_acc: Optional[npt.ArrayLike]
+    # motor_speed: Optional[npt.ArrayLike]
+    # actual_speed: Optional[npt.ArrayLike] # actual speed, m/s
+    # actual_speed_kmph: Optional[npt.ArrayLike] # actual speed, km/h
+    # distance: Optional[npt.ArrayLike]
+    # demand_power: Optional[npt.ArrayLike]
+    # limit_power: Optional[npt.ArrayLike]
+    # battery_demand: Optional[npt.ArrayLike]
+    # current: Optional[npt.ArrayLike]
+    # battery_SOC: Optional[npt.ArrayLike]
+
+    def __post_init__(self):
+        if isinstance(self.t, np.ndarray):
+            self.des_acc = np.zeros(len(self.t))
+            self.des_acc_F = np.zeros(len(self.t))
+            self.aero_F = np.zeros(len(self.t))
+            self.roll_grade_F = np.zeros(len(self.t))
+            self.demand_torque = np.zeros(len(self.t))
+            self.max_torque = np.zeros(len(self.t))
+            self.limit_regen = np.zeros(len(self.t))
+            self.limit_torque = np.zeros(len(self.t))
+            self.motor_torque = np.zeros(len(self.t))
+            self.actual_acc_F = np.zeros(len(self.t))
+            self.actual_acc = np.zeros(len(self.t))
+            self.motor_speed = np.zeros(len(self.t))
+            self.actual_speed = np.zeros(len(self.t)) # actual speed, m/s
+            self.actual_speed_kmph = np.zeros(len(self.t)) # actual speed, km/h
+            self.distance = np.zeros(len(self.t))
+            self.demand_power = np.zeros(len(self.t))
+            self.limit_power = np.zeros(len(self.t))
+            self.battery_demand = np.zeros(len(self.t))
+            self.current = np.zeros(len(self.t))
+            self.battery_SOC = np.zeros(len(self.t))
 
     def plot_battery_demand(self):
         """
