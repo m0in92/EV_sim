@@ -8,6 +8,7 @@ from EV_sim.constants import PhysicsConstants
 from EV_sim.sol import Solution
 from EV_sim.utils.timer import sol_timer
 
+
 class VehicleDynamics:
     """
     VehicleDynamics simulates the demanded power and current from the batter pack.
@@ -141,9 +142,100 @@ class VehicleDynamics:
                motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed, actual_speed_kmph, distance, \
                demand_power, limit_power, battery_demand, current, battery_SOC
 
+    def simulate_k(self, des_acc, des_acc_F, aero_F, roll_grade_F, demand_torque, max_torque, limit_regen, limit_torque,
+                   motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed, actual_speed_kmph, distance,
+                   demand_power, limit_power, battery_demand, current, battery_SOC, k, prev_time, prev_speed,
+                   prev_motor_speed, prev_distance, prev_SOC):
+        """
+        Vehicle dynamics simulation at a time step, k
+        :param des_acc:
+        :param des_acc_F:
+        :param aero_F:
+        :param roll_grade_F:
+        :param demand_torque:
+        :param max_torque:
+        :param limit_regen:
+        :param limit_torque:
+        :param motor_torque:
+        :param actual_acc_F:
+        :param actual_acc:
+        :param motor_speed:
+        :param actual_speed:
+        :param actual_speed_kmph:
+        :param distance:
+        :param demand_power:
+        :param limit_power:
+        :param battery_demand:
+        :param current:
+        :param battery_SOC:
+        :param k:
+        :param prev_time:
+        :param prev_speed:
+        :param prev_motor_speed:
+        :param prev_distance:
+        :param prev_SOC:
+        :return:
+        """
+        des_acc[k] = VehicleDynamics.desired_acc(desired_speed=self.des_speed[k], prev_speed=prev_speed,
+                                                 current_time=self.DriveCycle.t[k], prev_time=prev_time)
+        des_acc_F[k] = VehicleDynamics.desired_acc_F(equivalent_mass=self.EV.equiv_mass, desired_acc=des_acc[k])
+        aero_F[k] = VehicleDynamics.aero_F(self.ExtCond.rho, self.EV.A_front, self.EV.C_d, prev_speed)
+        roll_grade_F[k] = VehicleDynamics.roll_grade_F(max_veh_mass=self.EV.max_mass,
+                                                       gravity_acc=PhysicsConstants.g,
+                                                       grade_angle=self.ExtCond.road_grade_angle)
+        if np.abs(prev_speed) > 0:
+            roll_grade_F[k] = roll_grade_F[k] + self.EV.C_r * self.EV.max_mass * PhysicsConstants.g
+        demand_torque[k] = VehicleDynamics.demand_torque(des_acc_F=des_acc_F[k], aero_F=aero_F[k],
+                                                         roll_grade_F=roll_grade_F[k],
+                                                         road_F=self.ExtCond.road_force,
+                                                         wheel_radius=self.EV.drive_train.wheel.r,
+                                                         gear_ratio=self.EV.drive_train.gear_box.N)
+
+        # The remaining calculations leads to actual speed
+        # First check if demand torque is limited by the motor characteristics and calculate the max. torque and
+        # limit torque
+        if prev_motor_speed < self.EV.motor.RPM_r:
+            max_torque[k] = self.EV.motor.L_max
+        else:
+            max_torque[k] = self.EV.motor.L_max * self.EV.motor.RPM_r / prev_motor_speed
+
+        limit_regen[k] = np.minimum(max_torque[k], self.EV.drive_train.frac_regen_torque * self.EV.motor.L_max)
+        limit_torque[k] = np.minimum(demand_torque[k], max_torque[k])
+        if limit_torque[k] > 0:
+            motor_torque[k] = limit_torque[k]
+        else:
+            motor_torque[k] = np.maximum(-limit_regen[k], limit_torque[k])
+
+        ## Now calculate the actual accelerations and speeds. Finally the distance is calculated
+        actual_acc_F[k] = limit_torque[k] * self.EV.drive_train.gear_box.N / self.EV.drive_train.wheel.r - \
+                          aero_F[k] - roll_grade_F[k] - self.ExtCond.road_force
+        actual_acc[k] = actual_acc_F[k] / self.EV.equiv_mass
+        motor_speed[k] = np.minimum(self.EV.motor.RPM_max, self.EV.drive_train.gear_box.N * (
+                prev_speed + actual_acc[k] * (self.DriveCycle.t[k] - prev_time)) * 60 / (
+                                            2 * np.pi * self.EV.drive_train.wheel.r))
+        actual_speed[k] = motor_speed[k] * 2 * np.pi * self.EV.drive_train.wheel.r / (
+                    60 * self.EV.drive_train.gear_box.N)
+        actual_speed_kmph[k] = actual_speed[k] * 3600 / 1000
+        distance[k] = prev_distance + ((actual_speed[k] + prev_speed) / 2) * (self.DriveCycle.t[k] - prev_time) / 1000
+
+        # Finally, calculates the battery power, current demanded
+        if limit_torque[k] > 0:
+            demand_power[k] = limit_torque[k]
+        else:
+            demand_power[k] = np.maximum(limit_torque[k], -limit_regen[k])
+        demand_power[k] = (demand_power[k] * 2 * np.pi) * (prev_motor_speed + motor_speed[k]) / (2 * 60000)
+        limit_power[k] = np.maximum(-self.EV.motor.P_max, np.minimum(self.EV.motor.P_max, demand_power[k]))
+        battery_demand[k] = self.EV.overhead_power / 1000
+        if limit_power[k] > 0:
+            battery_demand[k] = battery_demand[k] + limit_power[k] / self.EV.drive_train.eff
+        else:
+            battery_demand[k] = battery_demand[k] + limit_power[k] * self.EV.drive_train.eff
+        current[k] = battery_demand[k] * 1000 / self.EV.pack.pack_V_nom
+        battery_SOC[k] = prev_SOC - current[k] * (self.DriveCycle.t[k] - prev_time)
+
     @sol_timer
     def simulate(self):
-        # intialization
+        # initialization
         prev_speed, prev_motor_speed, prev_distance, prev_SOC, prev_time = self.init_cond()
 
         # create arrays for results and calculations
@@ -152,64 +244,12 @@ class VehicleDynamics:
         demand_power, limit_power, battery_demand, current, battery_SOC = self.create_init_arrays()
 
         # Run the simulation.
-        ## Note: k represents time index.
-        for k in range(len(self.DriveCycle.t)):
-            # These calculations lead to demanded torque
-            des_acc[k] = VehicleDynamics.desired_acc(desired_speed=self.des_speed[k], prev_speed=prev_speed,
-                                                     current_time=self.DriveCycle.t[k], prev_time=prev_time)
-            des_acc_F[k] = VehicleDynamics.desired_acc_F(equivalent_mass=self.EV.equiv_mass, desired_acc=des_acc[k])
-            aero_F[k] = VehicleDynamics.aero_F(self.ExtCond.rho, self.EV.A_front, self.EV.C_d, prev_speed)
-            roll_grade_F[k] = VehicleDynamics.roll_grade_F(max_veh_mass=self.EV.max_mass,
-                                                        gravity_acc=PhysicsConstants.g,
-                                                        grade_angle=self.ExtCond.road_grade_angle)
-            if np.abs(prev_speed) > 0:
-                roll_grade_F[k] = roll_grade_F[k] + self.EV.C_r * self.EV.max_mass * PhysicsConstants.g
-            demand_torque[k] = VehicleDynamics.demand_torque(des_acc_F=des_acc_F[k], aero_F=aero_F[k],
-                                                             roll_grade_F=roll_grade_F[k],
-                                                             road_F=self.ExtCond.road_force,
-                                                             wheel_radius=self.EV.drive_train.wheel.r,
-                                                             gear_ratio=self.EV.drive_train.gear_box.N)
+        for k in range(len(self.DriveCycle.t)): # k represents time index.
 
-            # The remaining calculations leads to actual speed
-            ## First check if demand torque is limited by the motor characteristics and calculate the max. torque and
-            ## limit torque
-            if prev_motor_speed < self.EV.motor.RPM_r:
-                max_torque[k] = self.EV.motor.L_max
-            else:
-                max_torque[k] = self.EV.motor.L_max * self.EV.motor.RPM_r / prev_motor_speed
-
-            limit_regen[k] = np.minimum(max_torque[k], self.EV.drive_train.frac_regen_torque * self.EV.motor.L_max)
-            limit_torque[k] = np.minimum(demand_torque[k], max_torque[k])
-            if limit_torque[k] > 0:
-                motor_torque[k] = limit_torque[k]
-            else:
-                motor_torque[k] = np.maximum(-limit_regen[k], limit_torque[k])
-
-            ## Now calculate the actual accelerations and speeds. Finally the distance is calculated
-            actual_acc_F[k] = limit_torque[k] * self.EV.drive_train.gear_box.N / self.EV.drive_train.wheel.r - \
-                              aero_F[k] - roll_grade_F[k] - self.ExtCond.road_force
-            actual_acc[k] = actual_acc_F[k] / self.EV.equiv_mass
-            motor_speed[k] = np.minimum(self.EV.motor.RPM_max, self.EV.drive_train.gear_box.N * (
-                        prev_speed + actual_acc[k] * (self.DriveCycle.t[k] - prev_time)) * 60 / (
-                                                    2 * np.pi * self.EV.drive_train.wheel.r))
-            actual_speed[k] = motor_speed[k] * 2 * np.pi * self.EV.drive_train.wheel.r / (60 * self.EV.drive_train.gear_box.N)
-            actual_speed_kmph[k] = actual_speed[k] * 3600 / 1000
-            distance[k] = prev_distance + ((actual_speed[k] + prev_speed) / 2) * (self.DriveCycle.t[k] - prev_time) / 1000
-
-            # Finally, calculates the battery power, current demanded
-            if limit_torque[k] > 0:
-                demand_power[k] = limit_torque[k]
-            else:
-                demand_power[k] = np.maximum(limit_torque[k], -limit_regen[k])
-            demand_power[k] = (demand_power[k] * 2 * np.pi) * (prev_motor_speed + motor_speed[k]) / (2 * 60000)
-            limit_power[k] = np.maximum(-self.EV.motor.P_max, np.minimum(self.EV.motor.P_max, demand_power[k]))
-            battery_demand[k] = self.EV.overhead_power / 1000
-            if limit_power[k] > 0:
-                battery_demand[k] = battery_demand[k] + limit_power[k] / self.EV.drive_train.eff
-            else:
-                battery_demand[k] = battery_demand[k] + limit_power[k] * self.EV.drive_train.eff
-            current[k] = battery_demand[k] * 1000 / self.EV.pack.pack_V_nom
-            battery_SOC[k] = prev_SOC - current[k] * (self.DriveCycle.t[k] - prev_time)
+            self.simulate_k(des_acc, des_acc_F, aero_F, roll_grade_F, demand_torque, max_torque, limit_regen,
+                            limit_torque, motor_torque, actual_acc_F, actual_acc, motor_speed, actual_speed,
+                            actual_speed_kmph, distance, demand_power, limit_power, battery_demand, current,
+                            battery_SOC, k, prev_time, prev_speed, prev_motor_speed, prev_distance, prev_SOC)
 
             # update relevant variables
             prev_time = self.DriveCycle.t[k]
