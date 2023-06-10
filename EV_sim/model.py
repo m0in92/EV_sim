@@ -125,7 +125,7 @@ class VehicleDynamics:
     def simulate_k(self, sol: Solution, k: int, prev_time: float, prev_speed: float, prev_motor_speed: float,
                    prev_distance: float, prev_SOC: float) -> None:
         """
-        Performs vehicle dynamics simulation at a specfic time step, k. It updates the Solution instance attributes
+        Performs vehicle dynamics simulation at a specific time step, k. It updates the Solution instance attributes
         at this time step, k.
         :param sol: Solution object that contains the all the simulation results in a arrays.
         :param k: time step
@@ -137,19 +137,19 @@ class VehicleDynamics:
         :return: (None)
         """
         sol.des_acc[k] = VehicleDynamics.desired_acc(desired_speed=self.des_speed[k], prev_speed=prev_speed,
-                                                 current_time=self.DriveCycle.t[k], prev_time=prev_time)
+                                                     current_time=self.DriveCycle.t[k], prev_time=prev_time)
         sol.des_acc_F[k] = VehicleDynamics.desired_acc_F(equivalent_mass=self.EV.equiv_mass, desired_acc=sol.des_acc[k])
         sol.aero_F[k] = VehicleDynamics.aero_F(self.ExtCond.rho, self.EV.A_front, self.EV.C_d, prev_speed)
         sol.roll_grade_F[k] = VehicleDynamics.roll_grade_F(max_veh_mass=self.EV.max_mass,
-                                                       gravity_acc=PhysicsConstants.g,
-                                                       grade_angle=self.ExtCond.road_grade_angle)
+                                                           gravity_acc=PhysicsConstants.g,
+                                                           grade_angle=self.ExtCond.road_grade_angle)
         if np.abs(prev_speed) > 0:
             sol.roll_grade_F[k] = sol.roll_grade_F[k] + self.EV.C_r * self.EV.max_mass * PhysicsConstants.g
         sol.demand_torque[k] = VehicleDynamics.demand_torque(des_acc_F=sol.des_acc_F[k], aero_F=sol.aero_F[k],
-                                                         roll_grade_F=sol.roll_grade_F[k],
-                                                         road_F=self.ExtCond.road_force,
-                                                         wheel_radius=self.EV.drive_train.wheel.r,
-                                                         gear_ratio=self.EV.drive_train.gear_box.N)
+                                                             roll_grade_F=sol.roll_grade_F[k],
+                                                             road_F=self.ExtCond.road_force,
+                                                             wheel_radius=self.EV.drive_train.wheel.r,
+                                                             gear_ratio=self.EV.drive_train.gear_box.N)
 
         # The remaining calculations leads to actual speed
         # First check if demand torque is limited by the motor characteristics and calculate the max. torque and
@@ -166,7 +166,7 @@ class VehicleDynamics:
         else:
             sol.motor_torque[k] = np.maximum(-sol.limit_regen[k], sol.limit_torque[k])
 
-        ## Now calculate the actual accelerations and speeds. Finally the distance is calculated
+        # Now calculate the actual accelerations and speeds. Finally, the distance is calculated
         sol.actual_acc_F[k] = sol.limit_torque[k] * self.EV.drive_train.gear_box.N / self.EV.drive_train.wheel.r - \
                           sol.aero_F[k] - sol.roll_grade_F[k] - self.ExtCond.road_force
         sol.actual_acc[k] = sol.actual_acc_F[k] / self.EV.equiv_mass
@@ -176,7 +176,8 @@ class VehicleDynamics:
         sol.actual_speed[k] = sol.motor_speed[k] * 2 * np.pi * self.EV.drive_train.wheel.r / (
                     60 * self.EV.drive_train.gear_box.N)
         sol.actual_speed_kmph[k] = sol.actual_speed[k] * 3600 / 1000
-        sol.distance[k] = prev_distance + ((sol.actual_speed[k] + prev_speed) / 2) * (self.DriveCycle.t[k] - prev_time) / 1000
+        sol.distance[k] = prev_distance + ((sol.actual_speed[k] + prev_speed) / 2) * (self.DriveCycle.t[k] -
+                                                                                      prev_time) / 1000
 
         # Finally, calculates the battery power, current demanded
         if sol.limit_torque[k] > 0:
