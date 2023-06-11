@@ -1,3 +1,7 @@
+#  Copyright (c) 2023. Moin Ahmed. All rights reserved.
+
+from collections.abc import Callable
+
 import numpy as np
 import numpy.typing
 
@@ -13,7 +17,7 @@ class VehicleDynamics:
     """
     VehicleDynamics simulates the demanded power and current from the batter pack.
     """
-    def __init__(self, ev_obj: EV, drive_cycle_obj: DriveCycle, external_condition_obj: ExternalConditions):
+    def __init__(self, ev_obj: EV, drive_cycle_obj: DriveCycle, external_condition_obj: ExternalConditions) -> None:
         """
         VehicleDynamics class constructor.
         :param ev_obj: (EV) EV class object that contains vehicle parameters.
@@ -122,7 +126,31 @@ class VehicleDynamics:
         sol = Solution(veh_alias=self.EV.alias_name, t=self.DriveCycle.t)
         return sol
 
-    def simulate_k(self, sol: Solution, k: int, prev_time: float, prev_speed: float, prev_motor_speed: float,
+    @staticmethod
+    def simulate_over_all_timesteps(func) -> Callable[[], Solution]:
+        """
+        Acts as a decorator function, whose wrapper function defines the initial conditions and performs simulation
+        iterations over all time steps.
+        :param func: (function type) simulation function
+        """
+        @sol_timer
+        def initialize_and_iterations(self) -> Solution:
+            prev_speed, prev_motor_speed, prev_distance, prev_SOC, prev_time = self.init_cond() # initialization
+            sol = self.create_init_arrays() # create arrays for results and calculations
+            # Run the simulation.
+            for k in range(len(self.DriveCycle.t)): # k represents time index.
+                func(self, sol, k, prev_time, prev_speed, prev_motor_speed, prev_distance, prev_SOC)
+                # update relevant variables below
+                prev_time = self.DriveCycle.t[k]
+                prev_speed = sol.actual_speed[k]
+                prev_motor_speed = sol.motor_speed[k]
+                prev_distance = sol.distance[k]
+                prev_SOC = sol.battery_SOC[k]
+            return sol
+        return initialize_and_iterations
+
+    @simulate_over_all_timesteps
+    def simulate(self, sol: Solution, k: int, prev_time: float, prev_speed: float, prev_motor_speed: float,
                    prev_distance: float, prev_SOC: float) -> None:
         """
         Performs vehicle dynamics simulation at a specific time step, k. It updates the Solution instance attributes
@@ -193,21 +221,6 @@ class VehicleDynamics:
             sol.battery_demand[k] = sol.battery_demand[k] + sol.limit_power[k] * self.EV.drive_train.eff
         sol.current[k] = sol.battery_demand[k] * 1000 / self.EV.pack.pack_V_nom
         sol.battery_SOC[k] = prev_SOC - sol.current[k] * (self.DriveCycle.t[k] - prev_time)
-
-    @sol_timer
-    def simulate(self) -> Solution:
-        prev_speed, prev_motor_speed, prev_distance, prev_SOC, prev_time = self.init_cond() # initialization
-        sol = self.create_init_arrays() # create arrays for results and calculations
-        # Run the simulation.
-        for k in range(len(self.DriveCycle.t)): # k represents time index.
-            self.simulate_k(sol, k, prev_time, prev_speed, prev_motor_speed, prev_distance, prev_SOC)
-            # update relevant variables below
-            prev_time = self.DriveCycle.t[k]
-            prev_speed = sol.actual_speed[k]
-            prev_motor_speed = sol.motor_speed[k]
-            prev_distance = sol.distance[k]
-            prev_SOC = sol.battery_SOC[k]
-        return sol
 
     def __repr__(self):
         return f"VehicleDynamics({self.EV}, {self.DriveCycle}, {self.ExtCond})"
