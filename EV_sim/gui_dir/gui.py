@@ -1,3 +1,7 @@
+#  Copyright (c) 2023. Moin Ahmed. All Rights Reserved.
+
+"""Graphical User Interface for Vehicle Dynamics made using Python's Tkinter."""
+
 import glob
 import os
 import tkinter
@@ -9,11 +13,12 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 
 import EV_sim
 from EV_sim.config import definations
+from EV_sim.gui_dir.menubar import MenuBarClass
+from EV_sim.gui_dir.sim_variables import InputSimVariables
+from EV_sim.custom_exceptions import *
 
-# Public variables
-icon_dir = definations.ROOT_DIR + '/icon.ico'
-license_dir = os.path.join(definations.PROJ_DIR + '/LICENSE')
-doc_dir = os.path.join(definations.PROJ_DIR + '/README.md')
+# Global variables
+icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')
 
 
 matplotlib.use('TkAgg')
@@ -37,7 +42,7 @@ class VehicleDynamicsApp(tkinter.Tk):
         super().__init__()
         self.title()
         self.title('EV Simulator')
-        self.iconbitmap(definations.ROOT_DIR + '/icon.ico')
+        self.iconbitmap(icon_dir)
         self.geometry('1200x800')
 
         # instance variables
@@ -66,51 +71,6 @@ class VehicleDynamicsApp(tkinter.Tk):
         self.mainloop()
 
 
-class MenuBarClass(tkinter.Menu):
-    """Attributes and methods for the menubar."""
-
-    def __init__(self, parent) -> None:
-        super().__init__(parent)
-
-        option_menu = tkinter.Menu(self, tearoff="off")
-        option_menu.add_command(label="Show to two decimal")
-        help_menu = tkinter.Menu(self, tearoff="off")
-        help_menu.add_command(label="Documentation", command=self.show_doc_window)
-        help_menu.add_command(label="Licence", command=self.show_licence_window)
-        self.add_cascade(label="Options", menu=option_menu)
-        self.add_cascade(label="Help", menu=help_menu)
-
-    def read_file(self, licence_file_dir) -> str:
-        with open(licence_file_dir, 'r', encoding='utf8') as l_file:
-            l_str = l_file.read()
-            l_file.close()
-        return l_str
-
-    def show_licence_window(self) -> None:
-        win_license = tkinter.Toplevel()
-        win_license.iconbitmap(icon_dir)
-
-        lblfme = tkinter.LabelFrame(win_license, text="Licence")
-        tkinter.Label(lblfme, text=self.read_file(licence_file_dir=license_dir)).grid(row=0, column=0)
-
-        lblfme.grid(row=0, column=0, sticky="news")
-
-    def show_doc_window(self) -> None:
-        """
-        Opens a new window with the documentation.
-        :return: None
-        """
-        # TODO: Add scroll bar.
-        win_doc = tkinter.Toplevel()
-        win_doc.iconbitmap(icon_dir)
-
-        lblfme = tkinter.LabelFrame(win_doc, text="Documentation")
-        tkinter.Label(lblfme, text=self.read_file(licence_file_dir=doc_dir)).grid(row=0, column=0)
-
-        # Widget Placements
-        lblfme.grid(row=0, column=0, sticky="news")
-
-
 class InputAndDisplayFrames(ttk.Frame):
     """
     Contains the attributes and methods pertaining to the Input (that appears of the left of the gui) and Display Frames
@@ -121,9 +81,8 @@ class InputAndDisplayFrames(ttk.Frame):
         super().__init__(parent)
 
         # Instance variables
-        self.ev_obj = EV_sim.EVFromDatabase("Volt_2017")  # stores the EV object, initialized with a random EV
-        self.dc_obj = EV_sim.DriveCycle(drive_cycle_name=None)  # stores the DriveCycle object and initializes with a
-        # the first drive cycle text file in the data/drive_cycles folder
+        self.sim_vars = InputSimVariables()
+
         self.var_air_pressure = tkinter.StringVar()
         self.var_road_grade = tkinter.StringVar()
         self.var_road_force = tkinter.StringVar()
@@ -135,7 +94,7 @@ class InputAndDisplayFrames(ttk.Frame):
         ParametersOnInputFrame(self)  # Parameter Widgets
         ResultInput(parent=self, start_row_num=4)  # Results Widget
 
-        # Diplay Widgets (those that appears on the right of the gui)
+        # Display Widgets (those that appears on the right of the gui)
         self.fme_display = ttk.Label(parent)  # display frame
 
         # Widget placement
@@ -172,24 +131,23 @@ class InputsOnInputFrame(ttk.Frame):
         self.var_lstbox_inputs_choices = tkinter.StringVar()
         self.var_lstbox_inputs_choices.set(InputsOnInputFrame.lstbox_inputs_choices)
 
+        # Widgets
         ttk.Label(self, text="Inputs", font=VehicleDynamicsApp.heading_style).grid(row=0, column=0, sticky="news")
         self.lstbox_inputs = tkinter.Listbox(self, width=50, listvariable=self.var_lstbox_inputs_choices,
                                              selectmode="single", exportselection=False,
                                              height=len(self.lstbox_inputs_choices))
 
+        # Bindings
         self.lstbox_inputs.bind('<<ListboxSelect>>', self.set_lstbox_input_user_choice)
 
+        # Grid layout
         self.lstbox_inputs.grid(row=1, column=0, sticky="news")
         self.grid(row=0, column=0)
 
     def set_lstbox_input_user_choice(self, event) -> None:
-        user_choce = self.lstbox_inputs.get(self.lstbox_inputs.curselection())
-        if user_choce == self.input_display_heading1:
-            InputsDisplay(self.parent.fme_display, text=self.input_display_heading1, parent_obj=self.parent)
-        elif user_choce == self.input_display_heading2:
-            InputsDisplay(self.parent.fme_display, text=self.input_display_heading2, parent_obj=self.parent)
-        elif user_choce == self.input_display_heading3:
-            InputsDisplay(self.parent.fme_display, text=self.input_display_heading3, parent_obj=self.parent)
+        user_choice = self.lstbox_inputs.get(self.lstbox_inputs.curselection())
+        InputsDisplay(self.parent.fme_display, text=user_choice, sim_vars_instance=self.parent.sim_vars) # the parent
+        # is the Inputs and Display Frame
 
 
 class ParametersOnInputFrame(ttk.Frame):
@@ -274,32 +232,17 @@ class ParametersOnInputFrame(ttk.Frame):
     def set_lstbox_params_user_choice(self, event) -> None:
         self.var_lstbox_params_user_choice.set(self.lstbox_params.get(self.lstbox_params.curselection()))
         user_choice = self.var_lstbox_params_user_choice.get()
-        if user_choice == self.lstbox_params_choices[0]:  # Basic parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading1, parent_obj=self.parent)
-        elif user_choice == self.lstbox_params_choices[1]:  # Battery cell parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading2, parent_obj=self.parent)
-        elif user_choice == self.lstbox_params_choices[2]:  # Battery module parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading3, parent_obj=self.parent)
-        elif user_choice == self.lstbox_params_choices[3]:  # Battery module parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading4, parent_obj=self.parent)
-        elif user_choice == self.lstbox_params_choices[4]:  # Battery module parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading5, parent_obj=self.parent)
-        elif user_choice == self.lstbox_params_choices[5]:  # Battery module parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading6, parent_obj=self.parent)
-        elif user_choice == self.lstbox_params_choices[6]:  # Battery module parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading7, parent_obj=self.parent)
-        elif user_choice == self.lstbox_params_choices[7]:  # Battery module parameter
-            MainDisplay(parent_fme=self.parent.fme_display, text=self.params_display_heading8, parent_obj=self.parent)
+        text = f'Vehicle {user_choice} Information'
+        MainDisplay(parent_fme=self.parent.fme_display, text=text, sim_vars_instance=self.parent.sim_vars)
 
     def set_lstbox_params_dc_user_choice(self, event) -> None:
         user_selection = self.lstbox_dc_params.get(self.lstbox_dc_params.curselection())
-        DCParameterDisplay(parent=self.parent.fme_display, user_selection=user_selection, dc_obj=self.parent.dc_obj)
+        DCParameterDisplay(parent_fme=self.parent.fme_display, text=user_selection, sim_vars_instance=self.parent.sim_vars)
 
     def set_lstbox_params_ext_cond_user_choice(self, event) -> None:
-        ExtCondParameterDisplay(parent=self.parent.fme_display,
-                                air_density=self.parent.var_air_pressure.get(),
-                                road_grade=self.parent.var_road_grade.get(),
-                                road_force=self.parent.var_road_force.get())
+        ExtCondParameterDisplay(parent_fme=self.parent.fme_display,
+                                text='External Conditions Information',
+                                sim_vars_instance= self.parent.sim_vars)
 
 
 class ResultInput(ttk.Frame):
@@ -329,37 +272,25 @@ class ResultInput(ttk.Frame):
         self.grid(row=start_row_num, column=0, sticky=tkinter.W, pady=(10, 0))
 
     def simulate(self) -> None:
-        self.ev_obj = self.parent.ev_obj
-        self.dc_obj = self.parent.dc_obj
         try:
-            self.ext_cond_obj = EV_sim.ExternalConditions(rho=float(self.parent.var_air_pressure.get()),
-                                                          road_grade=float(self.parent.var_road_grade.get()),
-                                                          road_force=float(self.parent.var_road_force.get()))
-            model = EV_sim.VehicleDynamics(ev_obj=self.ev_obj, drive_cycle_obj=self.dc_obj,
-                                           external_condition_obj=self.ext_cond_obj)
-            self.sol = model.simulate()
-
+            self.parent.sim_vars.sim() # perform simulation and store it in sim_vars.sol
             self.lstbox_result = tkinter.Listbox(self, listvariable=self.var_lstbox_results, width=50,
                                                  selectmode="single", height=len(self.lstbox_results_choices),
-                                                 exportselection=False)
+                                                 exportselection=False) # Listbox created only after simulations
 
             # bindings
             self.lstbox_result.bind('<<ListboxSelect>>', self.cmd_lstbox_result)
 
             # Widget placements
             self.lstbox_result.grid(row=self.start_row_num + 2, column=0)
-        except AttributeError:
-            self.error_msg.set("Set Drive Cycle.")
+        except Exception as e:
+            self.error_msg.set(e)
             ttk.Label(self, text=self.error_msg.get(), font=VehicleDynamicsApp.error_font_style, foreground='red',
-                      width=30).grid(row=self.start_row_num + 2, column=0, sticky=tkinter.W)
-        except ValueError:
-            self.error_msg.set("Set valid external conditions.")
-            ttk.Label(self, text=self.error_msg.get(), font=VehicleDynamicsApp.error_font_style, foreground='red') \
-                .grid(row=self.start_row_num + 2, column=0, sticky=tkinter.W)
+                      width=40).grid(row=self.start_row_num + 2, column=0, sticky=tkinter.W)
 
     def cmd_lstbox_result(self, event) -> None:
         user_choice = self.lstbox_result.get(self.lstbox_result.curselection())
-        ResultDisplay(parent_fme=self.parent.fme_display, text=user_choice, parent_obj=self)
+        ResultDisplay(parent_fme=self.parent.fme_display, text=user_choice, parent_obj=self, sim_vars_instance=self.parent.sim_vars)
 
 
 class MainDisplay(ttk.Frame):
@@ -373,19 +304,16 @@ class MainDisplay(ttk.Frame):
 
     # available drive cycles from drive_cycle database.
 
-    def __init__(self, parent_fme, text: str, parent_obj: tkinter.Frame) -> None:
+    def __init__(self, parent_fme: ttk.Frame, text: str, sim_vars_instance: InputSimVariables) -> None:
         super().__init__(parent_fme)
-        self.parent_obj = parent_obj
 
-        if isinstance(parent_obj.ev_obj, EV_sim.EV):
-            self.ev_obj = parent_obj.ev_obj
-        else:
-            raise TypeError("Cannot find EV instance inside parent_obj.")
+        if not isinstance(text, str):
+            raise TypeError("Input text needs to be a string object.")
 
-        if isinstance(parent_obj.dc_obj, EV_sim.DriveCycle):
-            self.dc_obj = parent_obj.dc_obj
+        if isinstance(sim_vars_instance, InputSimVariables):
+            self.sim_vars_instance = sim_vars_instance
         else:
-            raise TypeError("Cannot find DriveCycle instance inside parent_obj.")
+            raise TypeError("Parameter sim_vars_instance needs to be a InputSimVariables.")
 
         # Widgets - Basic Heading
         lbl = ttk.Label(self, text=text, font=VehicleDynamicsApp.heading_style)
@@ -400,13 +328,13 @@ class MainDisplay(ttk.Frame):
         elif text == ParametersOnInputFrame.params_display_heading4:  # Battery Pack Information
             self.create_battery_pack_params_display()
         elif text == ParametersOnInputFrame.params_display_heading5:  # Battery Motor Information
-            self.create_battery_motor_params_display()
+            self.create_motor_params_display()
         elif text == ParametersOnInputFrame.params_display_heading6:  # Battery Wheel Information
-            self.create_battery_wheel_params_display()
+            self.create_wheel_params_display()
         elif text == ParametersOnInputFrame.params_display_heading7:  # Battery Drivetrain Information
-            self.create_battery_dt_params_display()
+            self.create_dt_params_display()
         elif text == ParametersOnInputFrame.params_display_heading8:  # Battery Design Information
-            self.create_battery_design_params_display()
+            self.create_design_params_display()
 
         # Widget Placement
         lbl.grid(row=0, column=0, sticky=tkinter.W)
@@ -422,17 +350,18 @@ class MainDisplay(ttk.Frame):
         ttk.Label(self, text="Year").grid(row=4, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Trim").grid(row=5, column=0, sticky=tkinter.W)
 
-        ttk.Label(self, text=self.parent_obj.ev_obj.model_name).grid(row=2, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.parent_obj.ev_obj.manufacturer).grid(row=3, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.parent_obj.ev_obj.year).grid(row=4, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.parent_obj.ev_obj.trim).grid(row=5, column=1, sticky=tkinter.W)
+        # ttk.Label(self, text=self.parent_obj.ev_obj.model_name).grid(row=2, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=self.sim_vars_instance.ev_obj_instances[0].model_name).grid(row=2, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=self.sim_vars_instance.ev_obj_instances[0].manufacturer).grid(row=3, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=self.sim_vars_instance.ev_obj_instances[0].year).grid(row=4, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=self.sim_vars_instance.ev_obj_instances[0].trim).grid(row=5, column=1, sticky=tkinter.W)
 
     def create_battery_cell_params_display(self) -> None:
         """
-        Creates a display for the vehicle's battery cell information.
+        Widgets for the battery cell display.
         :return: None
         """
-        ev_obj = self.parent_obj.ev_obj.pack
+        ev_obj = self.sim_vars_instance.ev_obj_instances[0].pack
         ttk.Label(self, text="Manufacturer").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Chemistry").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Capacity [A hr]").grid(row=4, column=0, sticky=tkinter.W)
@@ -458,7 +387,7 @@ class MainDisplay(ttk.Frame):
         Creates a display for the vehicle's battery cell information.
         :return: None
         """
-        ev_obj = self.ev_obj.pack
+        ev_obj = self.sim_vars_instance.ev_obj_instances[0].pack
         ttk.Label(self, text="No. of parallel cells]").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="No. of series cells]").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="No. of tot. cells").grid(row=4, column=0, sticky=tkinter.W)
@@ -478,6 +407,11 @@ class MainDisplay(ttk.Frame):
         ttk.Label(self, text=ev_obj.module_specific_energy).grid(row=9, column=1, sticky=tkinter.W)
 
     def create_battery_pack_params_display(self) -> None:
+        """
+        Widgets for the battery pack display.
+        :return:
+        """
+        ev_obj = self.sim_vars_instance.ev_obj_instances[0].pack
         ttk.Label(self, text="Tot. Modules").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Mass, kg").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Energy, Wh").grid(row=4, column=0, sticky=tkinter.W)
@@ -486,15 +420,20 @@ class MainDisplay(ttk.Frame):
         ttk.Label(self, text="Nominal Potential, V").grid(row=7, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Maximum Potential, V").grid(row=8, column=0, sticky=tkinter.W)
 
-        ttk.Label(self, text=self.ev_obj.pack.num_modules).grid(row=2, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.pack.pack_mass).grid(row=3, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.pack.pack_energy).grid(row=4, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.pack.pack_energy).grid(row=5, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.pack.pack_V_min).grid(row=6, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.pack.pack_V_nom).grid(row=7, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.pack.pack_V_max).grid(row=8, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=ev_obj.num_modules).grid(row=2, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=ev_obj.pack_mass).grid(row=3, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=ev_obj.pack_energy).grid(row=4, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=ev_obj.pack_energy).grid(row=5, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=ev_obj.pack_V_min).grid(row=6, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=ev_obj.pack_V_nom).grid(row=7, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=ev_obj.pack_V_max).grid(row=8, column=1, sticky=tkinter.W)
 
-    def create_battery_motor_params_display(self) -> None:
+    def create_motor_params_display(self) -> None:
+        """
+        Widgets for the motor display.
+        :return: None
+        """
+        motor_info = self.sim_vars_instance.ev_obj_instances[0].motor
         ttk.Label(self, text="Motor Type").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Rated Speed, RPM").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Max. Speed, RPM").grid(row=4, column=0, sticky=tkinter.W)
@@ -503,22 +442,25 @@ class MainDisplay(ttk.Frame):
         ttk.Label(self, text="Inertia, kg m^2").grid(row=7, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Max. Power, kW").grid(row=8, column=0, sticky=tkinter.W)
 
-        ttk.Label(self, text=self.ev_obj.motor.motor_type).grid(row=2, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.motor.RPM_r).grid(row=3, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.motor.RPM_max).grid(row=4, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.motor.L_max).grid(row=5, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.motor.eff).grid(row=6, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.motor.I).grid(row=7, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.motor.P_max).grid(row=8, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=motor_info.motor_type).grid(row=2, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=motor_info.RPM_r).grid(row=3, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=motor_info.RPM_max).grid(row=4, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=motor_info.L_max).grid(row=5, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=motor_info.eff).grid(row=6, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=motor_info.I).grid(row=7, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=motor_info.P_max).grid(row=8, column=1, sticky=tkinter.W)
 
-    def create_battery_wheel_params_display(self) -> None:
+    def create_wheel_params_display(self) -> None:
+        wheel_info = self.sim_vars_instance.ev_obj_instances[0].drive_train.wheel
+
         ttk.Label(self, text="Radius, m").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Inertia, kg m^2").grid(row=3, column=0, sticky=tkinter.W)
 
-        ttk.Label(self, text=self.ev_obj.drive_train.wheel.r).grid(row=2, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.drive_train.wheel.I).grid(row=3, column=1, sticky=tkinter.W)
+        ttk.Label(self, text= wheel_info.r).grid(row=2, column=1, sticky=tkinter.W)
+        ttk.Label(self, text= wheel_info.I).grid(row=3, column=1, sticky=tkinter.W)
 
-    def create_battery_dt_params_display(self) -> None:
+    def create_dt_params_display(self) -> None:
+        dt_info = self.sim_vars_instance.ev_obj_instances[0].drive_train
         ttk.Label(self, text="Gearbox Ratio").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Inertia, kg m^2").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="No. wheels").grid(row=4, column=0, sticky=tkinter.W)
@@ -526,14 +468,15 @@ class MainDisplay(ttk.Frame):
         ttk.Label(self, text="Fraction of regeneration").grid(row=6, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Efficiency").grid(row=7, column=0, sticky=tkinter.W)
 
-        ttk.Label(self, text=self.ev_obj.drive_train.gear_box.N).grid(row=2, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.drive_train.gear_box.I).grid(row=3, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.drive_train.num_wheel).grid(row=4, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.drive_train.inverter_eff).grid(row=5, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.drive_train.frac_regen_torque).grid(row=6, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.drive_train.eff).grid(row=7, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=dt_info.gear_box.N).grid(row=2, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=dt_info.gear_box.I).grid(row=3, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=dt_info.num_wheel).grid(row=4, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=dt_info.inverter_eff).grid(row=5, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=dt_info.frac_regen_torque).grid(row=6, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=dt_info.eff).grid(row=7, column=1, sticky=tkinter.W)
 
-    def create_battery_design_params_display(self) -> None:
+    def create_design_params_display(self) -> None:
+        design_info = self.sim_vars_instance.ev_obj_instances[0]
         ttk.Label(self, text="Drag Coefficient").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Frontal Area, m^2").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Mass [kg]").grid(row=4, column=0, sticky=tkinter.W)
@@ -543,14 +486,14 @@ class MainDisplay(ttk.Frame):
         ttk.Label(self, text="Maximum Speed [km/h]").grid(row=8, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Overhead Power [W]").grid(row=9, column=0, sticky=tkinter.W)
 
-        ttk.Label(self, text=self.ev_obj.C_d).grid(row=2, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.A_front).grid(row=3, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.m).grid(row=4, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.payload_capacity).grid(row=5, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.curb_mass).grid(row=6, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.rot_mass).grid(row=7, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.max_speed).grid(row=8, column=1, sticky=tkinter.W)
-        ttk.Label(self, text=self.ev_obj.overhead_power).grid(row=9, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.C_d).grid(row=2, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.A_front).grid(row=3, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.m).grid(row=4, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.payload_capacity).grid(row=5, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.curb_mass).grid(row=6, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.rot_mass).grid(row=7, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.max_speed).grid(row=8, column=1, sticky=tkinter.W)
+        ttk.Label(self, text=design_info.overhead_power).grid(row=9, column=1, sticky=tkinter.W)
 
 
 class InputsDisplay(MainDisplay):
@@ -558,13 +501,14 @@ class InputsDisplay(MainDisplay):
     Attributes and methods for the contents on the Display Frame corresponding to the Inputs selected on the Input
     Frame.
     """
+    def __init__(self, parent_fme, text: str, sim_vars_instance: InputSimVariables) -> \
+            None:
+        super().__init__(parent_fme=parent_fme, text=text, sim_vars_instance=sim_vars_instance)
 
-    def __init__(self, parent_fme, text: str, parent_obj: InputsOnInputFrame) -> None:
-        super().__init__(parent_fme=parent_fme, text=text, parent_obj=parent_obj)
-
-        # Check for the inputs, especially the parent_obj needs to be a InputsOnInputFrame Object.
-        if not isinstance(self.parent_obj, InputAndDisplayFrames):
-            raise TypeError("parent_obj needs to be a InputsAndDisplay Object.")
+        # Instance variables
+        self.var_rho = tkinter.StringVar()
+        self.var_road_grade = tkinter.StringVar()
+        self.var_road_force = tkinter.StringVar()
 
         self.create_widgets(text=text)
 
@@ -580,8 +524,10 @@ class InputsDisplay(MainDisplay):
         row_num = 2
         ttk.Label(self, text="EV Alias").grid(row=row_num, column=0)
         self.combobox_EV_alias = ttk.Combobox(self, height=10)
-        self.combobox_EV_alias['values'] = EV_sim.EVFromDatabase.list_all_EV_alias(file_dir=VehicleDynamicsApp.EV_DATABASE_DIR)
+        self.combobox_EV_alias['values'] = EV_sim.EVFromDatabase.list_all_EV_alias(
+            file_dir=VehicleDynamicsApp.EV_DATABASE_DIR)
 
+        # Bindings
         self.combobox_EV_alias.bind('<<ComboboxSelected>>', self.combobox_EV_alias_select)
 
         # Widget placement
@@ -608,63 +554,86 @@ class InputsDisplay(MainDisplay):
         self.tk_canvas_dc_plot.grid(row=row_num + 1, column=0, columnspan=2, pady=10)
         self.cavas_dc_plot.get_tk_widget().pack()
 
+        plt.close()
+
     def create_ExtCond_widgets(self) -> None:
+        def update_rho(event):
+            if self.var_rho.get():
+                self.sim_vars_instance.update_rho(float(self.var_rho.get()))
+
+        def update_grade(event):
+            if self.var_road_grade.get():
+                self.sim_vars_instance.ext_cond_obj.road_grade = float(self.var_road_grade.get())
+
+        def update_force(event):
+            if self.var_road_force.get():
+                self.sim_vars_instance.ext_cond_obj.road_force = float(self.var_road_force.get())
+
         ttk.Label(self, text="Air Density, kg/m^3").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Road Grade, %").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Road Force, N").grid(row=4, column=0, sticky=tkinter.W)
 
-        ttk.Entry(self, textvariable=self.parent_obj.var_air_pressure).grid(row=2, column=1)
-        ttk.Entry(self, textvariable=self.parent_obj.var_road_grade).grid(row=3, column=1)
-        ttk.Entry(self, textvariable=self.parent_obj.var_road_force).grid(row=4, column=1)
+        entry_rho = ttk.Entry(self, textvariable=self.var_rho)
+        entry_grade = ttk.Entry(self, textvariable=self.var_road_grade)
+        entry_force = ttk.Entry(self, textvariable=self.var_road_force)
+
+        # binds
+        entry_rho.bind('<KeyRelease>', update_rho)
+        entry_grade.bind('<KeyRelease>', update_grade)
+        entry_force.bind('<KeyRelease>', update_force)
+
+        # Widget grid placements
+        entry_rho.grid(row=2, column=1)
+        entry_grade.grid(row=3, column=1)
+        entry_force.grid(row=4, column=1)
+
 
     def combobox_EV_alias_select(self, event) -> None:
-        self.parent_obj.ev_obj = EV_sim.EVFromDatabase(self.combobox_EV_alias.get())
+        alias_name = self.combobox_EV_alias.get()
+        self.sim_vars_instance.update_EV_instance(instance_index=0, alias_name=alias_name)
 
     def combobox_dc_select(self, event) -> None:
-        self.parent_obj.dc_obj = EV_sim.DriveCycle(self.combobox_dc.get(),
-                                                   folder_dir=VehicleDynamicsApp.DRIVECYCLE_FOLDER_DIR)
+        # self.parent_obj.dc_obj = EV_sim.DriveCycle(self.combobox_dc.get(),
+        #                                            folder_dir=VehicleDynamicsApp.DRIVECYCLE_FOLDER_DIR)
+        drive_cycle_name = self.combobox_dc.get()
+        self.sim_vars_instance.update_drivecycle_instance(drive_cycle_name=drive_cycle_name)
         # plot on the canvas
         self.ax_dc_plot.clear()
-        self.ax_dc_plot.plot(self.parent_obj.dc_obj.t, self.parent_obj.dc_obj.speed_kmph)
+        self.ax_dc_plot.plot(self.sim_vars_instance.dc_obj.t, self.sim_vars_instance.dc_obj.speed_kmph)
         self.ax_dc_plot.set_xlabel('Time [s]')
         self.ax_dc_plot.set_ylabel('Speed [km/h]')
         self.cavas_dc_plot.draw()
 
 
-class DCParameterDisplay(ttk.Frame):
+class DCParameterDisplay(MainDisplay):
     """
     Contains attributes and methods for the display for the drive cycle. A plot or array for the drive cycle can
     be viewed.
     """
     MAX_ARRAY_LENGTH = 20
 
-    def __init__(self, parent, user_selection, dc_obj):
-        super().__init__(parent)
-
-        if isinstance(dc_obj, EV_sim.DriveCycle):
-            self.dc_obj = dc_obj
-        else:
-            raise TypeError("dc_obj needs to be a DriveCycle object.")
+    def __init__(self, parent_fme, text: str, sim_vars_instance: InputSimVariables):
+        super().__init__(parent_fme=parent_fme, text=text, sim_vars_instance=sim_vars_instance)
 
         # If drive cycle is not set, then attempts to plot or list arrays will result in Attribute exception.
         try:
-            if user_selection == ParametersOnInputFrame.lstbox_params_dc_choices[0]:  # plot
+            if text == ParametersOnInputFrame.lstbox_params_dc_choices[0]:  # plot
                 self.create_plot_display()
-            elif user_selection == ParametersOnInputFrame.lstbox_params_dc_choices[1]:  # array
+            elif text == ParametersOnInputFrame.lstbox_params_dc_choices[1]:  # array
                 self.create_array_display()
         except AttributeError:
             ttk.Label(self, text="Set Drive Cycle in the Inputs section.", font=VehicleDynamicsApp.error_font_style,
                       foreground="red").grid(row=0, column=0)
 
-        # Widget grid placement
-        self.grid(row=0, column=0, sticky="news")
+        # # Widget grid placement
+        # self.grid(row=0, column=0, sticky="news")
 
     def create_plot_display(self):
         tk_canvas = tkinter.Canvas(self)
         fig = plt.figure()
         canvas = FigureCanvasTkAgg(figure=fig, master=tk_canvas)
         ax = fig.add_subplot()
-        ax.plot(self.dc_obj.t, self.dc_obj.speed_kmph)
+        ax.plot(self.sim_vars_instance.dc_obj.t, self.sim_vars_instance.dc_obj.speed_kmph)
         ax.set_xlabel('Time [s]')
         ax.set_ylabel('Speed [km/h]')
 
@@ -672,62 +641,74 @@ class DCParameterDisplay(ttk.Frame):
         tk_canvas.grid(row=0, column=0, sticky="news")
         canvas.get_tk_widget().grid(row=0, column=0)
 
+        plt.close()
+
     def create_array_display(self):
         error_msg = tkinter.StringVar()
 
-        if len(self.dc_obj.t) > self.MAX_ARRAY_LENGTH:
+        if len(self.sim_vars_instance.dc_obj.t) > self.MAX_ARRAY_LENGTH:
             max_length = self.MAX_ARRAY_LENGTH
             error_msg.set("Array too long. Results have been appended")
         else:
-            max_length = len(self.dc_obj.t)
+            max_length = len(self.sim_vars_instance.dc_obj.t)
 
         ttk.Label(self, text="Time [s]").grid(row=0, column=0)
         ttk.Label(self, text="Speed [km/h]").grid(row=0, column=2)
 
         for row_i in range(0, max_length):
-            ttk.Label(self, text=self.dc_obj.t[row_i]).grid(row=row_i + 1, column=0)
-            ttk.Label(self, text=self.dc_obj.speed_kmph[row_i]).grid(row=row_i + 1, column=2)
+            ttk.Label(self, text=self.sim_vars_instance.dc_obj.t[row_i]).grid(row=row_i + 1, column=0)
+            ttk.Label(self, text=self.sim_vars_instance.dc_obj.speed_kmph[row_i]).grid(row=row_i + 1, column=2)
 
         ttk.Label(self, text=error_msg.get()).grid(row=self.MAX_ARRAY_LENGTH + 5, column=0)
 
 
-class ExtCondParameterDisplay(ttk.Frame):
-    def __init__(self, parent, air_density, road_grade, road_force):
-        super().__init__(parent)
+class ExtCondParameterDisplay(MainDisplay):
+    def __init__(self, parent_fme: ttk.Frame, text: str, sim_vars_instance: InputSimVariables):
+        super().__init__(parent_fme=parent_fme, text=text, sim_vars_instance=sim_vars_instance)
+        self.create_widgets()
 
-        # variables
-        self.error_msg = tkinter.StringVar()
-
-        # Check for incomplete external conditions
-        try:
-            float(air_density)
-        except:
-            self.error_msg.set("Invalid Air Density. Indicate Air Density in the Inputs Section.")
-
-        try:
-            float(road_grade)
-        except:
-            self.error_msg.set("Invalid road grade. Indicate road grade in the Inputs Section.")
-
-        try:
-            float(road_force)
-        except:
-            self.error_msg.set("Invalid road force. Indicate road force in the Inputs Section.")
-
-        # Widgets
+    def create_widgets(self):
         ttk.Label(self, text="Air Density, kg/m^3").grid(row=2, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Road Grade, %").grid(row=3, column=0, sticky=tkinter.W)
         ttk.Label(self, text="Road Force, N").grid(row=4, column=0, sticky=tkinter.W)
 
-        ttk.Label(self, text=air_density).grid(row=2, column=1, sticky=tkinter.W, padx=10)
-        ttk.Label(self, text=road_grade).grid(row=3, column=1, sticky=tkinter.W, padx=10)
-        ttk.Label(self, text=road_force).grid(row=4, column=1, sticky=tkinter.W, padx=10)
+        ttk.Label(self, text=self.sim_vars_instance.ext_cond_obj.rho).grid(row=2, column=1, sticky=tkinter.W, padx=10)
+        ttk.Label(self, text=self.sim_vars_instance.ext_cond_obj.road_grade).grid(row=3, column=1, sticky=tkinter.W, padx=10)
+        ttk.Label(self, text=self.sim_vars_instance.ext_cond_obj.road_force).grid(row=4, column=1, sticky=tkinter.W, padx=10)
 
-        ttk.Label(self, text=self.error_msg.get(), foreground='red', font=VehicleDynamicsApp.error_font_style) \
-            .grid(row=5, column=0, columnspan=5)
+        # # variables
+        # self.error_msg = tkinter.StringVar()
+        #
+        # # Check for incomplete external conditions
+        # try:
+        #     float(air_density)
+        # except:
+        #     self.error_msg.set("Invalid Air Density. Indicate Air Density in the Inputs Section.")
+        #
+        # try:
+        #     float(road_grade)
+        # except:
+        #     self.error_msg.set("Invalid road grade. Indicate road grade in the Inputs Section.")
+        #
+        # try:
+        #     float(road_force)
+        # except:
+        #     self.error_msg.set("Invalid road force. Indicate road force in the Inputs Section.")
 
-        # Widget placement
-        self.grid(row=0, column=0, sticky="news")
+        # # Widgets
+        # ttk.Label(self, text="Air Density, kg/m^3").grid(row=2, column=0, sticky=tkinter.W)
+        # ttk.Label(self, text="Road Grade, %").grid(row=3, column=0, sticky=tkinter.W)
+        # ttk.Label(self, text="Road Force, N").grid(row=4, column=0, sticky=tkinter.W)
+        #
+        # ttk.Label(self, text=air_density).grid(row=2, column=1, sticky=tkinter.W, padx=10)
+        # ttk.Label(self, text=road_grade).grid(row=3, column=1, sticky=tkinter.W, padx=10)
+        # ttk.Label(self, text=road_force).grid(row=4, column=1, sticky=tkinter.W, padx=10)
+        #
+        # ttk.Label(self, text=self.error_msg.get(), foreground='red', font=VehicleDynamicsApp.error_font_style) \
+        #     .grid(row=5, column=0, columnspan=5)
+        #
+        # # Widget placement
+        # self.grid(row=0, column=0, sticky="news")
 
 
 class ResultDisplay(MainDisplay):
@@ -737,15 +718,15 @@ class ResultDisplay(MainDisplay):
     """
 
     # TODO: have the option of saving data and plots.
-    def __init__(self, parent_fme, text: str, parent_obj: tkinter.Frame) -> None:
-        super().__init__(parent_fme=parent_fme, text=text, parent_obj=parent_obj)
+    def __init__(self, parent_fme, text: str, parent_obj: tkinter.Frame, sim_vars_instance: InputSimVariables) -> None:
+        super().__init__(parent_fme=parent_fme, text=text, sim_vars_instance=sim_vars_instance)
 
-        # Check for the inputs, particularly parent_obj needs to be a ResultInput Object.
-        if not isinstance(self.parent_obj, ResultInput):
-            raise TypeError("parent_obj needs to be a ResultInput object.")
-        # Furthermore, the parent_obj needs to have a simulation solution object.
-        if not isinstance(self.parent_obj.sol, EV_sim.sol.Solution):
-            raise TypeError("Solution object not found inside the parent_obj")
+        # # Check for the inputs, particularly parent_obj needs to be a ResultInput Object.
+        # if not isinstance(self.parent_obj, ResultInput):
+        #     raise TypeError("parent_obj needs to be a ResultInput object.")
+        # # Furthermore, the parent_obj needs to have a simulation solution object.
+        # if not isinstance(self.parent_obj.sol, EV_sim.sol.Solution):
+        #     raise TypeError("Solution object not found inside the parent_obj")
 
         # Widgets
         self.create_widgets(text=text)
@@ -757,59 +738,62 @@ class ResultDisplay(MainDisplay):
         :return: None
         """
         x_label = 'Time [min]'
+        sol_obj = self.sim_vars_instance.sol
+        x_values = sol_obj.t
+
         if text == ResultInput.lstbox_results_choices[0]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.des_acc,
+            self.create_plot(x_values=x_values, y_values=sol_obj.des_acc,
                              x_label=x_label, y_label=r'Desired Acceleration [m/$s^2$]')
         elif text == ResultInput.lstbox_results_choices[1]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.des_acc_F,
+            self.create_plot(x_values=x_values, y_values=sol_obj.des_acc_F,
                              x_label=x_label, y_label='Desired Acceleration Force [N]')
         elif text == ResultInput.lstbox_results_choices[2]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.aero_F,
+            self.create_plot(x_values=x_values, y_values=sol_obj.aero_F,
                              x_label=x_label, y_label='Aerodynamic Force [N]')
         elif text == ResultInput.lstbox_results_choices[3]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.roll_grade_F,
+            self.create_plot(x_values=x_values, y_values=sol_obj.roll_grade_F,
                              x_label=x_label, y_label='Rolling Grade Force [N]')
         elif text == ResultInput.lstbox_results_choices[4]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.demand_torque,
+            self.create_plot(x_values=x_values, y_values=sol_obj.demand_torque,
                              x_label=x_label, y_label='Demand Torque [Nm]')
         elif text == ResultInput.lstbox_results_choices[5]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.max_torque,
+            self.create_plot(x_values=x_values, y_values=sol_obj.max_torque,
                              x_label=x_label, y_label='Max. Torque [Nm]')
         elif text == ResultInput.lstbox_results_choices[6]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.limit_regen,
+            self.create_plot(x_values=x_values, y_values=sol_obj.limit_regen,
                              x_label=x_label, y_label='Limit Regeneration [Nm]')
         elif text == ResultInput.lstbox_results_choices[7]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.limit_torque,
+            self.create_plot(x_values=x_values, y_values=sol_obj.limit_torque,
                              x_label=x_label, y_label='Limit Torque [Nm]')
         elif text == ResultInput.lstbox_results_choices[8]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.motor_torque,
+            self.create_plot(x_values=x_values, y_values=sol_obj.motor_torque,
                              x_label=x_label, y_label='Motor Torque [Nm]')
         elif text == ResultInput.lstbox_results_choices[9]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.actual_acc_F,
+            self.create_plot(x_values=x_values, y_values=sol_obj.actual_acc_F,
                              x_label=x_label, y_label='Actual Acceleration Force [N]')
         elif text == ResultInput.lstbox_results_choices[10]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.actual_acc,
+            self.create_plot(x_values=x_values, y_values=sol_obj.actual_acc,
                              x_label=x_label, y_label=r'Actual Acceleration $[m/s^2]$')
         elif text == ResultInput.lstbox_results_choices[11]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.motor_speed,
+            self.create_plot(x_values=x_values, y_values=sol_obj.motor_speed,
                              x_label=x_label, y_label='Motor Speed [RPM]')
         elif text == ResultInput.lstbox_results_choices[12]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.actual_speed_kmph,
+            self.create_plot(x_values=x_values, y_values=sol_obj.actual_speed_kmph,
                              x_label=x_label, y_label='Actual Speed [km/h]')
         elif text == ResultInput.lstbox_results_choices[13]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.actual_speed_kmph,
+            self.create_plot(x_values=x_values, y_values=sol_obj.actual_speed_kmph,
                              x_label=x_label, y_label='Distance [km]')
         elif text == ResultInput.lstbox_results_choices[14]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.demand_power,
+            self.create_plot(x_values=x_values, y_values=sol_obj.demand_power,
                              x_label=x_label, y_label='Motor Demand Power [kW]')
         elif text == ResultInput.lstbox_results_choices[15]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.limit_power,
+            self.create_plot(x_values=x_values, y_values=sol_obj.limit_power,
                              x_label=x_label, y_label='Limit Power [kW]')
         elif text == ResultInput.lstbox_results_choices[16]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.battery_demand,
+            self.create_plot(x_values=x_values, y_values=sol_obj.battery_demand,
                              x_label=x_label, y_label='Battery power demand [kW]')
         elif text == ResultInput.lstbox_results_choices[17]:
-            self.create_plot(x_values=self.parent_obj.sol.t, y_values=self.parent_obj.sol.current,
+            self.create_plot(x_values=x_values, y_values=sol_obj.current,
                              x_label=x_label, y_label='Battery Pack Current [A]')
 
     def create_plot_canvas(self) -> None:

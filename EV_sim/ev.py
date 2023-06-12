@@ -1,4 +1,5 @@
-from dataclasses import dataclass, InitVar, KW_ONLY
+from dataclasses import dataclass
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -184,23 +185,23 @@ class EV:
     Furthermore, its has various vehicle methods to calculate for additional vehicle parameters.
     """
     # Basic EV information
-    alias_name: str
-    model_name: str
-    year: int
-    manufacturer: str
-    trim: str
+    alias_name: Optional[str] = None
+    model_name: Optional[str] = None
+    year: Optional[int] = None
+    manufacturer: Optional[str] = None
+    trim: Optional[str] = None
 
     # vehicle's component class objects
-    drive_train: DriveTrain
-    motor: ACInductionMotor
-    pack: BatteryPack
+    drive_train: Optional[DriveTrain] = None
+    motor: Optional[ACInductionMotor] = None
+    pack: Optional[BatteryPack] = None
 
     # Other vehicle information
-    C_d: float # drag coefficient, unit-less
-    A_front: float # vehicle frontal area, m^2
-    m: float # vehicle mass, kg
-    payload_capacity: float # vehicle payload capacity, kg
-    overhead_power: float # vehicle overhear power, W
+    C_d: Optional[float] = None # drag coefficient, unit-less
+    A_front: Optional[float] = None # vehicle frontal area, m^2
+    m: Optional[float] = None # vehicle mass, kg
+    payload_capacity: Optional[float] = None # vehicle payload capacity, kg
+    overhead_power: Optional[float] = None # vehicle overhear power, W
 
     @property
     def curb_mass(self) -> float:

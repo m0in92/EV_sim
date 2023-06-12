@@ -14,26 +14,6 @@ class Solution:
     """
     veh_alias: Optional[str]
     t: Optional[npt.ArrayLike]
-    # des_acc: Optional[npt.ArrayLike]
-    # des_acc_F: Optional[npt.ArrayLike]
-    # aero_F: Optional[npt.ArrayLike]
-    # roll_grade_F: Optional[npt.ArrayLike]
-    # demand_torque: Optional[npt.ArrayLike]
-    # max_torque: Optional[npt.ArrayLike]
-    # limit_regen: Optional[npt.ArrayLike]
-    # limit_torque: Optional[npt.ArrayLike]
-    # motor_torque: Optional[npt.ArrayLike]
-    # actual_acc_F: Optional[npt.ArrayLike]
-    # actual_acc: Optional[npt.ArrayLike]
-    # motor_speed: Optional[npt.ArrayLike]
-    # actual_speed: Optional[npt.ArrayLike] # actual speed, m/s
-    # actual_speed_kmph: Optional[npt.ArrayLike] # actual speed, km/h
-    # distance: Optional[npt.ArrayLike]
-    # demand_power: Optional[npt.ArrayLike]
-    # limit_power: Optional[npt.ArrayLike]
-    # battery_demand: Optional[npt.ArrayLike]
-    # current: Optional[npt.ArrayLike]
-    # battery_SOC: Optional[npt.ArrayLike]
 
     def __post_init__(self):
         if isinstance(self.t, np.ndarray):
