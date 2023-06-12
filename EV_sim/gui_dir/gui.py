@@ -1,6 +1,10 @@
+<<<<<<< HEAD:EV_sim/gui_dir/gui.py
 #  Copyright (c) 2023. Moin Ahmed. All Rights Reserved.
 
 """Graphical User Interface for Vehicle Dynamics made using Python's Tkinter."""
+=======
+#  Copyright (c) 2023. Moin Ahmed. All rights reserved.
+>>>>>>> 40fee242cb6eb20396fc3766898587bde1b9a5dd:EV_sim/gui.py
 
 import glob
 import os
