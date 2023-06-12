@@ -1,10 +1,7 @@
-<<<<<<< HEAD:EV_sim/gui_dir/gui.py
-#  Copyright (c) 2023. Moin Ahmed. All Rights Reserved.
+#  Copyright (c) 2023. Moin Ahmed. All rights reserved.
 
 """Graphical User Interface for Vehicle Dynamics made using Python's Tkinter."""
-=======
-#  Copyright (c) 2023. Moin Ahmed. All rights reserved.
->>>>>>> 40fee242cb6eb20396fc3766898587bde1b9a5dd:EV_sim/gui.py
+
 
 import glob
 import os
@@ -19,7 +16,7 @@ import EV_sim
 from EV_sim.config import definations
 from EV_sim.gui_dir.menubar import MenuBarClass
 from EV_sim.gui_dir.sim_variables import InputSimVariables
-from EV_sim.custom_exceptions import *
+from EV_sim.gui_dir.ribbon import Ribbon
 
 # Global variables
 icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')
@@ -60,6 +57,7 @@ class VehicleDynamicsApp(tkinter.Tk):
 
         # Widgets
         mb = MenuBarClass(self)  # menubar using the MenuBarClass below.
+        # rib = Ribbon(self)
         self.pw = ttk.PanedWindow(self, orient=tkinter.HORIZONTAL)  # PanedWindow Widget
         self.InputAndDisplayFrame = InputAndDisplayFrames(parent=self.pw)  # Input and Display Frames Widget
 
@@ -102,7 +100,7 @@ class InputAndDisplayFrames(ttk.Frame):
         self.fme_display = ttk.Label(parent)  # display frame
 
         # Widget placement
-        self.grid(row=0, column=0)
+        self.grid(row=0, column=0, rowspan=100)
         parent.add(self)
         self.fme_display.grid(row=0, column=1, sticky="news")
         parent.add(self.fme_display)
