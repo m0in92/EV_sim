@@ -83,13 +83,13 @@ class InputSimVariables:
             raise UndefinedRhoError
 
     def update_road_grade(self, road_grade):
-        if isinstance(road_grade):
+        if isinstance(road_grade, float):
             self.ext_cond_obj.road_grade = road_grade
         else:
             raise TypeError("Road grade needs to be a float.")
 
     def update_road_force(self, road_force):
-        if isinstance(road_force):
+        if isinstance(road_force, float):
             self.ext_cond_obj.road_force = road_force
         else:
             raise TypeError("road force needs to be a float.")

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 import numpy as np
@@ -101,17 +101,17 @@ class DriveTrain:
 
 @dataclass
 class BatteryCell:
-    cell_manufacturer: str
-    cell_cap: float # Battery cell capacity, A hr
-    cell_mass: float # Battery cell mass, g
-    cell_V_max: float # Battery cell max. voltage, V
-    cell_V_nom: float # Battery cell nominal voltage, V
-    cell_V_min: float # Battery cell min. voltage, V
-    cell_chem: str # Battery positive electrode chemistry
+    cell_manufacturer: str # Battery cell manufacturer
+    cell_cap: float  # Battery cell capacity, A hr
+    cell_mass: float  # Battery cell mass, g
+    cell_V_max: float  # Battery cell max. voltage, V
+    cell_V_nom: float  # Battery cell nominal voltage, V
+    cell_V_min: float  # Battery cell min. voltage, V
+    cell_chem: str  # Battery positive electrode chemistry
 
     def __post_init__(self):
         # check for the input manufacturer type. np.isnan is possible in case of empty field in the EV_dataset.csv
-        if isinstance(self.cell_manufacturer, str) or np.isnan(self.cell_manufacturer):
+        if isinstance(self.cell_manufacturer, str) or pd.isnull(self.cell_manufacturer):
             if isinstance(self.cell_manufacturer, str):
                 self.cell_manufacturer = self.cell_manufacturer
             else:

@@ -12,8 +12,8 @@ class InputSimVariables:
     Stores the instances of simulation variables. Furthermore, it contains methods for instance retrieval and update.
     """
     def __init__(self):
-        self.ev_obj_instances = []
-        self.create_EV_instance()
+        self.ev_obj_instances = [] # this list contains all the instances of the EV class.
+        self.create_EV_instance() # populate the ev_onj_instances list with an empty EV instance
         self.dc_obj = EV_sim.DriveCycle(drive_cycle_name=None)  # stores the DriveCycle object and initializes with a
         # the first drive cycle text file in the data/drive_cycles folder
         self.ext_cond_obj = EV_sim.ExternalConditions(rho=None, road_grade=None, road_force=None)
@@ -83,16 +83,29 @@ class InputSimVariables:
             raise UndefinedRhoError
 
     def update_road_grade(self, road_grade):
-        if isinstance(road_grade):
+        if isinstance(road_grade, float):
             self.ext_cond_obj.road_grade = road_grade
         else:
             raise TypeError("Road grade needs to be a float.")
 
     def update_road_force(self, road_force):
-        if isinstance(road_force):
+        if isinstance(road_force, float):
             self.ext_cond_obj.road_force = road_force
         else:
             raise TypeError("road force needs to be a float.")
+
+    def __repr__(self):
+        # if (self.ext_cond_obj.rho is not None and self.ext_cond_obj.road_grade is not None) and self.ext_cond_obj.road_force is not None:
+        sep = ','
+        return 'ext_cond: ' + str(self.ext_cond_obj.rho) + sep + str(self.ext_cond_obj.road_grade) + sep \
+               + str(self.ext_cond_obj.road_force)
+
+    def __str__(self):
+        sep = ','
+        return 'ev: ' + str(self.ev_obj_instances[0].alias_name) + sep + \
+            ' dc: ' + str(self.dc_obj.drive_cycle_name) + sep + \
+               ' ext_cond: ' + str(self.ext_cond_obj.rho) + sep + str(self.ext_cond_obj.road_grade) + sep \
+               + str(self.ext_cond_obj.road_force)
 
 
 # # protype testing
