@@ -41,7 +41,6 @@ class VehicleDynamicsApp(tkinter.Tk):
     def __init__(self):
         # root/window
         super().__init__()
-        self.title()
         self.title('EV Simulator')
         self.iconbitmap(icon_dir)
         self.geometry('1200x800')
@@ -57,16 +56,17 @@ class VehicleDynamicsApp(tkinter.Tk):
 
         # Widgets
         mb = MenuBarClass(self)  # menubar using the MenuBarClass below.
-        # rib = Ribbon(self)
+        rib = Ribbon(self)
         self.pw = ttk.PanedWindow(self, orient=tkinter.HORIZONTAL)  # PanedWindow Widget
         self.InputAndDisplayFrame = InputAndDisplayFrames(parent=self.pw)  # Input and Display Frames Widget
 
         # Widget grid placements
-        self.pw.grid(row=0, column=0, sticky="news")
+        self.pw.grid(row=1, column=0, sticky="news")
 
         # Row and column configurations
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=10)
         self.config(menu=mb)
 
         # main loop
@@ -97,10 +97,10 @@ class InputAndDisplayFrames(ttk.Frame):
         ResultInput(parent=self, start_row_num=4)  # Results Widget
 
         # Display Widgets (those that appears on the right of the gui)
-        self.fme_display = ttk.Label(parent)  # display frame
+        self.fme_display = ttk.Frame(parent)  # display frame
 
         # Widget placement
-        self.grid(row=0, column=0, rowspan=100)
+        self.grid(row=1, column=0, rowspan=100)
         parent.add(self)
         self.fme_display.grid(row=0, column=1, sticky="news")
         parent.add(self.fme_display)
