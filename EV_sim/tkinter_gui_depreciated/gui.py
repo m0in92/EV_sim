@@ -14,9 +14,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 
 import EV_sim
 from EV_sim.config import definations
-from EV_sim.gui_dir.menubar import MenuBarClass
-from EV_sim.gui_dir.sim_variables import InputSimVariables
-from EV_sim.gui_dir.ribbon import Ribbon
+from EV_sim.tkinter_gui_depreciated.menubar import MenuBarClass
+from EV_sim.tkinter_gui_depreciated.sim_variables import InputSimVariables
+from EV_sim.tkinter_gui_depreciated.ribbon import Ribbon
 
 # Global variables
 icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')

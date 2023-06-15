@@ -13,9 +13,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 
 import EV_sim
 from EV_sim.config import definations
-from EV_sim.gui_dir.menubar import MenuBarClass
+from EV_sim.tkinter_gui_depreciated.menubar import MenuBarClass
 from EV_sim.tkinter_gui.sim_variables import InputSimVariables
-from EV_sim.tkinter_gui.ribbon import Ribbon
+
 
 # Global variables
 icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')
@@ -75,6 +75,52 @@ class VehicleDynamicsApp(tkinter.Tk):
         self.mainloop()
 
 
+class Ribbon(ttk.Frame):
+    dict_bttn_text = {'Vehicle Dynamics Simulation': ['Simulate']}
+
+    def __init__(self, parent):
+        self.parent = parent
+        super().__init__(self.parent)
+
+        # Instance variables
+        self.parent = parent
+        self.user_bbtn_choice = tkinter.StringVar()
+        self.user_bbtn_choice.set(list(self.dict_bttn_text.keys())[0]) # initialize user selection of the main menu to
+        # the first available choice.
+
+        # Widgets
+        fme_top_menu = ttk.Frame(self)
+        dict_bttn = {}
+        for col_num, text_ in enumerate(self.dict_bttn_text.keys()):
+            dict_bttn[f'bttn_{text_}'] = ttk.Button(fme_top_menu, text=text_,
+                                                    command=lambda text=text_: self.show_sub_menu(text))
+            dict_bttn[f'bttn_{text_}'].grid(row=0, column=col_num, sticky='news')
+        self.show_sub_menu(text=self.user_bbtn_choice.get())
+
+        # grid layout
+        fme_top_menu.grid(row=0, column=0, columnspan=len(self.dict_bttn_text.keys()))
+        self.grid(row=0, column=0, sticky='news')
+
+    def show_sub_menu(self, text):
+        fme_sub_menu = ttk.Frame(self, width=self.parent.winfo_width())
+        if not isinstance(text, str):
+            raise TypeError('submenu needs a input of string type.')
+        for col_num, sub_menu_bttn_ in enumerate(self.dict_bttn_text[text]):
+            ttk.Button(fme_sub_menu, width=25, text=sub_menu_bttn_, command=lambda text=sub_menu_bttn_: self.sub_menu_cmd(text))\
+                .grid(row=1, column=col_num)
+        fme_sub_menu.grid(row=1, column=0, sticky='news')
+
+    def sub_menu_cmd(self, text):
+        if text == 'Simulate':
+            self.parent.InputFrameInstance.ResultsFrame.enable_lstbox_state()
+            try:
+                self.parent.InputFrameInstance.ResultsFrame.enable_lstbox_state()
+                self.parent.sim_vars.sim()
+            except Exception as e:
+                print(e)
+                self.parent.InputFrameInstance.ResultsFrame.display_error_msg(text=str(e))
+
+
 class MainInputFrame(ttk.Frame):
     lstbox_inputs_choices = {
         'Simulation Inputs': ["EV", "Drive Cycle", "External Conditions"]}  # all main choices in the input section
@@ -97,7 +143,7 @@ class MainInputFrame(ttk.Frame):
                       lstbox_choices=self.lstbox_inputs_choices)  # Input Frame
         SubInputFrame(self, fme_row=1, fme_col=0, main_heading_text="Parameters",
                       lstbox_choices=self.lstbox_params_choices)  # Parameters Frame
-        SubInputFrame(self, fme_row=2, fme_col=0, main_heading_text='Simulation Results',
+        self.ResultsFrame = SubInputResultsFrame(self, fme_row=2, fme_col=0, main_heading_text='Simulation Results',
                       lstbox_choices=self.lstbox_result_choices)  # Result Frame
 
         # Widget Layout
@@ -131,7 +177,7 @@ class SubInputFrame(ttk.Frame):
         self.create_widget()
 
         # Widget Layout
-        self.grid(row=fme_row, column=fme_col)
+        self.grid(row=fme_row, column=fme_col, sticky='news')
 
         self.create_bindings()
 
@@ -153,8 +199,7 @@ class SubInputFrame(ttk.Frame):
     def create_bindings(self):
         for category in self.lstbox_choices.keys():
             exec('self.lstbox_' + category.replace(' ',
-                                                   '_') + f".bind('<<ListboxSelect>>', lambda e:self.lstbox_callback(e,'{category}'))",
-                 locals())
+                                                   '_') + f".bind('<<ListboxSelect>>', lambda e:self.lstbox_callback(e,'{category}'))", locals())
 
     def lstbox_callback(self, event, category):
         user_selection = event.widget.get(event.widget.curselection())
@@ -162,6 +207,37 @@ class SubInputFrame(ttk.Frame):
                                                               '-' + user_selection, category=category,
                                                               user_selection=user_selection)
 
+
+class SubInputResultsFrame(SubInputFrame):
+    def __init__(self, parent: MainInputFrame, fme_row: int, fme_col: int, main_heading_text: str,
+                 lstbox_choices: dict):
+        super().__init__(parent=parent, fme_row=fme_row, fme_col=fme_col, main_heading_text=main_heading_text,
+                         lstbox_choices=lstbox_choices)
+
+    def enable_lstbox_state(self):
+        for category_index, category in enumerate(self.lstbox_choices.keys()):
+            exec('self.lstbox_' + category.replace(' ', '_') + "['state'] = tkinter.NORMAL")
+
+    def display_error_msg(self, text: str):
+        self.lbl_error_msg['text'] = text
+
+    def create_widget(self):
+        row_start_num = 1  # starting row index
+        for category_index, category in enumerate(self.lstbox_choices.keys()):
+            ttk.Label(self, text=category, font=VehicleDynamicsApp.heading_style2).grid(row=row_start_num, column=0,
+                                                                                        sticky=tkinter.W)
+            row_start_num += 1
+            lstbox = tkinter.Listbox(self, width=50, listvariable=self.var_lstbox_choices[category],
+                                     selectmode="single", exportselection=False,
+                                     height=len(self.lstbox_choices[category]), state=tkinter.DISABLED)
+            # lstbox['state'] = tkinter.NORMAL
+            lstbox.grid(row=row_start_num, column=0)
+            row_start_num += 1
+
+            exec('self.lstbox_' + category.replace(' ', '_') + '= lstbox')
+            self.dict_lstbox_instances[category] = lstbox
+        self.lbl_error_msg = ttk.Label(self, font=VehicleDynamicsApp.error_font_style, foreground='red')
+        self.lbl_error_msg.grid(row=row_start_num, column=0)
 
 class MainDisplayFrame(ttk.Frame):
     def __init__(self, parent):
@@ -235,10 +311,35 @@ class MainDisplayFrame(ttk.Frame):
                                  'Maximum Speed [km/h]")': ev_obj.max_speed,
                                  'Overhead Power [W]")': ev_obj.overhead_power
                              })
-
             return info_dict
         else:
             return dict(Basic={}, Cell={}, Module={}, Pack={}, Motor={}, Wheel={}, Drivetrain={}, Design={})
+
+    @property
+    def plot_info_dict(self):
+        dc_obj = self.parent.sim_vars.dc_obj
+        sol_obj = self.parent.sim_vars.sol
+        return {'Drive Cycle': {'plot': [dc_obj.t, dc_obj.speed_kmph, 'Time [min]', 'Speed [km/h]']},
+                'Results': {
+                    'Desired Acceleration': [sol_obj.t, sol_obj.des_acc, 'Time [min]', r'Desired Acceleration [m/$s^2$]'],
+                    'Desired Accelerating Force': [sol_obj.t, sol_obj.des_acc_F, 'Time [min]', 'Desired Acceleration Force [N]'],
+                    'Aerodynamic Force': [sol_obj.t, sol_obj.aero_F, 'Time [min]', 'Aerodynamic Force [N]'],
+                    'Rolling Grade Force': [sol_obj.t, sol_obj.roll_grade_F, 'Time [min]', 'Rolling Grade Force [N]'],
+                    'Demand Torque': [sol_obj.t, sol_obj.demand_torque, 'Time [min]', 'Demand Torque [Nm]'],
+                    'Max. Torque': [sol_obj.t, sol_obj.max_torque, 'Time [min]', 'Max. Torque [Nm]'],
+                    'Limit Regeneration': [sol_obj.t, sol_obj.limit_regen, 'Time [min]', 'Limit Regeneration [Nm]'],
+                    'Limit Torque': [sol_obj.t, sol_obj.limit_torque, 'Time [min]', 'Limit Torque [Nm]'],
+                    'Motor Torque': [sol_obj.t, sol_obj.motor_torque, 'Time [min]', 'Motor Torque [Nm]'],
+                    'Actual Accelerating Force': [sol_obj.t, sol_obj.actual_acc_F, 'Time [min]', 'Actual Acceleration Force [N]'],
+                    'Actual Acceleration': [sol_obj.t, sol_obj.actual_acc, 'Time [min]', r'Actual Acceleration $[m/s^2]$'],
+                    'Motor Speed': [sol_obj.t, sol_obj.motor_speed, 'Time [min]', 'Motor Speed [RPM]'],
+                    'Actual Speed': [sol_obj.t, sol_obj.actual_speed_kmph, 'Time [min]', 'Actual Speed [km/h]'],
+                    'Distance': [sol_obj.t, sol_obj.actual_speed_kmph, 'Time [min]', 'Distance [km]'],
+                    'Motor Demand Power': [sol_obj.t, sol_obj.demand_power, 'Time [min]', 'Motor Demand Power [kW]'],
+                    'Limit Power': [sol_obj.t, sol_obj.limit_power, 'Time [min]', 'Limit Power [kW]'],
+                    'Battery Demand': [sol_obj.t, sol_obj.battery_demand, 'Time [min]', 'Battery power demand [kW]'],
+                    'Battery Current': [sol_obj.t, sol_obj.current, 'Time [min]', 'Battery Pack Current [A]']}
+                }
 
     @property
     def info_ext_cond_dict(self):
@@ -271,11 +372,11 @@ class MainDisplayFrame(ttk.Frame):
         elif category == 'Vehicle':
             SubDisplayParameters(self, self.info_dict[user_selection])
         elif category == 'Drive Cycle':
-            SubDisplayPlots(self, user_selection=user_selection)
+            SubDisplayPlots(self, plot_info_dict=self.plot_info_dict[category], user_selection=user_selection)
         elif category == 'External Conditions':
             SubDisplayParameters(self, self.info_ext_cond_dict)
         elif category == 'Results':
-            SubDisplayPlots(self, user_selection=user_selection)
+            SubDisplayPlots(self, plot_info_dict=self.plot_info_dict[category],user_selection=user_selection)
 
 
 class SubDisplayComboBox(ttk.Frame):
@@ -383,10 +484,13 @@ class SubDisplayParameters(ttk.Frame):
 
 
 class SubDisplayPlots(ttk.Frame):
-    def __init__(self, parent, user_selection: str):
+    def __init__(self, parent, plot_info_dict: dict, user_selection: str):
         self.parent = parent
+        if not isinstance(plot_info_dict, dict):
+            raise TypeError('plot_info_dict needs to be a dict type.')
         if not isinstance(user_selection, str):
-            raise TypeError('user_selection needs to be a string type.')
+            raise TypeError('user selection needs to be a string type.')
+        self.plot_info_dict = plot_info_dict
         self.user_selection = user_selection
         super().__init__(self.parent)
 
@@ -395,11 +499,10 @@ class SubDisplayPlots(ttk.Frame):
         self.grid(row=1, column=0, sticky='news')  # Frame layout
 
     def create_widget(self):
-        if self.user_selection == 'plot':
-            if self.parent.parent.sim_vars.dc_obj.drive_cycle_name is not None:
-                self.create_plot(x_values=self.parent.parent.sim_vars.dc_obj.t,
-                                 y_values=self.parent.parent.sim_vars.dc_obj.speed_kmph,
-                                 x_label = 'Time [min]', y_label='Speed [km/h]')
+        self.create_plot(x_values=self.plot_info_dict[self.user_selection][0],
+                         y_values=self.plot_info_dict[self.user_selection][1],
+                         x_label = self.plot_info_dict[self.user_selection][2],
+                         y_label=self.plot_info_dict[self.user_selection][3])
 
     def create_plot_canvas(self) -> None:
         tk_canvas = tkinter.Canvas(self)
