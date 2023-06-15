@@ -44,16 +44,18 @@ class DriveCycle:
                 TypeError("Drive cycle's folder directory needs to be a string type.")
 
             df_drivecycle = self.parse_file()
-            self.t = df_drivecycle["Test Time [s]"].to_numpy()  # time array in seconds
-            self.speed_mph = df_drivecycle["Target Speed [milesph]"].to_numpy()  # desired speed, m/h
+            self.t = df_drivecycle['Test Time, secs'].to_numpy()  # time array in seconds
+            self.speed_mph = df_drivecycle['Target Speed, mph'].to_numpy()  # desired speed, m/h
             self.speed_kmph = df_drivecycle["Target Speed [km/h]"].to_numpy()  # desired speed, km/h
             self.speed_mps = df_drivecycle["Target Speed [m/h]"].to_numpy()  # desired speed, mps
             del df_drivecycle
 
     def parse_file(self):
-        file_dir = self.folder_dir + f"{self.drive_cycle_name}.txt"
-        df = pd.read_csv(file_dir, sep="\t", skiprows=2, header=None, names=["Test Time [s]", "Target Speed [milesph]"])
-        df["Target Speed [km/h]"] = df["Target Speed [milesph]"] * 1.609344  # creates a col with units in km/h
+        # file_dir = self.folder_dir + f"{self.drive_cycle_name}.txt"
+        file_dir = self.folder_dir + f"{self.drive_cycle_name}.csv"
+        # df = pd.read_csv(file_dir, sep="\t", skiprows=2, header=None, names=["Test Time [s]", "Target Speed [milesph]"])
+        df = pd.read_csv(file_dir)
+        df["Target Speed [km/h]"] = df["Target Speed, mph"] * 1.609344  # creates a col with units in km/h
         df["Target Speed [m/h]"] = df["Target Speed [km/h]"] * 1000 / 3600  # creates a col with units in m/s
         return df
 

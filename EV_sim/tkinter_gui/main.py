@@ -18,7 +18,7 @@ from EV_sim.tkinter_gui.sim_variables import InputSimVariables
 
 
 # Global variables
-icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')
+icon_dir = os.path.join(definations.ROOT_DIR, 'tkinter_gui', 'icon.ico')
 
 matplotlib.use('TkAgg')
 
@@ -363,7 +363,7 @@ class MainDisplayFrame(ttk.Frame):
                     'EV_Alias': EV_sim.EVFromDatabase.list_all_EV_alias(file_dir=VehicleDynamicsApp.EV_DATABASE_DIR)},
                                    user_selection=user_selection)
             elif user_selection == 'Drive Cycle':
-                dc_wildcard_txt = definations.ROOT_DIR + '\data\drive_cycles\*.txt'
+                dc_wildcard_txt = definations.ROOT_DIR + '\data\drive_cycles\*.csv'
                 SubDisplayComboBox(self, cmbbox_options={
                     'Drive Cycle': [os.path.split(file_)[-1].split('.')[0] for file_ in glob.glob(dc_wildcard_txt)]},
                                    user_selection=user_selection)
