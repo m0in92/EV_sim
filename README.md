@@ -101,11 +101,13 @@ author for more details, corrections, and/or contributions.
 </p>
 
 ### Drive Cycles in the Package:
-- Braunschweig City Driving Cycle (bcdc) 
-- Urban Dynamometer Driving Schedule (udds)
+- Braunschweig City Driving Cycle (bcdc) <sup>9</sup>
+- Federal Test Procedure (ftp) <sup>10</sup>
 - Highway Fuel Economy test (hwfet)
 - New York City Cycle (nycc)
+- Unified Cycle Driving Schedule (ucds) <sup>9</sup>
 - US06 (us06)
+- Urban Dynamometer Driving Schedule (udds)
 
 ### File Directories
 - Assets: Contains images for the README.md file
@@ -125,3 +127,5 @@ author for more details, corrections, and/or contributions.
 6. https://www.torquenews.com/
 7. https://www.guideautoweb.com/en/
 8. https://www.caranddriver.com/
+9. https://www.nrel.gov/transportation/drive-cycle-tool/
+10. https://www.epa.gov/vehicle-and-fuel-emissions-testing/dynamometer-drive-schedules
