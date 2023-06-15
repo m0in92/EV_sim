@@ -79,8 +79,8 @@ class MainInputFrame(ttk.Frame):
     lstbox_inputs_choices = {
         'Simulation Inputs': ["EV", "Drive Cycle", "External Conditions"]}  # all main choices in the input section
     lstbox_params_choices = {'Vehicle': ["Basic", "Cell", "Module", "Pack", "Motor", "Wheel", "Drivetrain", "Design"],
-                             "Drive Cycle": ["plot", "array"],
-                             "External Conditions": ["values"]}
+                             'Drive Cycle': ['plot'],
+                             'External Conditions': ["values"]}
     lstbox_result_choices = {'Results': ["Desired Acceleration", "Desired Accelerating Force", "Aerodynamic Force",
                                          "Rolling Grade Force", "Demand Torque", "Max. Torque", "Limit Regeneration",
                                          "Limit Torque", "Motor Torque", "Actual Accelerating Force",
@@ -176,20 +176,75 @@ class MainDisplayFrame(ttk.Frame):
 
     @property
     def info_dict(self):
-        ev_pack_obj = self.parent.sim_vars.ev_obj_instances[0].pack
-        if ev_pack_obj is not None:
-            info_dict = {"Cell": {"Manufacturer": ev_pack_obj.cell_manufacturer,
-                                  "Chemistry": ev_pack_obj.cell_chem,
-                                  "Capacity [A hr]": ev_pack_obj.cell_cap,
-                                  "Mass [g]": ev_pack_obj.cell_mass,
-                                  "V_max [V]": ev_pack_obj.cell_V_max,
-                                  "V_nom [V]": ev_pack_obj.cell_V_nom,
-                                  "V_min [V]": ev_pack_obj.cell_V_min,
-                                  "Cell Energy, Wh": ev_pack_obj.cell_energy,
-                                  "Cell Specific Energy, Wh/kg": ev_pack_obj.cell_spec_energy}}
+        if self.parent.sim_vars.ev_obj_instances[0].alias_name is not None:
+            ev_obj = self.parent.sim_vars.ev_obj_instances[0]
+            ev_pack_obj = ev_obj.pack
+            ev_motor_obj = ev_obj.motor
+            ev_wheel_obj = ev_obj.drive_train.wheel
+            ev_dt_obj = ev_obj.drive_train
+            info_dict = dict(Basic={'Model': ev_obj.model_name,
+                                    'Manufacturer': ev_obj.manufacturer,
+                                    'Year': ev_obj.year,
+                                    'Trim:': ev_obj.trim},
+                             Cell={'Manufacturer': ev_pack_obj.cell_manufacturer,
+                                   'Chemistry': ev_pack_obj.cell_chem,
+                                   "Capacity [A hr]": ev_pack_obj.cell_cap,
+                                   'Mass [g]': ev_pack_obj.cell_mass,
+                                   'V_max [V]': ev_pack_obj.cell_V_max,
+                                   'V_nom [V]': ev_pack_obj.cell_V_nom,
+                                   'V_min [V]': ev_pack_obj.cell_V_min,
+                                   'Cell Energy, Wh': ev_pack_obj.cell_energy,
+                                   'Cell Specific Energy, Wh/kg': ev_pack_obj.cell_spec_energy},
+                             Module={'No. of parallel cells]': ev_pack_obj.Np,
+                                     'No. of series cells]': ev_pack_obj.Ns,
+                                     'No. of tot. cells': ev_pack_obj.total_no_cells,
+                                     'Overhead mass ratio': ev_pack_obj.module_overhead_mass,
+                                     'Capacity [Ah]': ev_pack_obj.module_cap,
+                                     'Mass [kg]': ev_pack_obj.module_mass,
+                                     'Energy [kWh]': ev_pack_obj.module_energy,
+                                     'Specific Energy [Wh/kg]': ev_pack_obj.module_specific_energy},
+                             Pack={'Tot. Modules': ev_pack_obj.num_modules,
+                                   'Mass, kg': ev_pack_obj.pack_mass,
+                                   'Energy, Wh': ev_pack_obj.pack_energy,
+                                   'Specific Energy, Wh/kg': ev_pack_obj.pack_specific_energy,
+                                   'Minimum Potential, V': ev_pack_obj.pack_V_min,
+                                   'Nominal Potential, V': ev_pack_obj.pack_V_nom,
+                                   'Maximum Potential, V': ev_pack_obj.pack_V_max},
+                             Motor={'Motor Type': ev_motor_obj.motor_type,
+                                    'Rated Speed, RPM': ev_motor_obj.RPM_r,
+                                    'Max. Speed, RPM': ev_motor_obj.RPM_max,
+                                    'Max. Torque, Nm': ev_motor_obj.L_max,
+                                    'Efficiency': ev_motor_obj.eff,
+                                    'Inertia, kg m^2': ev_motor_obj.I,
+                                    'Max. Power, kW': ev_motor_obj.P_max},
+                             Wheel={'Radius, m': ev_wheel_obj.r,
+                                    'Inertia, kg m^2': ev_wheel_obj.I},
+                             Drivetrain={'Gearbox Ratio': ev_dt_obj.gear_box.N,
+                                         'Gearbox Inertia, kg m^2': ev_dt_obj.gear_box.I,
+                                         'No. wheels': ev_dt_obj.num_wheel,
+                                         'inverter Efficiency': ev_dt_obj.inverter_eff,
+                                         'Fraction of regeneration': ev_dt_obj.frac_regen_torque,
+                                         'Efficiency': ev_dt_obj.eff},
+                             Design={
+                                 'Drag Coefficient': ev_obj.C_d,
+                                 'Frontal Area, m^2': ev_obj.A_front,
+                                 'Mass [kg]': ev_obj.m,
+                                 'Payload Cap [kg]': ev_obj.payload_capacity,
+                                 'Curb Mass [kg]': ev_obj.curb_mass,
+                                 'Rotational Mass [kg]")': ev_obj.rot_mass,
+                                 'Maximum Speed [km/h]")': ev_obj.max_speed,
+                                 'Overhead Power [W]")': ev_obj.overhead_power
+                             })
+
             return info_dict
         else:
-            return {"Cell": {}}
+            return dict(Basic={}, Cell={}, Module={}, Pack={}, Motor={}, Wheel={}, Drivetrain={}, Design={})
+
+    @property
+    def info_ext_cond_dict(self):
+        ext_cond_obj = self.parent.sim_vars.ext_cond_obj
+        return {'Air Density, kg/m^3': ext_cond_obj.rho, 'Road Grade, %': ext_cond_obj.road_grade,
+                'Road Force, N' : ext_cond_obj.road_force}
 
     def create_widget(self, main_heading_text: str, category: str, user_selection: str):
         """
@@ -214,9 +269,13 @@ class MainDisplayFrame(ttk.Frame):
             elif user_selection == 'External Conditions':
                 SubDisplayUserEntry(self, entry_list=["Air Density, kg/m^3", "Road Grade, %", "Road Force, N"])
         elif category == 'Vehicle':
-            SubDisplayResults(self, self.info_dict[user_selection])
-            # if user_selection == 'Basic':
-            #     SubDisplayResults(self, info_dict=self.basic_info_dict)
+            SubDisplayParameters(self, self.info_dict[user_selection])
+        elif category == 'Drive Cycle':
+            SubDisplayPlots(self, user_selection=user_selection)
+        elif category == 'External Conditions':
+            SubDisplayParameters(self, self.info_ext_cond_dict)
+        elif category == 'Results':
+            SubDisplayPlots(self, user_selection=user_selection)
 
 
 class SubDisplayComboBox(ttk.Frame):
@@ -296,10 +355,9 @@ class SubDisplayUserEntry(ttk.Frame):
                 self.parent.parent.sim_vars.update_road_grade(float(user_input))
             elif event.widget['text'] == self.entry_list[2]:  # Road force
                 self.parent.parent.sim_vars.update_road_force(float(user_input))
-        print(self.parent.parent.sim_vars)
 
 
-class SubDisplayResults(ttk.Frame):
+class SubDisplayParameters(ttk.Frame):
     def __init__(self, parent, info_dict):
         self.parent = parent
         if not isinstance(info_dict, dict):
@@ -324,31 +382,49 @@ class SubDisplayResults(ttk.Frame):
         pass
 
 
-#     def create_battery_cell_params_display(self) -> None:
-#         """
-#         Widgets for the battery cell display.
-#         :return: None
-#         """
-#         ev_obj = self.sim_vars_instance.ev_obj_instances[0].pack
-#         ttk.Label(self, text="Manufacturer").grid(row=2, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="Chemistry").grid(row=3, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="Capacity [A hr]").grid(row=4, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="Mass [g]").grid(row=5, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="V_max [V]").grid(row=6, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="V_nom [V]").grid(row=7, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="V_min [V]").grid(row=8, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="Cell Energy, Wh").grid(row=9, column=0, sticky=tkinter.W)
-#         ttk.Label(self, text="Cell Specific Energy, Wh/kg").grid(row=10, column=0, sticky=tkinter.W)
-#
-#         ttk.Label(self, text=ev_obj.cell_manufacturer).grid(row=2, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_chem).grid(row=3, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_cap).grid(row=4, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_mass).grid(row=5, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_V_max).grid(row=6, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_V_nom).grid(row=7, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_V_min).grid(row=8, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_energy).grid(row=9, column=1, sticky=tkinter.W)
-#         ttk.Label(self, text=ev_obj.cell_spec_energy).grid(row=10, column=1, sticky=tkinter.W)
+class SubDisplayPlots(ttk.Frame):
+    def __init__(self, parent, user_selection: str):
+        self.parent = parent
+        if not isinstance(user_selection, str):
+            raise TypeError('user_selection needs to be a string type.')
+        self.user_selection = user_selection
+        super().__init__(self.parent)
+
+        self.create_widget()
+
+        self.grid(row=1, column=0, sticky='news')  # Frame layout
+
+    def create_widget(self):
+        if self.user_selection == 'plot':
+            if self.parent.parent.sim_vars.dc_obj.drive_cycle_name is not None:
+                self.create_plot(x_values=self.parent.parent.sim_vars.dc_obj.t,
+                                 y_values=self.parent.parent.sim_vars.dc_obj.speed_kmph,
+                                 x_label = 'Time [min]', y_label='Speed [km/h]')
+
+    def create_plot_canvas(self) -> None:
+        tk_canvas = tkinter.Canvas(self)
+        fig = plt.figure()
+        self.ax = fig.add_subplot()
+        self.canvas = FigureCanvasTkAgg(figure=fig, master=tk_canvas)
+
+        # Widget grid placement
+        tk_canvas.grid(row=1, column=0)
+        self.canvas.get_tk_widget().grid(row=0, column=0)
+
+    def create_plot(self, x_values, y_values, x_label, y_label) -> None:
+        """
+        Creates the time vs. battery power demand plot on the Display.
+        :param x_values: (np.ndarray) x_values for the plot
+        :param y_values: (np.ndarray) y_values for the plot.
+        :return: None
+        """
+        self.create_plot_canvas()
+        self.ax.clear()
+        self.ax.plot(x_values, y_values)
+        self.ax.set_xlabel(xlabel=x_label)
+        self.ax.set_ylabel(ylabel=y_label)
+        self.canvas.draw()
+        plt.close()
 
 
 if __name__ == '__main__':
