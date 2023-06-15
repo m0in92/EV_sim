@@ -101,6 +101,7 @@ author for more details, corrections, and/or contributions.
 </p>
 
 ### Drive Cycles in the Package:
+- Braunschweig City Driving Cycle (bcdc) 
 - Urban Dynamometer Driving Schedule (udds)
 - Highway Fuel Economy test (hwfet)
 - New York City Cycle (nycc)
