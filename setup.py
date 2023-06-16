@@ -11,5 +11,5 @@ setup(name='EV_sim',
       author="Moin Ahmed",
       author_email="moinahmed100#gmail.com",
       packages=['EV_sim', 'EV_sim.examples', 'EV_sim.config', 'tests'],
-      install_requires=['numpy', 'pandas', 'matplotlib'],
+      install_requires=['numpy', 'pandas', 'matplotlib', 'customtkinter'],
       )

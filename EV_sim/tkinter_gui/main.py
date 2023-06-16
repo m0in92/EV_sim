@@ -6,6 +6,7 @@ import glob
 import os
 import tkinter
 from tkinter import ttk
+import customtkinter as ctk
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -20,10 +21,11 @@ from EV_sim.tkinter_gui.sim_variables import InputSimVariables
 # Global variables
 icon_dir = os.path.join(definations.ROOT_DIR, 'tkinter_gui', 'icon.ico')
 
+# Settings
 matplotlib.use('TkAgg')
+ctk.set_appearance_mode('dark')
 
-
-class VehicleDynamicsApp(tkinter.Tk):
+class VehicleDynamicsApp(ctk.CTk):
     """
     Contains method and attributes for the root window. It creates the main window, menubar, panedwindow, and the
     Input and Display Frames. The main window contains the menubar and paned window. The paned window contains frames
@@ -75,12 +77,13 @@ class VehicleDynamicsApp(tkinter.Tk):
         self.mainloop()
 
 
-class Ribbon(ttk.Frame):
+class Ribbon(ctk.CTkFrame):
     dict_bttn_text = {'Vehicle Dynamics Simulation': ['Simulate']}
 
     def __init__(self, parent):
         self.parent = parent
         super().__init__(self.parent)
+        ctk.set_appearance_mode('system')
 
         # Instance variables
         self.parent = parent
@@ -89,26 +92,27 @@ class Ribbon(ttk.Frame):
         # the first available choice.
 
         # Widgets
-        fme_top_menu = ttk.Frame(self)
+        fme_top_menu = ctk.CTkFrame(self)
         dict_bttn = {}
         for col_num, text_ in enumerate(self.dict_bttn_text.keys()):
-            dict_bttn[f'bttn_{text_}'] = ttk.Button(fme_top_menu, text=text_,
+            dict_bttn[f'bttn_{text_}'] = ctk.CTkButton(fme_top_menu, text=text_,
                                                     command=lambda text=text_: self.show_sub_menu(text))
             dict_bttn[f'bttn_{text_}'].grid(row=0, column=col_num, sticky='news')
         self.show_sub_menu(text=self.user_bbtn_choice.get())
 
         # grid layout
-        fme_top_menu.grid(row=0, column=0, columnspan=len(self.dict_bttn_text.keys()))
+        fme_top_menu.grid(row=0, column=0, columnspan=len(self.dict_bttn_text.keys()), sticky='news', padx=5, pady=5)
         self.grid(row=0, column=0, sticky='news')
 
     def show_sub_menu(self, text):
-        fme_sub_menu = ttk.Frame(self, width=self.parent.winfo_width())
+        fme_sub_menu = ctk.CTkFrame(self, width=self.parent.winfo_width())
         if not isinstance(text, str):
             raise TypeError('submenu needs a input of string type.')
         for col_num, sub_menu_bttn_ in enumerate(self.dict_bttn_text[text]):
-            ttk.Button(fme_sub_menu, width=25, text=sub_menu_bttn_, command=lambda text=sub_menu_bttn_: self.sub_menu_cmd(text))\
+            ctk.CTkButton(fme_sub_menu, width=25, text=sub_menu_bttn_,
+                       command=lambda text=sub_menu_bttn_: self.sub_menu_cmd(text))\
                 .grid(row=1, column=col_num)
-        fme_sub_menu.grid(row=1, column=0, sticky='news')
+        fme_sub_menu.grid(row=1, column=0, sticky='news', padx=10, pady=5)
 
     def sub_menu_cmd(self, text):
         if text == 'Simulate':
