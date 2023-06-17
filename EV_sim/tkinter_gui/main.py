@@ -251,7 +251,7 @@ class MainDisplayFrame(ttk.Frame):
         # Widgets
         self.create_widget(main_heading_text="Default", category="Default", user_selection="Default")
 
-        # Layout
+        # Frame Layout
         self.grid(row=1, column=1, sticky='news')
 
     @property
