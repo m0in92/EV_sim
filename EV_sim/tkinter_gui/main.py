@@ -148,7 +148,7 @@ class MainInputFrame(ttk.Frame):
         SubInputFrame(self, fme_row=1, fme_col=0, main_heading_text="Parameters",
                       lstbox_choices=self.lstbox_params_choices)  # Parameters Frame
         self.ResultsFrame = SubInputResultsFrame(self, fme_row=2, fme_col=0, main_heading_text='Simulation Results',
-                      lstbox_choices=self.lstbox_result_choices)  # Result Frame
+                                                 lstbox_choices=self.lstbox_result_choices)  # Result Frame
 
         # Widget Layout
         self.grid(row=1, column=0, sticky='news', rowspan=100)
@@ -164,7 +164,7 @@ class SubInputFrame(ttk.Frame):
         if not isinstance(main_heading_text, str):
             raise TypeError("Main heading text needs to be a string type.")
         if not isinstance(lstbox_choices, dict):
-            raise TypeError("lst_box_choices needs to be an input type.")
+            raise TypeError("lst_box_choices needs to be an dict type.")
 
         # Instance variables
         self.main_heading_text = main_heading_text
@@ -242,6 +242,7 @@ class SubInputResultsFrame(SubInputFrame):
             self.dict_lstbox_instances[category] = lstbox
         self.lbl_error_msg = ttk.Label(self, font=VehicleDynamicsApp.error_font_style, foreground='red')
         self.lbl_error_msg.grid(row=row_start_num, column=0)
+
 
 class MainDisplayFrame(ttk.Frame):
     def __init__(self, parent):

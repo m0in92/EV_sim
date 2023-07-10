@@ -2,6 +2,8 @@
 
 import EV_sim
 
+import pandas as pd
+
 
 alias_name = "Tesla_2022_Model3_RWD"
 tesla = EV_sim.EVFromDatabase(alias_name=alias_name)
