@@ -19,7 +19,7 @@ from EV_sim.tkinter_gui.sim_variables import InputSimVariables
 
 
 # Global variables
-# icon_dir = os.path.join(definations.PROJ_DIR, "EV_sim", 'tkinter_gui', 'icon.ico')
+icon_dir = os.path.join(definations.PROJ_DIR, "EV_sim", 'tkinter_gui', 'icon1.ico')
 
 # Settings
 matplotlib.use('TkAgg')
@@ -42,7 +42,7 @@ class VehicleDynamicsApp(ctk.CTk):
         # root/window
         super().__init__()
         self.title('EV Simulator')
-        # self.iconbitmap(icon_dir)
+        self.iconbitmap(icon_dir)
         self.geometry('1000x800')
 
         # instance variables
