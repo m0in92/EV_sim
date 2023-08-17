@@ -8,7 +8,7 @@ from EV_sim.config import definations
 # Global variables
 doc_dir = os.path.join(definations.PROJ_DIR + '/README.md')
 license_dir = os.path.join(definations.PROJ_DIR + '/LICENSE')
-icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')
+icon_dir = os.path.join(definations.ROOT_DIR, 'tkinter_gui', 'icon.ico')
 
 
 class MenuBarClass(tkinter.Menu):

@@ -6,9 +6,9 @@ from EV_sim.config import definations
 
 
 # Global variables
-doc_dir = os.path.join(definations.PROJ_DIR + '/README.md')
-license_dir = os.path.join(definations.PROJ_DIR + '/LICENSE')
-icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')
+doc_dir = os.path.join(definations.PROJ_DIR, '/README.md')
+license_dir = os.path.join(definations.PROJ_DIR, 'LICENSE')
+# icon_dir = os.path.join(definations.ROOT_DIR, 'tkinter_gui', 'icon.ico')
 
 
 class MenuBarClass(tkinter.Menu):
@@ -33,7 +33,7 @@ class MenuBarClass(tkinter.Menu):
 
     def show_licence_window(self) -> None:
         win_license = tkinter.Toplevel()
-        win_license.iconbitmap(icon_dir)
+        # win_license.iconbitmap(icon_dir)
 
         lblfme = tkinter.LabelFrame(win_license, text="Licence")
         tkinter.Label(lblfme, text=self.read_file(licence_file_dir=license_dir)).grid(row=0, column=0)
@@ -47,7 +47,7 @@ class MenuBarClass(tkinter.Menu):
         """
         # TODO: Add scroll bar.
         win_doc = tkinter.Toplevel()
-        win_doc.iconbitmap(icon_dir)
+        # win_doc.iconbitmap(icon_dir)
 
         lblfme = tkinter.LabelFrame(win_doc, text="Documentation")
         tkinter.Label(lblfme, text=self.read_file(licence_file_dir=doc_dir)).grid(row=0, column=0)

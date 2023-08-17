@@ -19,7 +19,7 @@ from EV_sim.tkinter_gui_depreciated.sim_variables import InputSimVariables
 from EV_sim.tkinter_gui_depreciated.ribbon import Ribbon
 
 # Global variables
-icon_dir = os.path.join(definations.ROOT_DIR, 'gui_dir', 'icon.ico')
+icon_dir = os.path.join(definations.ROOT_DIR, 'tkinter_gui', 'icon.ico')
 
 
 matplotlib.use('TkAgg')
