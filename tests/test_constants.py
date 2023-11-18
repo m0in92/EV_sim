@@ -1,6 +1,6 @@
 import unittest
 
-from EV_sim.constants import PhysicsConstants
+from EV_sim.utils.constants import PhysicsConstants
 
 
 class TestPhysicsConstants(unittest.TestCase):

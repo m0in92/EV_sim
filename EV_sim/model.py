@@ -1,4 +1,12 @@
-#  Copyright (c) 2023. Moin Ahmed. All rights reserved.
+"""
+This modules contains the classes and functionailities the calculations involved with the electric vehicle dynamic
+simulations
+"""
+
+__all__ = ['VehicleDynamics']
+
+__authors__ = "Moin Ahmed"
+__copyright__ = "Copyright 2023 by EV_sim. All rights reserved."
 
 from collections.abc import Callable
 
@@ -8,7 +16,7 @@ import numpy.typing
 from EV_sim.ev import EV
 from EV_sim.extern_conditions import ExternalConditions
 from EV_sim.drivecycles import DriveCycle
-from EV_sim.constants import PhysicsConstants
+from EV_sim.utils.constants import PhysicsConstants
 from EV_sim.sol import Solution
 from EV_sim.utils.timer import sol_timer
 

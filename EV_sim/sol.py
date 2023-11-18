@@ -1,3 +1,13 @@
+"""
+This modules contains the classes and functionailities for storing the simulation results.
+"""
+
+__all__ = ['Solution']
+
+__authors__ = "Moin Ahmed"
+__copyright__ = 'Copyright 2023 by EV_sim. All rights reserved.'
+
+
 from dataclasses import dataclass
 
 import numpy as np
