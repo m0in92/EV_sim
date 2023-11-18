@@ -1,3 +1,14 @@
+"""
+This module contains classes and functionalities pertaining to the parameters storage and relevant calculations of
+the external conditions experienced by an electric vehicle.
+"""
+
+__all__ = ['ExternalConditions']
+
+__authors__ = "Moin Ahmed"
+__copyright__ = "Copyright 2023 by EV_sim. All rights reserved."
+
+
 from typing import Optional, overload, Union
 
 import numpy as np

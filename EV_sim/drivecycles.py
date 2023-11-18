@@ -20,7 +20,8 @@ class DriveCycle:
     def __init(self, drive_cycle_name: None) -> None:
         ...
 
-    def __init__(self, drive_cycle_name: typing.Optional[str], folder_dir: str = definations.ROOT_DIR + "/data/drive_cycles/"):
+    def __init__(self, drive_cycle_name: typing.Optional[str],
+                 folder_dir: str = definations.ROOT_DIR + "/data/drive_cycles/"):
         """
         DriveCycle constructor
         :param drive_cycle_name: Drive cycle name as store in the data/drive_cycles directory.

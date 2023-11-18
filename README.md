@@ -3,13 +3,13 @@
 #### Copywrite©️ 2023 by Moin Ahmed. All Rights Reserved.
 
 <p>
-This repository contains the Python source code for the simulation of power and energy demand of an electric vehicles 
-(EV) during its drive cycle. This simulation takes in various vehicle parameter as its inputs. The simulation uses the
-methods describes by Gillespie<sup>1</sup> and Plett<sup>2</sup>.
+This repository contains the Python source code for simulating the power and energy demand of an electric vehicle 
+(EV) during its drive cycle. This simulation takes in various vehicle parameters as its inputs. The simulation uses the 
+methods described by Gillespie<sup>1</sup> and Plett<sup>2</sup>.
 
-To summarize, the demanded motor power is calculated at every time step. This calculation is done by first calculating
-the desired speed, acceleration, force, and torques. These desired variables are limited by the motor characteristics
-and hence the limited torque and actual forces, acceleration, and speed are then calculated<sup>2</sup>.
+To summarize, the demanded motor power is calculated at every time step. This calculation is done by first calculating 
+the desired speed, acceleration, force, and torques. The motor characteristics limit these desired variables, and hence 
+the limited torque and actual forces, acceleration, and speed are then calculated<sup>2</sup>.
 </p>
 
 ### Features

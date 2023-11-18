@@ -1,8 +1,10 @@
-#  Copyright (c) 2023. Moin Ahmed. All Rights Reserved.
-
 """
 Contains custom exceptions relevant for EV_sim.
 """
+
+__author__ = "Moin Ahmed"
+__copyright__ = "Copyright (c) 2023. Moin Ahmed. All Rights Reserved."
+
 
 class UndefinedEVError(Exception):
     def __init__(self):
@@ -25,6 +27,7 @@ class RoadAngleCalcError(Exception):
     """
     def __init__(self):
         super().__init__("Cannot calculate road grade angle since road grade is not the correct type.")
+
 
 class UndefinedRoadForce(Exception):
     def __init__(self):

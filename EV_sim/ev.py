@@ -1,3 +1,15 @@
+"""
+This module provides the classes pertaining to the parameters and functionailities of the various components of an
+electric vehicle.
+"""
+
+__all__ = ['ACInductionMotor', 'Wheel', 'Gearbox', 'DriveTrain', 'BatteryCell', 'BatteryModule', 'BatteryPack', 'EV',
+           'EVFromDatabase']
+
+__authors__ = "Moin Ahmed"
+__copyright__ = "Copyright 2023 by EV_sim. All rights reserved."
+
+
 from dataclasses import dataclass, field
 from typing import Optional
 
