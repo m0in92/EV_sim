@@ -130,3 +130,5 @@ author for more details, corrections, and/or contributions.
 8. https://www.caranddriver.com/
 9. https://www.nrel.gov/transportation/drive-cycle-tool/
 10. https://www.epa.gov/vehicle-and-fuel-emissions-testing/dynamometer-drive-schedules
+11. https://www.batterydesign.net/
+12. https://pushevs.com/2021/03/30/ncm-712-by-lg-chem-e66a-and-e78-battery-cells/
