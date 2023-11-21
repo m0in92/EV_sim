@@ -25,6 +25,7 @@ class VehicleDynamics:
     """
     VehicleDynamics simulates the demanded power and current from the batter pack.
     """
+
     def __init__(self, ev_obj: EV, drive_cycle_obj: DriveCycle, external_condition_obj: ExternalConditions) -> None:
         """
         VehicleDynamics class constructor.
@@ -62,7 +63,7 @@ class VehicleDynamics:
         return np.minimum(self.DriveCycle.speed_kmph, self.EV.max_speed) / 3.6
 
     @staticmethod
-    def desired_acc(desired_speed: float, prev_speed: float, current_time: float, prev_time:float) -> float:
+    def desired_acc(desired_speed: float, prev_speed: float, current_time: float, prev_time: float) -> float:
         """
         Calculates and returns the desired acceleration, m/s^2.
         :param desired_speed: (float) desired speed, m/s
@@ -93,7 +94,7 @@ class VehicleDynamics:
         :param prev_speed: Speed at the previous time step, m/s
         :return: (float) aerodynamic drag, N
         """
-        return 0.5 * air_density * aero_frontal_area * C_d * (prev_speed**2)
+        return 0.5 * air_density * aero_frontal_area * C_d * (prev_speed ** 2)
 
     @staticmethod
     def roll_grade_F(max_veh_mass: float, gravity_acc: float, grade_angle: float) -> float:
@@ -141,12 +142,13 @@ class VehicleDynamics:
         iterations over all time steps.
         :param func: (function type) simulation function
         """
+
         @sol_timer
         def initialize_and_iterations(self) -> Solution:
-            prev_speed, prev_motor_speed, prev_distance, prev_SOC, prev_time = self.init_cond() # initialization
-            sol = self.create_init_arrays() # create arrays for results and calculations
+            prev_speed, prev_motor_speed, prev_distance, prev_SOC, prev_time = self.init_cond()  # initialization
+            sol = self.create_init_arrays()  # create arrays for results and calculations
             # Run the simulation.
-            for k in range(len(self.DriveCycle.t)): # k represents time index.
+            for k in range(len(self.DriveCycle.t)):  # k represents time index.
                 func(self, sol, k, prev_time, prev_speed, prev_motor_speed, prev_distance, prev_SOC)
                 # update relevant variables below
                 prev_time = self.DriveCycle.t[k]
@@ -155,11 +157,12 @@ class VehicleDynamics:
                 prev_distance = sol.distance[k]
                 prev_SOC = sol.battery_SOC[k]
             return sol
+
         return initialize_and_iterations
 
     @simulate_over_all_timesteps
     def simulate(self, sol: Solution, k: int, prev_time: float, prev_speed: float, prev_motor_speed: float,
-                   prev_distance: float, prev_SOC: float) -> None:
+                 prev_distance: float, prev_SOC: float) -> None:
         """
         Performs vehicle dynamics simulation at a specific time step, k. It updates the Solution instance attributes
         at this time step, k.
@@ -204,13 +207,13 @@ class VehicleDynamics:
 
         # Now calculate the actual accelerations and speeds. Finally, the distance is calculated
         sol.actual_acc_F[k] = sol.limit_torque[k] * self.EV.drive_train.gear_box.N / self.EV.drive_train.wheel.r - \
-                          sol.aero_F[k] - sol.roll_grade_F[k] - self.ExtCond.road_force
+                              sol.aero_F[k] - sol.roll_grade_F[k] - self.ExtCond.road_force
         sol.actual_acc[k] = sol.actual_acc_F[k] / self.EV.equiv_mass
         sol.motor_speed[k] = np.minimum(self.EV.motor.RPM_max, self.EV.drive_train.gear_box.N * (
                 prev_speed + sol.actual_acc[k] * (self.DriveCycle.t[k] - prev_time)) * 60 / (
-                                            2 * np.pi * self.EV.drive_train.wheel.r))
+                                                2 * np.pi * self.EV.drive_train.wheel.r))
         sol.actual_speed[k] = sol.motor_speed[k] * 2 * np.pi * self.EV.drive_train.wheel.r / (
-                    60 * self.EV.drive_train.gear_box.N)
+                60 * self.EV.drive_train.gear_box.N)
         sol.actual_speed_kmph[k] = sol.actual_speed[k] * 3600 / 1000
         sol.distance[k] = prev_distance + ((sol.actual_speed[k] + prev_speed) / 2) * (self.DriveCycle.t[k] -
                                                                                       prev_time) / 1000
@@ -235,5 +238,3 @@ class VehicleDynamics:
 
     def __str__(self):
         return f"Vehicle Alias: {self.EV.alias_name} driving along {self.DriveCycle.drive_cycle_name}."
-
-
