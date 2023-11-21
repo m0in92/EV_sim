@@ -1,42 +1,42 @@
-Parameter Classification,Parameter Name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD,Tesla_2022_ModelS_PlaidTriMotorAWD,Tesla_2022_ModelS_LongRange,Tesla_2022_ModelX,Tesla_2022_ModelX_Plaid,Tesla_2022_ModelY_RWD,Tesla_2022_ModelY_LongRangeAWD,Tesla_2022_ModelY_PerformanceAWD,Audi_2021_e-tron 55 quattro,Porsche_2020_Taycan4S
-basic vehicle,dataset_name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD,Tesla_2022_ModelS_PlaidTriMotorAWD,Tesla_2022_ModelS_LongRange,Tesla_2022_ModelX,Tesla_2022_ModelX_Plaid,Tesla_2022_ModelY_RWD,Tesla_2022_ModelY_LongRangeAWD,Tesla_2022_ModelY_PerformanceAWD,Audi_2021_e-tron 55 quattro,Porsche_2020_Taycan4S
-basic vehicle,model_name,Volt,Model 3,Model 3,Model 3,Model S,ModelS,ModelX,ModelX,ModelY,ModelY,ModelY,e-tron 55 quattro,Taycan
-basic vehicle,year,2017,2022,2022,2022,2022,2022,2022,2022,2022,2022,2022,2021,2020
-basic vehicle,manufacturer,Chevy,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Audi,Porsche
-basic vehicle,trim,Unknown,RWD,Long Range AWD,Performance AWD,Plaid Tri Motor,Long Range,,Plaid,RWD,Long Range AWD,Performance AWD,,4S
-cell,positive electrode chem.,,LFP,NCM,NMC,NCA,NCA,NCA,NCA,LFP,NMC,NMC,NCM622,NCM712
-cell,battery_cell_manufacturer,,CATL,Tesla and Panasonic,Tesla and Panasonic,Panasonic,Panasonic,Panasonic,Panasonic,CATL,Panasonic; LG Chem,Panasonic; LG Chem,LG,LG Chem E66A
-cell,format,,2170,2170,2170,18650,18650,18650,18650,2170,2170,2170,pouch,pouch
-cell,capacity [A hr],15,6.25,4.76,5,3.5,3.472222222,3.472222222,3.4375,7.487922705,4.957729469,4.957729469,59.97474747,65
-cell,mass [g],450,65,65,65,47,47,47,47,65,65,65,pouch,897
-cell,V_max [V],4.2,3.65,4.2,4.2,4.2,4.2,4.2,4.2,3.6,4.2,4.2,4.2,4.2
-cell,V_nom [V],3.8,3.22,3.7,3.7,3.7,3.67,3.67,3.67,3.2,3.67,3.67,3.67,3.657
-cell,V_min [V],3,2.5,3.2,3.2,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5
-module,Np,3,24,31,46,72,72,72,72,24,46,46,4,
-module,Ns,8,31,24,24,22,72,72,72,24,46,46,4,
-module,overhead_mass,0.08,0.2,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,
-pack,N_module_s,12,4,4,4,5,5,5,5,4,4,4,108,
-pack,overhead_mass,0.1,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,
-pack,SOC_full,75,75,75,75,75,0.75,0.75,0.75,0.75,0.75,0.75,0.75,
-pack,SOC_empty,25,25,25,2,25,0.2,0.2,0.2,0.2,0.2,0.2,0.2,
-pack,eff,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,
-motor,type,AC Induction Motor,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,AC induction/asynchronous,Permanent magnet synchronous
-motor,Lmax [Nm],275,450,330,450,420,420,420,720,420,475,420,314,300
-motor,RPM_rated [rpm],4000,8000,8000,8000,4660,4660,11359.54764,11868.18145,5797.787213,4422.832103,5343.058804,4257.648159,5093
-motor,RPM_max [rpm],12000,15000,15000,15000,18000,18000,1600,1600,18000,18000,18000,16000,14626
-motor,eff,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,
-motor,inertia [kg/m2],0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,
-wheel,radius [m],0.35,0.4572,0.4826,0.508,0.4826,0.2667,0.2794,0.254,0.2413,0.2413,0.2667,0.2413,0.36425
-wheel,inertia [kg/m2],8,8,8,8,8,8,8,8,8,8,8,8,
-wheel,roll_coeff,0.0111,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,
-drive train,inverter_eff,0.94,0.94,0.94,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.98
-drive train,frac_regen_torque,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,
-drive train,gear_ratio,12,9,9,9,7.5,9.01,9.04,7.56,9,9.1,9.1,9.205,8.05
-drive train,gear_inertia [kg/m2],0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,
-drive train,eff,0.8316,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,
-drive train,no_wheels,4,4,4,4,4,4,4,4,4,4,4,4,4
-vehicle,C_d,0.22,0.23,0.23,0.23,0.208,0.208,0.24,0.24,0.23,0.23,0.23,0.28,0.22
-vehicle,frontal_area [m2],1.84,2.26,2.26,2.26,2.38,2.386570388,2.848426561,2.848426561,2.649165024,2.649165024,2.649165024,2.678547546,2.33
-vehicle,mass [kg],1425,1751.9991,1829.99878,1835.999802,2240.998492,2214.998598,2553.999651,2603.999097,1908.996363,1978.999216,1994.997406,2489.99782,2140
-vehicle,payload_cap [kg],75,308,471,465,479,192.998598,531.999651,581.999097,460.001255,611.999935,596.001745,640.0001683,740
-vehicle,overhead_power [W],200,200,200,200,200,200,200,200,200,200,200,200,
+Parameter Classification,Parameter Name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD,Tesla_2022_ModelS_PlaidTriMotorAWD,Tesla_2022_ModelS_LongRange,Tesla_2022_ModelX,Tesla_2022_ModelX_Plaid,Tesla_2022_ModelY_RWD,Tesla_2022_ModelY_LongRangeAWD,Tesla_2022_ModelY_PerformanceAWD,Audi_2021_e-tron 55 quattro,Porsche_2020_Taycan4S,Porsche_2020_Taycan4SPlus
+basic vehicle,dataset_name,Volt_2017,Tesla_2022_Model3_RWD,Tesla_2022_Model3_LongRangeAWD,Tesla_2022_Model3_PerformanceAWD,Tesla_2022_ModelS_PlaidTriMotorAWD,Tesla_2022_ModelS_LongRange,Tesla_2022_ModelX,Tesla_2022_ModelX_Plaid,Tesla_2022_ModelY_RWD,Tesla_2022_ModelY_LongRangeAWD,Tesla_2022_ModelY_PerformanceAWD,Audi_2021_e-tron 55 quattro,Porsche_2020_Taycan4S,Porsche_2020_Taycan4SPlus
+basic vehicle,model_name,Volt,Model 3,Model 3,Model 3,Model S,ModelS,ModelX,ModelX,ModelY,ModelY,ModelY,e-tron 55 quattro,Taycan,Taycan
+basic vehicle,year,2017,2022,2022,2022,2022,2022,2022,2022,2022,2022,2022,2021,2020,2020
+basic vehicle,manufacturer,Chevy,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Tesla,Audi,Porsche,Porsche
+basic vehicle,trim,Unknown,RWD,Long Range AWD,Performance AWD,Plaid Tri Motor,Long Range,,Plaid,RWD,Long Range AWD,Performance AWD,,4S,4S Plus
+cell,positive electrode chem.,,LFP,NCM,NMC,NCA,NCA,NCA,NCA,LFP,NMC,NMC,NCM622,NCM712,NCM712
+cell,battery_cell_manufacturer,,CATL,Tesla and Panasonic,Tesla and Panasonic,Panasonic,Panasonic,Panasonic,Panasonic,CATL,Panasonic; LG Chem,Panasonic; LG Chem,LG,LG Chem E66A,LG Chem E66A
+cell,format,,2170,2170,2170,18650,18650,18650,18650,2170,2170,2170,pouch,pouch,pouch
+cell,capacity [A hr],15,6.25,4.76,5,3.5,3.472222222,3.472222222,3.4375,7.487922705,4.957729469,4.957729469,59.97474747,65,65
+cell,mass [g],450,65,65,65,47,47,47,47,65,65,65,pouch,897,897
+cell,V_max [V],4.2,3.65,4.2,4.2,4.2,4.2,4.2,4.2,3.6,4.2,4.2,4.2,4.2,4.2
+cell,V_nom [V],3.8,3.22,3.7,3.7,3.7,3.67,3.67,3.67,3.2,3.67,3.67,3.67,3.657,3.657
+cell,V_min [V],3,2.5,3.2,3.2,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5
+module,Np,3,24,31,46,72,72,72,72,24,46,46,4,2,2
+module,Ns,8,31,24,24,22,72,72,72,24,46,46,4,6,6
+module,overhead_mass [%],0.08,0.2,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5
+pack,N_module_s,12,4,4,4,5,5,5,5,4,4,4,108,28,33
+pack,overhead_mass [%],0.1,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33
+pack,SOC_full,75,75,75,75,75,0.75,0.75,0.75,0.75,0.75,0.75,0.75,80,80
+pack,SOC_empty,25,25,25,2,25,0.2,0.2,0.2,0.2,0.2,0.2,0.2,5,5
+pack,eff,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96
+motor,type,AC Induction Motor,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,Permanent magnet synchronous,AC induction/asynchronous,Permanent magnet synchronous,Permanent magnet synchronous
+motor,Lmax [Nm],275,450,330,450,420,420,420,720,420,475,420,314,300,350
+motor,RPM_rated [rpm],4000,8000,8000,8000,4660,4660,11359.54764,11868.18145,5797.787213,4422.832103,5343.058804,4257.648159,5093,5456
+motor,RPM_max [rpm],12000,15000,15000,15000,18000,18000,1600,1600,18000,18000,18000,16000,14626,14655
+motor,eff,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.95
+motor,inertia [kg/m2],0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2
+wheel,radius [m],0.35,0.4572,0.4826,0.508,0.4826,0.2667,0.2794,0.254,0.2413,0.2413,0.2667,0.2413,0.36425,0.36425
+wheel,inertia [kg/m2],8,8,8,8,8,8,8,8,8,8,8,8,8,8
+wheel,roll_coeff,0.0111,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01
+drive train,inverter_eff,0.94,0.94,0.94,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.96,0.98,0.98
+drive train,frac_regen_torque,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+drive train,gear_ratio,12,9,9,9,7.5,9.01,9.04,7.56,9,9.1,9.1,9.205,8.05,8.05
+drive train,gear_inertia [kg/m2],0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05
+drive train,eff,0.8316,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93,0.93
+drive train,no_wheels,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+vehicle,C_d,0.22,0.23,0.23,0.23,0.208,0.208,0.24,0.24,0.23,0.23,0.23,0.28,0.22,0.22
+vehicle,frontal_area [m2],1.84,2.26,2.26,2.26,2.38,2.386570388,2.848426561,2.848426561,2.649165024,2.649165024,2.649165024,2.678547546,2.33,2.33
+vehicle,mass [kg],1425,1751.9991,1829.99878,1835.999802,2240.998492,2214.998598,2553.999651,2603.999097,1908.996363,1978.999216,1994.997406,2489.99782,2140,2220
+vehicle,payload_cap [kg],75,308,471,465,479,192.998598,531.999651,581.999097,460.001255,611.999935,596.001745,640.0001683,740,560
+vehicle,overhead_power [W],200,200,200,200,200,200,200,200,200,200,200,200,200,200

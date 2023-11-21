@@ -123,7 +123,7 @@ author for more details, corrections, and/or contributions.
 1. Gillespie, T. D. (Thomas D. ). (1992). Fundamentals of vehicle dynamics.
 2. Plett, G. (2015). Simulating Battery Packs. In Battery Management Systems, vol 2 (1st Edition, pp. 31–67). Artech House.
 3. https://evspecifications.com
-4. https://ev_database.org
+4. https://ev-database.org
 5. https://insideevs.com/
 6. https://www.torquenews.com/
 7. https://www.guideautoweb.com/en/
