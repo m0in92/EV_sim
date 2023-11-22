@@ -228,6 +228,7 @@ class VehicleDynamics:
         else:
             sol.battery_demand[k] = sol.battery_demand[k] + sol.limit_power[k] * self.EV.drive_train.eff
         sol.current[k] = sol.battery_demand[k] * 1000 / self.EV.pack.pack_V_nom
+        sol.cell_current[k] = sol.current[k] / self.EV.pack.Np
         sol.battery_SOC[k] = prev_SOC - sol.current[k] * (self.DriveCycle.t[k] - prev_time)
 
     def __repr__(self):

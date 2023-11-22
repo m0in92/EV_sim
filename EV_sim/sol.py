@@ -7,7 +7,6 @@ __all__ = ['Solution']
 __authors__ = "Moin Ahmed"
 __copyright__ = 'Copyright 2023 by EV_sim. All rights reserved.'
 
-
 from dataclasses import dataclass
 
 import numpy as np
@@ -39,13 +38,14 @@ class Solution:
             self.actual_acc_F = np.zeros(len(self.t))
             self.actual_acc = np.zeros(len(self.t))
             self.motor_speed = np.zeros(len(self.t))
-            self.actual_speed = np.zeros(len(self.t)) # actual speed, m/s
-            self.actual_speed_kmph = np.zeros(len(self.t)) # actual speed, km/h
+            self.actual_speed = np.zeros(len(self.t))  # actual speed, m/s
+            self.actual_speed_kmph = np.zeros(len(self.t))  # actual speed, km/h
             self.distance = np.zeros(len(self.t))
             self.demand_power = np.zeros(len(self.t))
             self.limit_power = np.zeros(len(self.t))
             self.battery_demand = np.zeros(len(self.t))
             self.current = np.zeros(len(self.t))
+            self.cell_current = np.zeros(len(self.t))
             self.battery_SOC = np.zeros(len(self.t))
 
     def plot_battery_demand(self):
