@@ -123,10 +123,12 @@ author for more details, corrections, and/or contributions.
 1. Gillespie, T. D. (Thomas D. ). (1992). Fundamentals of vehicle dynamics.
 2. Plett, G. (2015). Simulating Battery Packs. In Battery Management Systems, vol 2 (1st Edition, pp. 31–67). Artech House.
 3. https://evspecifications.com
-4. https://ev_database.org
+4. https://ev-database.org
 5. https://insideevs.com/
 6. https://www.torquenews.com/
 7. https://www.guideautoweb.com/en/
 8. https://www.caranddriver.com/
 9. https://www.nrel.gov/transportation/drive-cycle-tool/
 10. https://www.epa.gov/vehicle-and-fuel-emissions-testing/dynamometer-drive-schedules
+11. https://www.batterydesign.net/
+12. https://pushevs.com/2021/03/30/ncm-712-by-lg-chem-e66a-and-e78-battery-cells/

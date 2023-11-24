@@ -326,11 +326,11 @@ class EVFromDatabase(EV):
         df_module = self.parse_module_info(file_dir=database_dir)
         n_s = int(df_module["Ns"])
         n_p = int(df_module["Np"])
-        module_overhead_mass = float(df_module["overhead_mass"])
+        module_overhead_mass = float(df_module["overhead_mass [%]"])
         del df_module
         df_pack = self.parse_pack_info(file_dir=database_dir)
         num_modules = int(df_pack["N_module_s"])
-        pack_overhead_mass = float(df_pack["overhead_mass"])
+        pack_overhead_mass = float(df_pack["overhead_mass [%]"])
         soc_full = float(df_pack["SOC_full"])
         soc_empty = float(df_pack["SOC_empty"])
         pack_eff = float(df_pack["eff"])
