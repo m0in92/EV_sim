@@ -22,9 +22,10 @@ the limited torque and actual forces, acceleration, and speed are then calculate
 Either of the two recommended installation procedures can be used and the steps for these installation procedures are
 listed below.
 #### Git Clone
-1. Ensure numpy (https://numpy.org/), pandas (https://pandas.pydata.org/), and Matplotlib (https://matplotlib.org/) 
+1. Ensure python version >= 3.10.0 is used.
+2. Ensure numpy (https://numpy.org/), pandas (https://pandas.pydata.org/), and Matplotlib (https://matplotlib.org/) 
 are installed in your system.
-2. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
+3. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
 #### Python setup
 1. Download or clone this repository
 2. Ensure you are on the repository directory (where the setup.py resides) and run 
