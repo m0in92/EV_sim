@@ -3,7 +3,9 @@
 import sys
 import unittest
 
+import numpy
 import numpy as np
+from random import randint
 
 import EV_sim
 
@@ -211,3 +213,22 @@ class TestVehicleDynamics(unittest.TestCase):
         self.assertEqual(0.2, sol.battery_demand[0])
         # self.assertEqual(2.631097151114207, sol.battery_demand[21])
         self.assertAlmostEqual(-22.567011148711070, sol.battery_demand[119], places=2)
+
+    def test_sim_cell_current(self):
+        alias_name = "Volt_2017"
+        volt = EV_sim.EVFromDatabase(alias_name=alias_name)
+        np_test = randint(1,100)
+        volt.pack.Np = np_test # assign Np to a randomly generated int value
+        udds = EV_sim.DriveCycle(drive_cycle_name=self.drive_cycle_name)
+        waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3)
+        model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo)
+        sol = model.simulate()
+        # The lines below test for cell current
+        self.assertIs(type(sol.current), type(numpy.empty(0)))
+        self.assertIs(type(sol.cell_current), type(numpy.empty(0)))
+        self.assertEqual(len(sol.current), len(sol.cell_current))
+        for indx in range(len(sol.current)):
+            quotient = sol.current[indx] / sol.cell_current[indx]
+            self.assertAlmostEqual(quotient, np_test, None, "Current ratio does not match the assigned ", 0.000001)
+
+
