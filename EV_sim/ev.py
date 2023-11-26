@@ -346,9 +346,9 @@ class EVFromDatabase(EV):
                          C_d=C_d, A_front=A_front, m=m, payload_capacity=payload_capacity, overhead_power=overhead_power)
 
     @staticmethod
-    def list_all_EV_alias(file_dir: str):
+    def list_all_EV_alias(file_dir: str) -> list:
         """
-        This method lists all the EV alias in the EV database.
+        Lists all the EV alias in the EV database.
         :return: (list) list of all EV alias in the EV database
         """
         df = pd.read_csv(file_dir)
