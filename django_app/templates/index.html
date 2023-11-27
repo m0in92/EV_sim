@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% load static %}
+
+  <h1>Home Page</h1>
+  <form action="" method="post">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit" onclick='printHi()' value="Submit">
+  </form>
+
+  <div>
+      <canvas id="id_chart_battery_power_demand" width="60px" height="30px"></canvas>
+  </div>
+    <div>
+        <canvas id="id_chart_current" width="60px" height="30px"></canvas>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+      const ctx = document.getElementById('id_chart_battery_power_demand');
+
+      new Chart(ctx, {
+          type: 'line',
+          data: {labels: {{ t }},
+              datasets: [{label: 'Battery Power Demand [kW]', data: {{ demand }}, borderWidth: 1}]},
+          options: {
+              scales: {y: {beginAtZero: true}}
+          }});
+
+      const ctx1 = document.getElementById("id_chart_current")
+      new Chart(ctx1, {
+          type: 'line',
+          data: {labels: {{ t }},
+              datasets: [{label: 'Current [A]', data: {{ current }}, borderWidth: 1}]},
+          options: {
+              scales: {y: {beginAtZero: true}}
+          }});
+
+  </script>
+</body>
+</html>
