@@ -1,3 +1,4 @@
 include EV_sim/data/EV/EV_dataset.csv
 include EV_sim/data/drive_cycles/*.txt
 include EV_sim/tkinter_gui/icon.ico
+include EV_sim/tkinter_gui/icon1.ico
