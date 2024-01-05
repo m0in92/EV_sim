@@ -28,15 +28,12 @@ are installed in your system.
 3. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
 #### Python setup
 1. Download or clone this repository
-2. Ensure you are on the repository directory (where the setup.py resides) and run 
-<code>python setup.py sdist</code> on the command line. This will create a dist directory in the repository. Within this
-directory a zip or a tar.gz file resides.
-3. Extract the contents tar.gz file created in Step 2. Note that this file can be extracted anywhere within your local 
-system. 
-4. It is recommended to create a python virtual environment before the installation of this project as a Python package.
-Once the Python virtual environment is created, move to the directory where the extracted files reside and 
-run <code>python setup.py install</code> on the command line. This will install EV_sim on your system 
-(along with the external dependencies) and EV_sim can be imported as any other Python package.
+2. Ensure, on the command line, you are on the repository directory (where the setup.py resides) and run 
+<code>python setup.py sdist</code> on the command line. This will create a <code>dist</code> directory in the repository. Within this directory, a zip or a tar.gz file resides.
+3. It is recommended to create a python virtual environment before the installation of this project as a Python package.
+4. Once the Python virtual environment is created, run the command <code>pip install -r requirements.txt</code> to install all the external Python dependencies.
+5. <code>cd</code> into the <code>dist</code> directory and run <code>pip install <EV_sim_version>.tar.gz</code> (or zip file) on the command line. This will install EV_sim on your system (or virtual environment) and EV_sim can be imported as any other Python package.
+6. Run an example in the examples folder to test the installation. Alternatively, the gui version can be opened using the the command <code>python -m EV_sim</code> on the command line.
 
 
 ### Basic Usage

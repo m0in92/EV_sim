@@ -1,11 +1,13 @@
 from distutils.core import setup
+from EV_sim.version import __version__
 
 with open("README.md", 'r', encoding='utf8') as file:
     long_description = file.read()
     file.close()
 
+exec(open('EV_sim/version.py').read())
 setup(name='EV_sim',
-      version='0.1.0',
+      version=__version__,
       description="Electric Vehicle Dynamics Simulation Package",
       long_description=long_description,
       author="Moin Ahmed",
