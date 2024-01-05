@@ -29,11 +29,14 @@ are installed in your system.
 #### Python setup
 1. Download or clone this repository
 2. Ensure you are on the repository directory (where the setup.py resides) and run 
-<code>python setup.py sdist</code> on the command line.
-3. Step 2 will create a dist directory in the repository. Extract the contents tar.gz file in this directory. Move to
-the directory where the extracted files reside and run <code>pip install EV_sim</code> on the command line. This 
-will install EV_sim on your system (along with the external dependencies) and EV_sim can be imported as any other Python
-package.
+<code>python setup.py sdist</code> on the command line. This will create a dist directory in the repository. Within this
+directory a zip or a tar.gz file resides.
+3. Extract the contents tar.gz file created in Step 2. Note that this file can be extracted anywhere within your local 
+system. 
+4. It is recommended to create a python virtual environment before the installation of this project as a Python package.
+Once the Python virtual environment is created, move to the directory where the extracted files reside and 
+run <code>python setup.py install</code> on the command line. This will install EV_sim on your system 
+(along with the external dependencies) and EV_sim can be imported as any other Python package.
 
 
 ### Basic Usage
