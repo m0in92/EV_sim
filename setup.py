@@ -11,6 +11,7 @@ setup(name='EV_sim',
       author="Moin Ahmed",
       author_email="moinahmed100#gmail.com",
       packages=['EV_sim', 'EV_sim.config', 'tests', 'EV_sim.utils', 'EV_sim.tkinter_gui',
-                'EV_sim.tkinter_gui_depreciated'],
+                'EV_sim.tkinter_gui_depreciated', 'EV_sim.data', 'EV_sim.data.EV'],
       install_requires=['numpy', 'pandas', 'matplotlib', 'customtkinter', 'pytest'],
+      include_package_data=True
       )

@@ -10,6 +10,7 @@ __authors__ = "Moin Ahmed"
 __copyright__ = "Copyright 2023 by EV_sim. All rights reserved."
 
 
+import os
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -262,7 +263,7 @@ class EVFromDatabase(EV):
     EVFromDatabase inherits from the EV class. It is meant to update the attributes of its parent EV class using the
     Database.
     """
-    def __init__(self, alias_name: str, database_dir: str = definations.ROOT_DIR + "/data/EV/EV_dataset.csv"):
+    def __init__(self, alias_name: str, database_dir: str = os.path.join(definations.ROOT_DIR, "data", "EV", "EV_dataset.csv")):
         """
         EV class constructor.
         :param alias_name: (str) Vehicle alias [i.e, identifier]

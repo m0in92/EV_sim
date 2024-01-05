@@ -1,3 +1,4 @@
+import os
 import typing
 from typing import overload
 
@@ -21,7 +22,7 @@ class DriveCycle:
         ...
 
     def __init__(self, drive_cycle_name: typing.Optional[str],
-                 folder_dir: str = definations.ROOT_DIR + "/data/drive_cycles/"):
+                 folder_dir: str = os.path.join(definations.ROOT_DIR, "data", "drive_cycles")):
         """
         DriveCycle constructor
         :param drive_cycle_name: Drive cycle name as store in the data/drive_cycles directory.
@@ -37,12 +38,16 @@ class DriveCycle:
 
         if self.drive_cycle_name is not None:
             if isinstance(folder_dir, str):
-                if folder_dir[-1] == "/":
-                    self.folder_dir = folder_dir
+                if not os.path.exists(folder_dir):
+                    raise ValueError(f"{folder_dir} does not exists.")
                 else:
-                    raise ValueError("Drive cycle's folder directory needs to have a '/' at the end.")
+                    self.folder_dir = folder_dir
+                # if folder_dir[-1] == "/":
+                #     self.folder_dir = folder_dir
+                # else:
+                #     raise ValueError("Drive cycle's folder directory needs to have a '/' at the end.")
             else:
-                TypeError("Drive cycle's folder directory needs to be a string type.")
+                raise TypeError("Drive cycle's folder directory needs to be a string type.")
 
             df_drivecycle = self.parse_file()
             self.t = df_drivecycle['Test Time, secs'].to_numpy()  # time array in seconds
@@ -53,7 +58,7 @@ class DriveCycle:
 
     def parse_file(self):
         # file_dir = self.folder_dir + f"{self.drive_cycle_name}.txt"
-        file_dir = self.folder_dir + f"{self.drive_cycle_name}.csv"
+        file_dir = os.path.join(self.folder_dir, f"{self.drive_cycle_name}.csv")
         # df = pd.read_csv(file_dir, sep="\t", skiprows=2, header=None, names=["Test Time [s]", "Target Speed [milesph]"])
         df = pd.read_csv(file_dir)
         df["Target Speed [km/h]"] = df["Target Speed, mph"] * 1.609344  # creates a col with units in km/h
