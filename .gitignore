@@ -477,3 +477,6 @@ EV_sim/gui_assests
 Output
 #EV_sim/tkinter_gui
 
+examples/drivecycles.py
+examples/example_teslaModel3_porscheTaycan.py
+

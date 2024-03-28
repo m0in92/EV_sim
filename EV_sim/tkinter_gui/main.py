@@ -381,7 +381,7 @@ class MainDisplayFrame(ttk.Frame):
         elif category == 'External Conditions':
             SubDisplayParameters(self, self.info_ext_cond_dict)
         elif category == 'Results':
-            SubDisplayPlots(self, plot_info_dict=self.plot_info_dict[category],user_selection=user_selection)
+            SubDisplayPlots(self, plot_info_dict=self.plot_info_dict[category], user_selection=user_selection)
 
 
 class SubDisplayComboBox(ttk.Frame):
