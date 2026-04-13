@@ -324,26 +324,26 @@ class MainDisplayFrame(ttk.Frame):
     def plot_info_dict(self):
         dc_obj = self.parent.sim_vars.dc_obj
         sol_obj = self.parent.sim_vars.sol
-        return {'Drive Cycle': {'plot': [dc_obj.t, dc_obj.speed_kmph, 'Time [min]', 'Speed [km/h]']},
+        return {'Drive Cycle': {'plot': [dc_obj.t, dc_obj.speed_kmph, 'Time [sec]', 'Speed [km/h]']},
                 'Results': {
-                    'Desired Acceleration': [sol_obj.t, sol_obj.des_acc, 'Time [min]', r'Desired Acceleration [m/$s^2$]'],
-                    'Desired Accelerating Force': [sol_obj.t, sol_obj.des_acc_F, 'Time [min]', 'Desired Acceleration Force [N]'],
-                    'Aerodynamic Force': [sol_obj.t, sol_obj.aero_F, 'Time [min]', 'Aerodynamic Force [N]'],
-                    'Rolling Grade Force': [sol_obj.t, sol_obj.roll_grade_F, 'Time [min]', 'Rolling Grade Force [N]'],
-                    'Demand Torque': [sol_obj.t, sol_obj.demand_torque, 'Time [min]', 'Demand Torque [Nm]'],
-                    'Max. Torque': [sol_obj.t, sol_obj.max_torque, 'Time [min]', 'Max. Torque [Nm]'],
-                    'Limit Regeneration': [sol_obj.t, sol_obj.limit_regen, 'Time [min]', 'Limit Regeneration [Nm]'],
-                    'Limit Torque': [sol_obj.t, sol_obj.limit_torque, 'Time [min]', 'Limit Torque [Nm]'],
-                    'Motor Torque': [sol_obj.t, sol_obj.motor_torque, 'Time [min]', 'Motor Torque [Nm]'],
-                    'Actual Accelerating Force': [sol_obj.t, sol_obj.actual_acc_F, 'Time [min]', 'Actual Acceleration Force [N]'],
-                    'Actual Acceleration': [sol_obj.t, sol_obj.actual_acc, 'Time [min]', r'Actual Acceleration $[m/s^2]$'],
-                    'Motor Speed': [sol_obj.t, sol_obj.motor_speed, 'Time [min]', 'Motor Speed [RPM]'],
-                    'Actual Speed': [sol_obj.t, sol_obj.actual_speed_kmph, 'Time [min]', 'Actual Speed [km/h]'],
-                    'Distance': [sol_obj.t, sol_obj.actual_speed_kmph, 'Time [min]', 'Distance [km]'],
-                    'Motor Demand Power': [sol_obj.t, sol_obj.demand_power, 'Time [min]', 'Motor Demand Power [kW]'],
-                    'Limit Power': [sol_obj.t, sol_obj.limit_power, 'Time [min]', 'Limit Power [kW]'],
-                    'Battery Demand': [sol_obj.t, sol_obj.battery_demand, 'Time [min]', 'Battery power demand [kW]'],
-                    'Battery Current': [sol_obj.t, sol_obj.current, 'Time [min]', 'Battery Pack Current [A]']}
+                    'Desired Acceleration': [sol_obj.t, sol_obj.des_acc, 'Time [sec]', r'Desired Acceleration [m/$s^2$]'],
+                    'Desired Accelerating Force': [sol_obj.t, sol_obj.des_acc_F, 'Time [sec]', 'Desired Acceleration Force [N]'],
+                    'Aerodynamic Force': [sol_obj.t, sol_obj.aero_F, 'Time [sec]', 'Aerodynamic Force [N]'],
+                    'Rolling Grade Force': [sol_obj.t, sol_obj.roll_grade_F, 'Time [sec]', 'Rolling Grade Force [N]'],
+                    'Demand Torque': [sol_obj.t, sol_obj.demand_torque, 'Time [sec]', 'Demand Torque [Nm]'],
+                    'Max. Torque': [sol_obj.t, sol_obj.max_torque, 'Time [sec]', 'Max. Torque [Nm]'],
+                    'Limit Regeneration': [sol_obj.t, sol_obj.limit_regen, 'Time [sec]', 'Limit Regeneration [Nm]'],
+                    'Limit Torque': [sol_obj.t, sol_obj.limit_torque, 'Time [sec]', 'Limit Torque [Nm]'],
+                    'Motor Torque': [sol_obj.t, sol_obj.motor_torque, 'Time [sec]', 'Motor Torque [Nm]'],
+                    'Actual Accelerating Force': [sol_obj.t, sol_obj.actual_acc_F, 'Time [sec]', 'Actual Acceleration Force [N]'],
+                    'Actual Acceleration': [sol_obj.t, sol_obj.actual_acc, 'Time [sec]', r'Actual Acceleration $[m/s^2]$'],
+                    'Motor Speed': [sol_obj.t, sol_obj.motor_speed, 'Time [sec]', 'Motor Speed [RPM]'],
+                    'Actual Speed': [sol_obj.t, sol_obj.actual_speed_kmph, 'Time [sec]', 'Actual Speed [km/h]'],
+                    'Distance': [sol_obj.t, sol_obj.actual_speed_kmph, 'Time [sec]', 'Distance [km]'],
+                    'Motor Demand Power': [sol_obj.t, sol_obj.demand_power, 'Time [sec]', 'Motor Demand Power [kW]'],
+                    'Limit Power': [sol_obj.t, sol_obj.limit_power, 'Time [sec]', 'Limit Power [kW]'],
+                    'Battery Demand': [sol_obj.t, sol_obj.battery_demand, 'Time [sec]', 'Battery power demand [kW]'],
+                    'Battery Current': [sol_obj.t, sol_obj.current, 'Time [sec]', 'Battery Pack Current [A]']}
                 }
 
     @property
