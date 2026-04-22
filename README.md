@@ -19,20 +19,20 @@ the limited torque and actual forces, acceleration, and speed are then calculate
 ![image](Assests/gui.png)
 
 ### Installation
-This repository can either by used as a (a) Python package or a (b) desktop application with a GUI. Note that the GUI
-can be used in either case however, Python package allows for the most flexibility and customization.
+This repository can either be used as a (a) Python package or a (b) desktop application with a GUI. Note that the GUI
+can be used in either case; however, the Python package allows for the most flexibility and customization.
 
-The recommended installation are listed below.
+The recommended installations are listed below.
 
 #### Git Clone (_if you want to use the source code and/or install as a Python package_)
-1. Ensure python version >= 3.10.0 is used.
-2. External Python dependencies can be installed to your system or Python virtual environment using the following command <code>pip install -r requirements.txt</code>.
+1. Ensure Python version >= 3.10.0 is used.
+2. External Python dependencies can be installed on your system or Python virtual environment using the following command <code>pip install -r requirements.txt</code>.
 3. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
 #### Desktop GUI (_if you want to use the GUI without installing as a Python package_)
 1. Download or clone this repository
-2. Ensure, on the command line, you are on the repository directory (where the setup.py resides) and run 
+2. Ensure, on the command line, you are in the repository directory (where the setup.py resides) and run 
 <code>python setup.py sdist</code> on the command line. This will create a <code>dist</code> directory in the repository. Within this directory, a zip or a tar.gz file resides.
-3. It is recommended to create a python virtual environment before the installation of this project as a Python package.
+3. It is recommended to create a Python virtual environment before the installation of this project as a Python package.
 4. Once the Python virtual environment is created, run the command <code>pip install -r requirements.txt</code> to install all the external Python dependencies.
 5. <code>cd</code> into the <code>dist</code> directory and run <code>pip install <EV_sim_version>.tar.gz</code> (or zip file) on the command line. This will install EV_sim on your system (or virtual environment) and EV_sim can be imported as any other Python package.
 6. Run an example in the examples folder to test the installation. Alternatively, the gui version can be opened using the the command <code>python -m EV_sim</code> on the command line.
@@ -51,11 +51,11 @@ Simulation requires instances of three classes:
 2. DriveCycle
 3. ExternalConditions
 
-Then, "EV" class object needs to be initialized. Various vehicle parameters needs to be defined to initialize it. Instead,
-EV_sim provides a database of commercial electric vehicles (EV), which contains all the relevant required parameters. For the 
+Then, "EV" class object needs to be initialized. Various vehicle parameters need to be defined to initialize it. Instead,
+EV_sim provides a database of commercial electric vehicles (EV), which contains all the required parameters. For the 
 list of supported commercial EV, refer to the "Vehicles in the Database" section. When using the parameters from the
-database, "EVfromDatabase" class object (derived child of EV class) is called instead. The "EVfromDatabase" takes 
-vehicle alias as its input parameter. In EV_sim, vehicle alias is a string and follows the convention: 
+database, "EVfromDatabase" class object (derived child of EV class) is called instead. The "EVfromDatabase" takes the 
+vehicle alias as its input parameter. In EV_sim, the vehicle alias is a string and follows the convention: 
 'manufacturer_year_model name_trim'.
 
 For example:
@@ -70,7 +70,7 @@ Specify the DriveCycle and ExternalConditions class objects. </br>
 <code> waterloo = EV_sim.ExternalConditions(rho=1.225, road_grade=0.3) </code>
 
 
-Finally, declare the VehicleDynamics object and use it's simulate method. 
+Finally, declare the VehicleDynamics object and use its simulate method. 
 
 <code> model = EV_sim.VehicleDynamics(ev_obj=volt, drive_cycle_obj=udds, external_condition_obj=waterloo) </code> <br>
 <code> sol = model.simulate() </code>
@@ -79,7 +79,7 @@ Finally, declare the VehicleDynamics object and use it's simulate method.
 
 #### Using GUI
 <p>
-One way to execute gui is to run <code>python -m EV_sim</code> on the command line.
+One way to execute GUI is to run <code>python -m EV_sim</code> on the command line.
 </p>
 
 ### Vehicles in the Database:
