@@ -1,6 +1,21 @@
+<div align="center">
+
 # EV_sim
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](#getting-started)
 
 #### Copywrite©️ 2023 by Moin Ahmed. All Rights Reserved.
+
+</div>
+
+<div align="center">
+<a href="#features"> Features </a> •
+<a href="#installation"> Installation </a> •
+<a href="#basic-usage"> Basic Usage </a> •
+<a href="#vehicles-in-the-database"> Vehicles in the Database </a> •
+<a href="#drive-cycles-in-the-package"> Drive Cycles in the Package </a> •
+<a href="#file-directories"> File Directories </a> •
+<a href="#how-to-cite"> How to cite </a> •
+</div>
 
 <p>
 This repository contains the Python source code for simulating the power and energy demand of an electric vehicle 
@@ -10,6 +25,11 @@ methods described by Gillespie<sup>1</sup> and Plett<sup>2</sup>.
 To summarize, the demanded motor power is calculated at every time step. This calculation is done by first calculating 
 the desired speed, acceleration, force, and torques. The motor characteristics limit these desired variables, and hence 
 the limited torque and actual forces, acceleration, and speed are then calculated<sup>2</sup>.
+
+> If this project helps your research or product, please ⭐ star the repository and share it with peers in battery/BMS 
+> communities.
+> 
+> Please feel free to contact the author for any questions, suggestions, and/or contributions. 
 </p>
 
 ### Features
