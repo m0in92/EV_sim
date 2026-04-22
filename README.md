@@ -19,13 +19,16 @@ the limited torque and actual forces, acceleration, and speed are then calculate
 ![image](Assests/gui.png)
 
 ### Installation
-Either of the two recommended installation procedures can be used and the steps for these installation procedures are
-listed below.
-#### Git Clone
+This repository can either by used as a (a) Python package or a (b) desktop application with a GUI. Note that the GUI
+can be used in either case however, Python package allows for the most flexibility and customization.
+
+The recommended installation are listed below.
+
+#### Git Clone (_if you want to use the source code and/or install as a Python package_)
 1. Ensure python version >= 3.10.0 is used.
-2. External Python dependencies can be installed to your system or Python virtual environment using the command <code>pip install -r requirements.txt</code>.
+2. External Python dependencies can be installed to your system or Python virtual environment using the following command <code>pip install -r requirements.txt</code>.
 3. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
-#### Python setup
+#### Desktop GUI (_if you want to use the GUI without installing as a Python package_)
 1. Download or clone this repository
 2. Ensure, on the command line, you are on the repository directory (where the setup.py resides) and run 
 <code>python setup.py sdist</code> on the command line. This will create a <code>dist</code> directory in the repository. Within this directory, a zip or a tar.gz file resides.
@@ -37,6 +40,7 @@ listed below.
 
 ### Basic Usage
 #### Using Source code
+_Note: More examples are available in the "examples" folder within the "EV_Sim" source code directory._
 <p>
 Import the EV_sim module using Python's import command, and this imports relevant submodules within EV_sim.
 
@@ -118,6 +122,12 @@ author for more details, corrections, and/or contributions.
   - data: datafiles for EVs and drive cycles
   - utils: utility code for timing simulation times and printing useful database information.
 - tests: Test code using the results from MATLAB code<sup>2</sup>.
+
+### How to cite:
+If you use this code in your research or want to cite this code, please cite the following:
+
+Ahmed, M. (2024). Applications of Mathematical Models for Lithium-Ion Battery Management Systems. 
+University of Waterloo. https://hdl.handle.net/10012/21242
 
 ### References
 1. Gillespie, T. D. (Thomas D. ). (1992). Fundamentals of vehicle dynamics.
