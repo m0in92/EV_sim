@@ -27,7 +27,7 @@ To summarize, the demanded motor power is calculated at every time step. This ca
 the desired speed, acceleration, force, and torques. The motor characteristics limit these desired variables, and hence 
 the limited torque and actual forces, acceleration, and speed are then calculated<sup>2</sup>.
 
-<img src="Assests/screenshot_low_quality.gif">
+![alternative text](https://github.com/m0in92/Public-GIFs/blob/main/demo_EV_Sim.gif)
 
 > If this project helps your research or product, please ⭐ star the repository and share it with peers in battery/BMS 
 > communities.
