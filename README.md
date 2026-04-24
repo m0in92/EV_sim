@@ -38,8 +38,10 @@ the limited torque and actual forces, acceleration, and speed are then calculate
 
 
 ### Features
-- Graphic User Interface (GUI)
-  - One way to execute gui is to run <code>python -m EV_sim</code> on the command line.
+- End-to-end EV longitudinal simulation that computes motor power and energy demand across an entire drive cycle using physics-based vehicle dynamics.
+- Ready-to-use database of commercial EV configurations (e.g., multiple Tesla trims, Audi e-tron, Chevy Volt) so users can simulate quickly without manually entering full parameter sets.
+- Built-in support for widely used regulatory and research drive cycles (including UDDS, US06, HWFET, FTP, NYCC, SC03, UCDS, and BCDC).
+- Dual usage modes: a Python API for scripting/research workflows and a desktop GUI for quick interactive simulations; launch with <code>python -m EV_sim</code>.
   
 [//]: # (![image]&#40;Assests/gui.png&#41;)
 
