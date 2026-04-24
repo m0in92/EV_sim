@@ -27,17 +27,21 @@ To summarize, the demanded motor power is calculated at every time step. This ca
 the desired speed, acceleration, force, and torques. The motor characteristics limit these desired variables, and hence 
 the limited torque and actual forces, acceleration, and speed are then calculated<sup>2</sup>.
 
+<img src="Assests/screenshot_low_quality.gif">
+
 > If this project helps your research or product, please ⭐ star the repository and share it with peers in battery/BMS 
 > communities.
 > 
 > Please feel free to contact the author for any questions, suggestions, and/or contributions. 
 </p>
 
+
+
 ### Features
 - Graphic User Interface (GUI)
   - One way to execute gui is to run <code>python -m EV_sim</code> on the command line.
   
-![image](Assests/gui.png)
+[//]: # (![image]&#40;Assests/gui.png&#41;)
 
 ### Installation
 This repository can either be used as a Python package. This package comes with a desktop GUI that can be used after
