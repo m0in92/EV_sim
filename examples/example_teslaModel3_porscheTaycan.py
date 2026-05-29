@@ -2,8 +2,18 @@
 
 import matplotlib.pyplot as plt
 
-import EV_sim
-from EV_sim.sol import Solution
+try:
+    import EV_sim
+    from EV_sim.sol import Solution
+except ModuleNotFoundError:
+    import sys
+    import os
+
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(parent_dir)
+    import EV_sim
+    from EV_sim.sol import Solution
+
 
 alias_name_tesla: str = "Tesla_2022_Model3_RWD"
 alias_name_porshe: str = "Porsche_2020_Taycan4S"

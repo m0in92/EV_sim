@@ -10,28 +10,45 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-df_us06: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "us06.csv"))
+try:
+    df_us06: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "us06.csv"))
+except FileNotFoundError:
+    df_us06: pd.DataFrame = pd.read_csv(os.path.join("EV_sim", "data", "drive_cycles", "us06.csv"))
 t_us06: np.ndarray = df_us06['Test Time, secs'].to_numpy()
 v_us06: np.ndarray = df_us06['Target Speed, mph'].to_numpy()
 
-df_hwfet: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "hwfet.csv"))
+try:
+    df_hwfet: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "hwfet.csv"))
+except FileNotFoundError:
+    df_hwfet: pd.DataFrame = pd.read_csv(os.path.join("EV_sim", "data", "drive_cycles", "hwfet.csv"))
 t_hwfet: np.ndarray = df_hwfet['Test Time, secs'].to_numpy()
 v_hwfet: np.ndarray = df_hwfet['Target Speed, mph'].to_numpy()
 
-df_udds: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "udds.csv"))
+try:
+    df_udds: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "udds.csv"))
+except FileNotFoundError:
+    df_udds: pd.DataFrame = pd.read_csv(os.path.join("EV_sim", "data", "drive_cycles", "udds.csv"))
 t_udds: np.ndarray = df_udds['Test Time, secs'].to_numpy()
 v_udds: np.ndarray = df_udds['Target Speed, mph'].to_numpy()
 
-df_nycc: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "nycc.csv"))
+try:
+    df_nycc: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "nycc.csv"))
+except FileNotFoundError:
+    df_nycc: pd.DataFrame = pd.read_csv(os.path.join("EV_sim", "data", "drive_cycles", "nycc.csv"))
 t_nycc: np.ndarray = df_nycc['Test Time, secs'].to_numpy()
 v_nycc: np.ndarray = df_nycc['Target Speed, mph'].to_numpy()
 
-df_ftp: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "ftp.csv"))
+try:
+    df_ftp: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "ftp.csv"))
+except FileNotFoundError:
+    df_ftp: pd.DataFrame = pd.read_csv(os.path.join("EV_sim", "data", "drive_cycles", "ftp.csv"))
 t_ftp: np.ndarray = df_ftp['Test Time, secs'].to_numpy()
 v_ftp: np.ndarray = df_ftp['Target Speed, mph'].to_numpy()
 
-df_bcdc: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "bcdc.csv"))
+try:
+    df_bcdc: pd.DataFrame = pd.read_csv(os.path.join("..", "EV_sim", "data", "drive_cycles", "bcdc.csv"))
+except FileNotFoundError:
+    df_bcdc: pd.DataFrame = pd.read_csv(os.path.join("EV_sim", "data", "drive_cycles", "bcdc.csv"))
 t_bcdc: np.ndarray = df_bcdc['Test Time, secs'].to_numpy()
 v_bcdc: np.ndarray = df_bcdc['Target Speed, mph'].to_numpy()
 

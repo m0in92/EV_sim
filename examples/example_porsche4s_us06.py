@@ -1,4 +1,12 @@
-import EV_sim
+try:
+    import EV_sim
+except ModuleNotFoundError:
+    import sys
+    import os
+
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(parent_dir)
+    import EV_sim
 
 import pandas as pd
 

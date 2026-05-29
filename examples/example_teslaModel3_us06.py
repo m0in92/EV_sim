@@ -1,8 +1,16 @@
 #  Copyright (c) 2023. Moin Ahmed. All rights reserved.
 
-import EV_sim
-
 import pandas as pd
+
+try:
+    import EV_sim
+except ModuleNotFoundError:
+    import sys
+    import os
+
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(parent_dir)
+    import EV_sim
 
 
 alias_name = "Tesla_2022_Model3_RWD"

@@ -53,12 +53,11 @@ The recommended installations are listed below.
 
 #### Git Clone 
 1. Ensure Python version >= 3.10.0 is used. It is recommended to use a Python virtual environment for this project.
-2. External Python dependencies can be installed on your system or Python virtual environment using the following 
+2. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
+3. External Python dependencies can be installed on your system or Python virtual environment using the following 
 command <code>pip install -r requirements.txt</code>.
-3. Clone the repository, for example using <code>git clone git@github.com:m0in92/EV_sim.git</code> using Git Bash.
 4. Run an example in the examples folder to test the installation. Alternatively, the gui version can be opened using
-the command <code>python -m EV_sim</code> on the command line. Furthermore, included unit tests can be run to test the 
-installation using the command <code>pytest tests</code> on the commandline/terminal from the project root directory.
+the command <code>python -m EV_sim</code> on the command line. Furthermore, included unit tests can be run to test the installation using the command <code>pytest tests</code> on the commandline/terminal from the project root directory.
 
 
 ### Basic Usage
